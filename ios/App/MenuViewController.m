@@ -50,17 +50,8 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
     v.center = c;
 }
 
-/// A 9-slice pixel panel, each pixel `scale` points.
-static UIImage *panelImage(NSString *name, CGFloat scale) {
-    UIImage *base = controlImage(name);
-    UIImage *scaled = [UIImage imageWithCGImage:base.CGImage scale:1.0 / scale orientation:UIImageOrientationUp];
-    CGFloat cap = 6 * scale;
-    return [scaled resizableImageWithCapInsets:UIEdgeInsetsMake(cap, cap, cap, cap) resizingMode:UIImageResizingModeStretch];
-}
-
 @interface MenuViewController ()
-@property (nonatomic, strong) UIImageView *background, *logo, *subtitle, *countText, *wideText, *wideToggle;
-@property (nonatomic, strong) UIScrollView *scroll;
+@property (nonatomic, strong) UIImageView *background, *emblem, *arrow, *countText;
 @property (nonatomic, strong) NSMutableArray<UIButton *> *cards;
 @end
 
@@ -86,59 +77,48 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
         return;
     }
 
-    self.background = [[UIImageView alloc] initWithImage:controlImage(@"menu_bg")];
+    // Sunky the Game's title screen: its sky, clouds, mountains and water, the winged emblem with
+    // thumbs-up Sunky, and the games listed in the game's gold lettering.
+    self.background = [[UIImageView alloc] initWithImage:controlImage(@"menu_title_bg")];
     self.background.contentMode = UIViewContentModeScaleAspectFill;
-    self.background.layer.magnificationFilter = kCAFilterNearest;
     self.background.clipsToBounds = YES;
     [self.view addSubview:self.background];
+    self.emblem = [[UIImageView alloc] initWithImage:controlImage(@"menu_emblem")];
+    self.emblem.contentMode = UIViewContentModeScaleAspectFit;
+    [self.view addSubview:self.emblem];
 
-    self.logo = pixelView(pixelText(@"SUNKY", YES), 9);
-    self.subtitle = pixelView(pixelText([self singleGame] ? @"TAP TO PLAY" : @"PICK A GAME", NO), 3);
-    self.countText = pixelView(pixelText(@" ", YES), 3);
-    self.wideText = pixelView(pixelText(@"WIDESCREEN", NO), 2.5);
-    self.wideToggle = pixelView(controlImage(SunkyWidescreen() ? @"toggle_on" : @"toggle_off"), 3.5);
-    for (UIView *v in @[self.logo, self.subtitle, self.countText]) [self.view addSubview:v];
-
-    self.scroll = [UIScrollView new];
-    self.scroll.showsHorizontalScrollIndicator = NO;
-    self.scroll.clipsToBounds = NO;
-    [self.view addSubview:self.scroll];
     self.cards = [NSMutableArray array];
-
-    NSString *only = [NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"];
     for (int i = 0; i < kSunkyGameCount; i++) {
-        if (only.length && ![only isEqualToString:@(kSunkyGames[i].file)]) continue;
         const SunkyGame *g = &kSunkyGames[i];
-        UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
-        b.tag = i;
-        [b setBackgroundImage:panelImage(@"panel", 3) forState:UIControlStateNormal];
-        [b setBackgroundImage:panelImage(@"panel_on", 3) forState:UIControlStateHighlighted];
-        b.adjustsImageWhenHighlighted = NO;
-        [b addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
-
-        NSString *iconPath = [NSBundle.mainBundle pathForResource:@(g->file) ofType:@"png" inDirectory:@"Games"];
-        UIImageView *icon = [[UIImageView alloc] initWithImage:iconPath ? [UIImage imageWithContentsOfFile:iconPath] : nil];
-        icon.contentMode = UIViewContentModeScaleAspectFit;
-        icon.layer.magnificationFilter = kCAFilterNearest;
-        icon.tag = 10;
-        icon.userInteractionEnabled = NO;
-        [b addSubview:icon];
-
-        // "SUNKY THE GAME" + "PART 1", or the game's name + a short line
-        BOOL part = strncmp(g->subtitle, "Part", 4) == 0;
-        NSString *line1 = part ? @"SUNKY THE GAME" : @(g->title);
-        NSString *line2 = part ? @(g->subtitle) : @(g->subtitle);
-        UIImageView *t1 = pixelView(pixelText(line1, NO), 2), *t2 = pixelView(pixelText(line2, YES), 2);
-        t1.tag = 11; t2.tag = 12;
-        [b addSubview:t1];
-        [b addSubview:t2];
-
-        UIImageView *star = pixelView(controlImage(@"star"), 3);
+        UIButton *row = [UIButton buttonWithType:UIButtonTypeCustom];
+        row.tag = i;
+        [row addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
+        [row addTarget:self action:@selector(pointAt:) forControlEvents:UIControlEventTouchDown | UIControlEventTouchDragEnter];
+        // the emblem already says SUNKY THE GAME, so the list stays short and big
+        NSString *name;
+        if (strncmp(g->subtitle, "Part", 4) == 0) name = [@(g->subtitle) uppercaseString];
+        else if (g->engine == 1) name = @"SUNKY 2";
+        else name = [@(g->title) uppercaseString];
+        UIImageView *t = pixelView(pixelText(name, YES), 3);
+        t.tag = 11;
+        [row addSubview:t];
+        UIImageView *star = pixelView(controlImage(@"star"), 2.4);
         star.tag = 13;
-        [b addSubview:star];
-        [self.scroll addSubview:b];
-        [self.cards addObject:b];
+        [row addSubview:star];
+        [self.view addSubview:row];
+        [self.cards addObject:row];
     }
+    self.arrow = pixelView(pixelText(@">", YES), 3);
+    [self.view addSubview:self.arrow];
+    self.countText = pixelView(pixelText(@" ", NO), 2.2);
+    [self.view addSubview:self.countText];
+    // the arrow blinks, like PRESS START does
+    [UIView animateWithDuration:0.45 delay:0 options:UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionAllowUserInteraction
+                     animations:^{ self.arrow.alpha = 0.15; } completion:nil];
+}
+
+- (void)pointAt:(UIButton *)row {
+    self.arrow.center = CGPointMake(CGRectGetMinX(row.frame) - 18, row.center.y);
 }
 
 - (void)viewDidLayoutSubviews {
@@ -146,39 +126,39 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
     if ([self singleGame]) return;
     UIEdgeInsets safe = self.view.safeAreaInsets;
     CGSize b = self.view.bounds.size;
-    CGFloat left = MAX(safe.left, 24), right = MAX(safe.right, 24), top = MAX(safe.top, 14);
+    CGFloat left = MAX(safe.left, 16), right = MAX(safe.right, 16);
     self.background.frame = self.view.bounds;
 
-    CGRect f = self.logo.frame;
-    f.origin = CGPointMake(left, top);
-    self.logo.frame = f;
-    f = self.subtitle.frame;
-    f.origin = CGPointMake(left + 4, CGRectGetMaxY(self.logo.frame) + 6);
-    self.subtitle.frame = f;
-    f = self.countText.frame;
-    f.origin = CGPointMake(CGRectGetMaxX(self.subtitle.frame) + 18, self.subtitle.frame.origin.y);
-    self.countText.frame = f;
+    // emblem on the left, as big as the height allows
+    CGFloat eh = b.height * 0.94;
+    CGFloat ew = MIN(eh * 590.0 / 455.0, b.width * 0.48);
+    eh = ew * 455.0 / 590.0;
+    self.emblem.frame = CGRectMake(left - 6, (b.height - eh) / 2, ew, eh);
 
-    CGFloat y = CGRectGetMaxY(self.subtitle.frame) + 16;
-    CGFloat h = b.height - y - MAX(safe.bottom, 14);
-    self.scroll.frame = CGRectMake(0, y, b.width, h);
-    CGFloat cardW = MIN(200, h * 0.85), gap = 18, x = left;
-    if ([self singleGame]) x = (b.width - cardW) / 2;
-    for (UIButton *card in self.cards) {
-        card.frame = CGRectMake(x, 0, cardW, h);
-        UIView *icon = [card viewWithTag:10], *t1 = [card viewWithTag:11], *t2 = [card viewWithTag:12], *star = [card viewWithTag:13];
-        icon.frame = CGRectMake(20, 20, cardW - 40, h - 86);
-        // shrink the title to fit the card if needed
-        for (UIImageView *t in @[(UIImageView *)t1, (UIImageView *)t2]) {
-            CGFloat s = MIN(2, (cardW - 24) / t.image.size.width);
-            t.bounds = CGRectMake(0, 0, t.image.size.width * s, t.image.size.height * s);
-        }
-        t1.center = CGPointMake(cardW / 2, h - 52);
-        t2.center = CGPointMake(cardW / 2, h - 30);
-        star.center = CGPointMake(cardW - 22, 22);
-        x += cardW + gap;
+    // the list on the right, centred in the space left
+    CGFloat listX = CGRectGetMaxX(self.emblem.frame) + 30;
+    CGFloat listW = b.width - right - listX;
+    CGFloat rowH = MIN(46, (b.height - 70) / MAX(1, self.cards.count));
+    CGFloat top = (b.height - rowH * self.cards.count - 30) / 2;
+    for (NSUInteger i = 0; i < self.cards.count; i++) {
+        UIButton *row = self.cards[i];
+        UIImageView *t = (UIImageView *)[row viewWithTag:11], *star = (UIImageView *)[row viewWithTag:13];
+        CGFloat sc = MIN(3, (listW - 34) / t.image.size.width);
+        t.bounds = CGRectMake(0, 0, t.image.size.width * sc, t.image.size.height * sc);
+        row.frame = CGRectMake(listX, top + i * rowH, listW, rowH);
+        t.frame = CGRectMake(0, (rowH - t.bounds.size.height) / 2, t.bounds.size.width, t.bounds.size.height);
+        star.center = CGPointMake(CGRectGetMaxX(t.frame) + 8 + star.bounds.size.width / 2, rowH / 2);
     }
-    self.scroll.contentSize = CGSizeMake(MAX(x - gap + right, b.width), h);
+    if (self.arrow.center.x < 1 && self.cards.count) [self pointAt:self.cards.firstObject];
+    else if (self.cards.count) {
+        // keep the arrow on its row after a layout change
+        UIButton *nearest = self.cards.firstObject;
+        for (UIButton *r in self.cards) if (fabs(r.center.y - self.arrow.center.y) < fabs(nearest.center.y - self.arrow.center.y)) nearest = r;
+        [self pointAt:nearest];
+    }
+    CGRect f = self.countText.frame;
+    f.origin = CGPointMake(listX, top + rowH * self.cards.count + 10);
+    self.countText.frame = f;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -188,26 +168,16 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
 
 - (void)refreshFinished {
     if ([self singleGame]) return;
-    for (UIButton *card in self.cards) {
-        BOOL done = SunkyIsFinished(&kSunkyGames[card.tag]);
-        [card viewWithTag:13].hidden = !done;
-        [card setBackgroundImage:panelImage(done ? @"panel_done" : @"panel", 3) forState:UIControlStateNormal];
+    for (UIButton *row in self.cards) {
+        [row viewWithTag:13].hidden = !SunkyIsFinished(&kSunkyGames[row.tag]);
     }
-    if ([self singleGame]) {
-        self.countText.hidden = YES;
-    } else {
-        int n = SunkyFinishedCount();
-        NSString *t = n == kSunkyGameCount ? [NSString stringWithFormat:@"ALL %d FINISHED!", n]
-                                           : [NSString stringWithFormat:@"%d OF %d FINISHED", n, kSunkyGameCount];
-        setPixelText(self.countText, t, YES, 3);
-    }
+    int n = SunkyFinishedCount();
+    NSString *t = n == kSunkyGameCount ? [NSString stringWithFormat:@"ALL %d FINISHED!", n]
+                                       : [NSString stringWithFormat:@"%d OF %d FINISHED", n, kSunkyGameCount];
+    setPixelText(self.countText, t, NO, 2.2);
     [self.view setNeedsLayout];
 }
 
-- (void)toggleWide {
-    SunkySetWidescreen(!SunkyWidescreen());
-    self.wideToggle.image = controlImage(SunkyWidescreen() ? @"toggle_on" : @"toggle_off");
-}
 
 // Test hook for the Simulator run (ci/sim.sh): -sunkyAutoplay <game> starts that game straight away.
 - (void)viewDidAppear:(BOOL)animated {

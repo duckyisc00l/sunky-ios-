@@ -15,6 +15,9 @@ udid=$(xcrun simctl create sunky "$dev" "$rt")
 echo "simulator $dev $rt $udid" | tee "$out/sim.md"
 xcrun simctl boot "$udid"; sleep 20
 xcrun simctl install "$udid" "$app"
+# the menu on its own first (landscape)
+xcrun simctl launch "$udid" com.duckyisc00l.sunky >/dev/null; sleep 6
+xcrun simctl io "$udid" screenshot "$out/menu.png" >/dev/null 2>&1
 
 # steps: <seconds>:<vk>:<hold seconds>  (13 enter, 32 space, 16 shift, 37 left, 38 up, 39 right, 40 down)
 #        <seconds>:gtap:<x>:<y>  tap a game pixel      <seconds>:tap:<fx>:<fy>  tap a fraction of the screen
