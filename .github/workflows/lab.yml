@@ -16,7 +16,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Games cache
         uses: actions/cache@v4
-        with: { path: games, key: games-v1-${{ hashFiles('ci/games.txt') }} }
+        with:
+          path: games
+          key: games-v1-${{ hashFiles('ci/games.txt') }}
       - name: Download games from Game Jolt
         run: ci/fetch.sh
       - name: Unpack Sunky the Game 2 installer
