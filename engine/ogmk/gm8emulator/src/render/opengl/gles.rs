@@ -31,14 +31,14 @@ pub const FIRST_VERTEX_CONVENTION: types::GLenum = 0x8E4D;
 pub static SCREEN_FBO: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU32::new(0);
 
 pub struct Gl {
-    raw: raw::Gl,
+    raw: raw::Gles2,
     sizes: RefCell<HashMap<types::GLuint, (types::GLint, types::GLint)>>,
     scratch_fbo: RefCell<types::GLuint>,
 }
 
 impl Deref for Gl {
-    type Target = raw::Gl;
-    fn deref(&self) -> &raw::Gl {
+    type Target = raw::Gles2;
+    fn deref(&self) -> &raw::Gles2 {
         &self.raw
     }
 }
@@ -48,7 +48,7 @@ impl Gl {
     where
         F: FnMut(&'static str) -> *const c_void,
     {
-        Gl { raw: raw::Gl::load_with(loadfn), sizes: RefCell::new(HashMap::new()), scratch_fbo: RefCell::new(0) }
+        Gl { raw: raw::Gles2::load_with(loadfn), sizes: RefCell::new(HashMap::new()), scratch_fbo: RefCell::new(0) }
     }
 
     unsafe fn bound_texture(&self) -> types::GLuint {

@@ -11,3 +11,9 @@ pub mod linux;
 
 #[cfg(target_os = "linux")]
 pub(crate) use linux as imp;
+
+// SUNKY-IOS
+#[cfg(target_os = "ios")]
+pub mod ios;
+#[cfg(target_os = "ios")]
+pub(crate) use ios as imp;

@@ -92,6 +92,10 @@ impl Source for InterprocessSource {
 impl AudioManager {
     pub fn new(do_output: bool, capture_audio: bool) -> Self {
         // TODO: not all these unwraps
+        // SUNKY-IOS: the iPhone app pulls samples through udon's iOS backend
+        #[cfg(target_os = "ios")]
+        let session = Session::new(Api::Ios).unwrap();
+        #[cfg(not(target_os = "ios"))]
         let session = Session::new(Api::SoundIo).unwrap();
         let device = session.default_output_device().unwrap();
         let sample_rate = device.sample_rate();

@@ -289,3 +289,24 @@ pub fn run(args: Vec<String>) -> i32 {
         EXIT_SUCCESS
     }
 }
+
+/// SUNKY-IOS: entry point for the iPhone app. Runs the game at `path` on the calling thread and
+/// returns when it ends: 0 = ended normally, 1 = error, 2 = the runner crashed (panic).
+#[cfg(target_os = "ios")]
+#[no_mangle]
+pub unsafe extern "C" fn sunky_run_game(path: *const std::os::raw::c_char) -> i32 {
+    let path = std::ffi::CStr::from_ptr(path).to_string_lossy().into_owned();
+    let args = vec!["gm8emulator".to_string(), path, "-r".to_string()];
+    match std::panic::catch_unwind(|| run(args)) {
+        Ok(code) => code,
+        Err(e) => {
+            let msg = e
+                .downcast_ref::<String>()
+                .map(|s| s.as_str())
+                .or_else(|| e.downcast_ref::<&str>().copied())
+                .unwrap_or("unknown panic");
+            eprintln!("runner panicked: {}", msg);
+            2
+        },
+    }
+}

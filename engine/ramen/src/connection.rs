@@ -2,7 +2,7 @@ use crate::{error::Error, platform::imp, window::Builder};
 use crate::util::sync::Mutex;
 use std::sync::Arc;
 
-#[cfg(unix)]
+#[cfg(target_os = "linux")] // SUNKY-IOS: was unix
 use crate::util::sync;
 
 /// A connection to a windowing backend, used as a factory object to create [`Window`](crate::window::Window)s and
@@ -38,13 +38,13 @@ impl Connection {
         Builder::new(self, None)
     }
 
-    #[cfg(unix)]
+    #[cfg(target_os = "linux")] // SUNKY-IOS: was unix
     pub fn xscreenid(&self) -> u32 {
         let g = sync::mutex_lock(&*self.0);
         g.xscreenid()
     }
 
-    #[cfg(unix)]
+    #[cfg(target_os = "linux")] // SUNKY-IOS: was unix
     pub fn xdisplay(&self) -> *mut crate::platform::linux::Display {
         let g = sync::mutex_lock(&*self.0);
         g.xdisplay()

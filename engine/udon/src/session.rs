@@ -147,7 +147,10 @@ backends! {
     mod dummy => Dummy if not(target_pointer_width = "0"),
 
     /// andrewrk's libsoundio
-    mod sio => SoundIo if not(target_pointer_width = "0"),
+    mod sio => SoundIo if not(target_os = "ios"), // SUNKY-IOS: was always on
+
+    /// SUNKY-IOS: iPhone (the app's RemoteIO unit pulls samples)
+    mod ios => Ios if target_os = "ios",
 
     // Windows Audio Session API (WASAPI)
     //mod wasapi => Wasapi if all(target_os = "windows", feature = "wasapi"),
