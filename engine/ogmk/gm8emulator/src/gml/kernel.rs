@@ -7742,9 +7742,13 @@ impl Game {
             {
                 self.window.hwnd() as u64 as f64
             }
-            #[cfg(unix)]
+            #[cfg(target_os = "linux")] // SUNKY-IOS: was unix
             {
                 self.window.xid()
+            }
+            #[cfg(target_os = "ios")]
+            {
+                0.0
             }
         }.into())
     }

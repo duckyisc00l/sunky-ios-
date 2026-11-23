@@ -6,3 +6,4 @@ build/
 Payload/
 *.ipa
 *.xcodeproj/
+target-gles/

@@ -123,9 +123,15 @@ pub fn glx_init(display: *mut Display, screen: u32) {
                 _ => (),
             }
         }
-        if !(has_cc && has_gpa && has_swc) { panic!("upgrade your drivers Thanks"); }
+        // SUNKY-IOS: swap control is optional (Xvfb in the lab doesn't have it)
+        if !(has_cc && has_gpa) { panic!("upgrade your drivers Thanks"); }
         let glXCreateContextAttribsARB = std::mem::transmute::<_, unsafe extern "C" fn(*mut Display, GLXFBConfig, GLXContext, c_int, *const c_int) -> GLXContext>(glXGetProcAddressARB("glXCreateContextAttribsARB\0".as_ptr().cast()));
-        let glXSwapIntervalEXT = std::mem::transmute::<_, unsafe extern "C" fn(*mut Display, GLXDrawable, interval: c_int)>(glXGetProcAddressARB("glXSwapIntervalEXT\0".as_ptr().cast()));
+        unsafe extern "C" fn no_swap_interval(_: *mut Display, _: GLXDrawable, _: c_int) {}
+        let glXSwapIntervalEXT = if has_swc {
+            std::mem::transmute::<_, unsafe extern "C" fn(*mut Display, GLXDrawable, interval: c_int)>(glXGetProcAddressARB("glXSwapIntervalEXT\0".as_ptr().cast()))
+        } else {
+            no_swap_interval as unsafe extern "C" fn(*mut Display, GLXDrawable, c_int)
+        };
         let mut depth: c_int = 0;
         _ = glXGetFBConfigAttrib(display, fb_config, DEPTH_SIZE, &mut depth);
         let mut visual: c_int = 0;

@@ -29,7 +29,7 @@ jobs:
         run: |
           sudo rm -f /var/lib/man-db/auto-update
           sudo apt-get update -qq
-          sudo apt-get install -y -qq xvfb xdotool imagemagick libx11-dev libxcb1-dev libxcb-shape0-dev libxcb-xfixes0-dev libxrandr-dev libxi-dev libgl1-mesa-dev libgl1-mesa-dri libasound2-dev libpulse-dev libjack-jackd2-dev libxcb-xinput0 libxkbcommon0 libxkbcommon-x11-0 libx11-xcb1 pulseaudio >/dev/null
+          sudo apt-get install -y -qq xvfb xdotool imagemagick libx11-dev libxcb1-dev libxcb-shape0-dev libxcb-xfixes0-dev libxrandr-dev libxi-dev libgl1-mesa-dev libgl1-mesa-dri libasound2-dev libpulse-dev libjack-jackd2-dev libegl-dev libgles-dev libxcb-xinput0 libxkbcommon0 libxkbcommon-x11-0 libx11-xcb1 pulseaudio >/dev/null
       - name: Cargo cache
         uses: actions/cache@v4
         with:
@@ -37,13 +37,16 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             engine/ogmk/target
+            engine/ogmk/target-gles
             ci/gm8info/target
           key: cargo-v2-${{ hashFiles('engine/**/*.rs', 'engine/**/Cargo.*', 'ci/gm8info/**') }}
           restore-keys: cargo-v2-
       - name: Build OpenGMK and gm8info
         run: |
           set -o pipefail
-          (cd engine/ogmk && cargo build --release -p gm8emulator 2>&1 | grep -vE "^\s+(Compiling|Downloaded|Downloading)")
+          (cd engine/ogmk && cargo build --release -p gm8emulator --bin gm8emulator 2>&1 | grep -E "^(error|warning: unused)|-->|^\s+\|" | head -80)
+          (cd engine/ogmk && cargo build --release -p gm8emulator --bin gm8emulator --features gles --target-dir target-gles 2>&1 | grep -E "^error|-->|^\s+\|" | head -120)
+          ls -la engine/ogmk/target/release/gm8emulator engine/ogmk/target-gles/release/gm8emulator
           (cd ci/gm8info && cargo build --release 2>&1 | tail -5)
       - name: Inspect games
         run: |
@@ -58,7 +61,8 @@ jobs:
         run: |
           pulseaudio --start --exit-idle-time=-1 || true
           pactl load-module module-null-sink >/dev/null 2>&1 || true
-          xvfb-run -s "-screen 0 1280x960x24" ci/lab.sh out/run ${{ inputs.games || 'p1 p2 p3 mpeg tiff' }}
+          EMU=engine/ogmk/target/release/gm8emulator xvfb-run -a -s "-screen 0 1280x960x24" ci/lab.sh out/run ${{ inputs.games || 'p1 p2 p3 mpeg tiff' }}
+          EMU=engine/ogmk/target-gles/release/gm8emulator xvfb-run -a -s "-screen 0 1280x960x24" ci/lab.sh out/run-gles ${{ inputs.games || 'p1 p2 p3 mpeg tiff' }}
       - name: Publish results to branch r-lab
         if: always()
         run: |

@@ -597,7 +597,7 @@ impl Game {
         let window_icons = !settings.dont_show_buttons;
 
         let connection = ramen::connection::Connection::new()?;
-        #[cfg(unix)]
+        #[cfg(target_os = "linux")] // SUNKY-IOS: was unix (iOS is unix too)
         unsafe {
             let display = connection.xdisplay();
             let screen = connection.xscreenid();
@@ -626,7 +626,7 @@ impl Game {
             });
 
         // if unix... pass visual...
-        #[cfg(unix)]
+        #[cfg(target_os = "linux")] // SUNKY-IOS
         unsafe {
             let glx = crate::render::opengl::glx::GLX.as_ref().unwrap();
             builder = builder.depth(glx.depth).visual(glx.visual);
