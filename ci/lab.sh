@@ -20,8 +20,10 @@ for g in $games; do
   hold() { focus; xdotool keydown "$1"; sleep "$2"; xdotool keyup "$1"; }
   click() { [ -n "$wid" ] && xdotool mousemove --window "$wid" "$1" "$2" mousedown 1 sleep 0.2 mouseup 1 2>/dev/null; }
   sleep 6; shot 01-start
-  click 307 448; sleep 3; shot 02-click-play      # Part 1's PLAY
-  click 547 443; sleep 3; shot 03-click-play2     # Part 3's PLAY
+  # each game's PLAY button on its warning screen (centre of the Play object, from the room data)
+  case $g in p1) click 320 432;; p3) click 528 393;; tiff) click 448 352;; esac
+  sleep 3; shot 02-click-play
+  sleep 3; shot 03-after-play
   key Return; sleep 3; shot 04-enter
   key Return; sleep 3; shot 05-enter2
   key space; sleep 2; hold Right 4; shot 06-right
