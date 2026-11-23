@@ -5,7 +5,7 @@ on:
       games: { description: "games to run (blank = all)", required: false, default: "" }
   push:
     branches: [main]
-    paths: ["ci/**", ".github/workflows/lab.yml"]
+    paths: ["ci/**", "engine/**", ".github/workflows/lab.yml"]
 permissions: { contents: write }
 concurrency: { group: lab, cancel-in-progress: true }
 jobs:

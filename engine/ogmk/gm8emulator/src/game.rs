@@ -675,6 +675,9 @@ impl Game {
             n if n < 0 => Scaling::Aspect(f64::from(n) / 100.0),
             n => Scaling::Fixed(f64::from(n) / 100.0),
         };
+        // SUNKY-IOS: always fit the game to the phone's screen, keeping its shape
+        #[cfg(target_os = "ios")]
+        let scaling = { let _ = scaling; Scaling::Aspect(-1.0) };
 
         println!("GPU Max Texture Size: {}", renderer.max_texture_size());
 
