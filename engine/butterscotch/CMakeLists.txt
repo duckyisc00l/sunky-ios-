@@ -788,6 +788,8 @@ elseif(PLATFORM STREQUAL "ios")
     endif()
     target_include_directories(butterscotch PUBLIC vendor/stb/image)
     target_include_directories(butterscotch PUBLIC vendor/stb/vorbis)
+    # miniaudio's iOS code uses AVAudioSession, so its implementation is compiled as Objective-C
+    set_source_files_properties(src/audio/miniaudio/ma_audio_system.c PROPERTIES COMPILE_OPTIONS "-xobjective-c")
     target_link_libraries(butterscotch PRIVATE bzip2 stb_ds sha1 stb_vorbis)
 elseif(PLATFORM STREQUAL "ps2")
     # The PS2 EE has a single-precision FPU only, so double is software-emulated
