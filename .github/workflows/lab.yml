@@ -44,7 +44,9 @@ jobs:
       - name: Build OpenGMK and gm8info
         run: |
           set -o pipefail
-          (cd engine/ogmk && cargo build --release -p gm8emulator --bin gm8emulator --features gles --target-dir target-gles 2>&1 | grep -E "^error" -A12 | head -150)
+          (cd engine/ogmk && cargo build --release -p gm8emulator --bin gm8emulator --features gles --target-dir target-gles > ../../build.log 2>&1); rc=$?
+          grep -E "^error" -A12 build.log | head -150 || true
+          [ $rc -eq 0 ] || exit $rc
           ls -la engine/ogmk/target-gles/release/gm8emulator
           (cd ci/gm8info && cargo build --release 2>&1 | tail -5)
       - name: Inspect games
