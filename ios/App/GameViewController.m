@@ -27,6 +27,8 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     BOOL _dirDown[4]; // left, up, right, down (from the D-pad)
     BOOL _padDir[4];  // from a game controller
     UITouch *_dpadTouch;
+    CFTimeInterval _mouseDownAt;
+    NSUInteger _mouseGeneration;
 }
 
 - (instancetype)initWithExe:(NSString *)exePath title:(NSString *)title {
@@ -273,6 +275,8 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
                 _mouseTouch = t;
                 [self sendMouse:p];
                 ramen_ios_mouse_button(0, true);
+                _mouseDownAt = CACurrentMediaTime();
+                _mouseGeneration++;
                 break;
             case RoleClose: [self askToClose]; role = RoleNone; break;
             default: break;
@@ -300,7 +304,17 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
                 break;
             case RoleJump: ramen_ios_key(VK_SPACE, false); [self highlight:self.jump on:NO]; break;
             case RoleStart: ramen_ios_key(VK_RETURN, false); [self highlight:self.start on:NO]; break;
-            case RoleGame: _mouseTouch = nil; ramen_ios_mouse_button(0, false); break;
+            case RoleGame: {
+                // Some buttons only react while the mouse is held, so keep every tap down for a few frames.
+                _mouseTouch = nil;
+                CFTimeInterval wait = 0.1 - (CACurrentMediaTime() - _mouseDownAt);
+                NSUInteger gen = _mouseGeneration;
+                if (wait <= 0) { ramen_ios_mouse_button(0, false); break; }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(wait * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    if (gen == self->_mouseGeneration && !self->_mouseTouch) ramen_ios_mouse_button(0, false);
+                });
+                break;
+            }
             default: break;
         }
         [_roles removeObjectForKey:t];

@@ -18,7 +18,7 @@ for g in $games; do
   focus() { [ -n "$wid" ] && xdotool windowfocus "$wid" 2>/dev/null; }
   key() { focus; xdotool key --clearmodifiers "$@" 2>/dev/null; }
   hold() { focus; xdotool keydown "$1"; sleep "$2"; xdotool keyup "$1"; }
-  click() { [ -n "$wid" ] && xdotool mousemove --window "$wid" "$1" "$2" click 1 2>/dev/null; }
+  click() { [ -n "$wid" ] && xdotool mousemove --window "$wid" "$1" "$2" mousedown 1 sleep 0.2 mouseup 1 2>/dev/null; }
   sleep 6; shot 01-start
   click 307 448; sleep 3; shot 02-click-play      # Part 1's PLAY
   click 547 443; sleep 3; shot 03-click-play2     # Part 3's PLAY
