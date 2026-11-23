@@ -72,7 +72,7 @@ int32_t sunky_bs_run(const char *dataWinPath, const char *savesPath) {
             for (int i = 0; i < n; i++) {
                 if (events[i].kind == 0) bs_ios_key(events[i].a, events[i].b);
                 else if (events[i].kind == 1) bs_ios_pointer(events[i].x, events[i].y);
-                else bs_ios_mouse_button(0, events[i].b);
+                else bs_ios_mouse_button(1, events[i].b); // GameMaker numbers mouse buttons from 1 (mb_left)
             }
             bs_ios_set_widescreen(atomic_load(&gWide));
             CFTimeInterval now = CACurrentMediaTime();
