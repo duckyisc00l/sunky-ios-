@@ -125,7 +125,7 @@ jobs:
         if: inputs.simulator == 'yes'
         continue-on-error: true
         working-directory: ios
-        env: { SIM_GAMES: "p1 p3 g2" }
+        env: { SIM_GAMES: "p1 p2 p3 mpeg tiff g2" }
         run: ../ci/sim.sh
 
       - name: Upload build log

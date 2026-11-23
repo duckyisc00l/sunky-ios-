@@ -168,6 +168,26 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     NSString *spec = [NSUserDefaults.standardUserDefaults stringForKey:@"sunkyAutoKeys"];
     for (NSString *item in [spec componentsSeparatedByString:@","]) {
         NSArray *p = [item componentsSeparatedByString:@":"];
+        if (p.count == 4) { // "sec:gtap:x:y" taps game pixel (x, y); "sec:tap:fx:fy" taps a fraction of the screen
+            double at = [p[0] doubleValue];
+            NSString *kind = p[1];
+            CGFloat a = [p[2] doubleValue], b2 = [p[3] doubleValue];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(at * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                CGPoint pt;
+                if ([kind isEqualToString:@"gtap"]) {
+                    CGRect r = [self gameRect];
+                    uint32_t packed = ramen_ios_game_size();
+                    pt = CGPointMake(r.origin.x + a / MAX(1, packed >> 16) * r.size.width, r.origin.y + b2 / MAX(1, packed & 0xFFFF) * r.size.height);
+                } else {
+                    pt = CGPointMake(a * self.view.bounds.size.width, b2 * self.view.bounds.size.height);
+                }
+                SunkyLog(@"test tap at %.0f,%.0f", pt.x, pt.y);
+                [self sendMouse:pt];
+                [self mouseButton:YES];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{ [self mouseButton:NO]; });
+            });
+            continue;
+        }
         if (p.count != 3) continue;
         double at = [p[0] doubleValue], hold = [p[2] doubleValue];
         uint32_t vk = (uint32_t)[p[1] intValue];

@@ -16,11 +16,23 @@ echo "simulator $dev $rt $udid" | tee "$out/sim.md"
 xcrun simctl boot "$udid"; sleep 20
 xcrun simctl install "$udid" "$app"
 
-# keys: <seconds>:<vk>:<hold seconds>  (13 enter, 32 space, 37 left, 38 up, 39 right, 40 down)
-keys="6:13:0.2,9:13:0.2,12:32:0.2,14:39:4,19:32:0.3,21:39:3,25:13:0.2"
-for g in ${SIM_GAMES:-p1 p2 p3 mpeg tiff}; do
+# steps: <seconds>:<vk>:<hold seconds>  (13 enter, 32 space, 16 shift, 37 left, 38 up, 39 right, 40 down)
+#        <seconds>:gtap:<x>:<y>  tap a game pixel      <seconds>:tap:<fx>:<fy>  tap a fraction of the screen
+# Each game: tap its PLAY button on the warning screen, then start, then run right and jump.
+steps_for() {
+  local run="12:13:0.2,15:13:0.2,18:32:0.2,19:39:5,22:32:0.3,25:39:4,27:32:0.3"
+  case $1 in
+    p1)   echo "6:gtap:320:432,$run" ;;
+    p2|p3) echo "6:gtap:528:393,$run" ;;
+    tiff) echo "6:gtap:448:352,$run" ;;
+    mpeg) echo "6:13:0.2,9:13:0.2,$run" ;;
+    g2)   echo "7:tap:0.5:0.72,8:tap:0.47:0.7,12:13:0.2,15:13:0.2,18:16:0.2,19:39:5,22:16:0.3,25:39:4,27:16:0.3" ;;
+  esac
+}
+for g in ${SIM_GAMES:-p1 p2 p3 mpeg tiff g2}; do
+  keys=$(steps_for "$g")
   xcrun simctl launch --terminate-running-process "$udid" com.duckyisc00l.sunky -sunkyAutoplay "$g" -sunkyAutoKeys "$keys" >/dev/null
-  for t in 5 10 16 22 30; do
+  for t in 5 10 16 22 30 36; do
     sleep $(( t - ${prev:-0} )); prev=$t
     xcrun simctl io "$udid" screenshot "$out/$g-$t.png" >/dev/null 2>&1
   done
