@@ -135,6 +135,11 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
         UIImageView *t = pixelView(pixelText(name, NO), 2.4);
         t.tag = 11;
         [card addSubview:t];
+        // once finished, the card turns into that game's own ending (ci/finished_cards.py)
+        UIImageView *skin = [[UIImageView alloc] initWithImage:controlImage([@"done_" stringByAppendingString:@(g->file)])];
+        skin.userInteractionEnabled = NO;
+        skin.tag = 14;
+        [card addSubview:skin];
         UIImageView *star = pixelView(controlImage(@"star"), 3);
         star.tag = 13;
         [card addSubview:star];
@@ -147,7 +152,14 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
     self.selected = card.tag;
     UIColor *gold = [UIColor colorWithRed:1 green:214/255.0 blue:0 alpha:1];
     UIColor *white = [UIColor colorWithRed:230/255.0 green:230/255.0 blue:240/255.0 alpha:1];
-    for (UIButton *c in self.cards) c.backgroundColor = c.tag == self.selected ? gold : white;
+    for (UIButton *c in self.cards) {
+        BOOL on = c.tag == self.selected;
+        c.backgroundColor = on ? gold : white;
+        // finished cards are covered by their own art, so they show the pick with a gold edge
+        BOOL fin = SunkyIsFinished(&kSunkyGames[c.tag]);
+        c.layer.borderColor = (fin && on ? gold : UIColor.blackColor).CGColor;
+        c.layer.borderWidth = fin && on ? 7 : 4;
+    }
 }
 
 - (void)viewDidLayoutSubviews {
@@ -182,6 +194,7 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
         CGFloat sc = MIN(2.4, (cw - 16) / t.image.size.width);
         t.bounds = CGRectMake(0, 0, t.image.size.width * sc, t.image.size.height * sc);
         t.center = CGPointMake(cw / 2, (CGRectGetMaxY(box.frame) + ch) / 2);
+        [card viewWithTag:14].frame = card.bounds;
         UIView *star = [card viewWithTag:13];
         star.center = CGPointMake(cw - star.bounds.size.width / 2 + 8, star.bounds.size.height / 2 - 10);
     }
@@ -202,9 +215,10 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
     for (UIButton *card in self.cards) {
         BOOL fin = SunkyIsFinished(&kSunkyGames[card.tag]);
         [card viewWithTag:13].hidden = !fin;
+        [card viewWithTag:14].hidden = !fin;
         if (!fin && firstOpen < 0) firstOpen = card.tag;
     }
-    if (self.selected < 0 && self.cards.count) [self pick:self.cards[MAX(0, firstOpen)]];
+    if (self.cards.count) [self pick:self.cards[self.selected < 0 ? MAX(0, firstOpen) : self.selected]];
     int n = SunkyFinishedCount();
     NSString *t = n == kSunkyGameCount ? [NSString stringWithFormat:@"ALL %d FINISHED!", n]
                                        : [NSString stringWithFormat:@"%d OF %d FINISHED", n, kSunkyGameCount];
