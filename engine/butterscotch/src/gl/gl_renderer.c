@@ -1278,6 +1278,28 @@ bool GLRenderer_ensureTextureLoaded(GLRenderer* gl, uint32_t pageId) {
     if (txtr->externalPath != nullptr && gl->base.runner != nullptr)
         gl->base.runner->fileSystem->vtable->readFileBinary(gl->base.runner->fileSystem,
             txtr->externalPath, &externalData, &externalSize);
+#ifdef PLATFORM_IOS
+    // SUNKY-IOS: replacement art, $SUNKY_OVERRIDES/txtr/<page>.png (same idea as OpenGMK's overrides.rs)
+    if (externalData == nullptr && getenv("SUNKY_OVERRIDES") != nullptr) {
+        char path[1024];
+        snprintf(path, sizeof path, "%s/txtr/%u.png", getenv("SUNKY_OVERRIDES"), pageId);
+        FILE* f = fopen(path, "rb");
+        if (f != nullptr) {
+            fseek(f, 0, SEEK_END);
+            long n = ftell(f);
+            fseek(f, 0, SEEK_SET);
+            externalData = malloc((size_t) n);
+            if (externalData != nullptr && fread(externalData, 1, (size_t) n, f) == (size_t) n) {
+                externalSize = (int32_t) n;
+                logInfo("GL: TXTR page %u replaced from %s\n", pageId, path);
+            } else {
+                free(externalData);
+                externalData = nullptr;
+            }
+            fclose(f);
+        }
+    }
+#endif
     uint8_t* pixels = ImageDecoder_decodeToRgba(externalData ? externalData : txtr->blobData,
         externalData ? (size_t)externalSize : (size_t)txtr->blobSize, gm2022_5, &w, &h);
     free(externalData);

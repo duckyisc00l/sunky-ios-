@@ -6,6 +6,7 @@ bs=$(realpath "$1"); data=$(realpath "$2"); out=$(realpath -m "$3"); mkdir -p "$
 "$bs" "$data" --print-unknown-functions > "$out/unknown-functions.txt" 2>&1
 "$bs" "$data" --print-rooms > "$out/rooms.txt" 2>&1
 python3 "$(dirname "$0")/strings.py" "$data" > "$out/strings.txt" 2>&1
+python3 "$(dirname "$0")/txtr.py" "$data" "$out/txtr"
 "$bs" "$data" --disassemble '*' > /tmp/disasm.txt 2>&1
 # every keyboard check with the few instructions before it (the key code is pushed just before)
 grep -n -B4 -E "keyboard_check|keyboard_key_press|keyboard_set_map" /tmp/disasm.txt > "$out/keys.txt"
