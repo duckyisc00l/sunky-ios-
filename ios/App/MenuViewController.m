@@ -1,13 +1,67 @@
-// Pick a game. Each game gets its own save folder: Documents/<game>/ (visible in the Files app).
+// Pick a game, in the same pixel-art style as the controls (art drawn by ci/menu_art.py).
+// Each game gets its own save folder: Documents/<game>/ (visible in the Files app).
 #import "MenuViewController.h"
 #import "GameViewController.h"
 #import "Sunky.h"
 
+// ---- Pixel text: draws strings from the 7x9-cell font strips (ASCII 32..95) ----
+
+static UIImage *controlImage(NSString *name) {
+    NSString *path = [NSBundle.mainBundle pathForResource:name ofType:@"png" inDirectory:@"Controls"];
+    return path ? [UIImage imageWithContentsOfFile:path] : nil;
+}
+
+/// The string as a pixel image (1 point per pixel; display it scaled up with nearest filtering).
+static UIImage *pixelText(NSString *text, BOOL gold) {
+    static UIImage *white, *goldStrip;
+    if (!white) { white = controlImage(@"font_white"); goldStrip = controlImage(@"font_gold"); }
+    UIImage *strip = gold ? goldStrip : white;
+    text = text.uppercaseString;
+    if (!strip || text.length == 0) return nil;
+    CGFloat w = text.length * 6 + 1, h = 9;
+    UIGraphicsImageRendererFormat *fmt = [UIGraphicsImageRendererFormat defaultFormat];
+    fmt.scale = 1;
+    UIGraphicsImageRenderer *r = [[UIGraphicsImageRenderer alloc] initWithSize:CGSizeMake(w, h) format:fmt];
+    return [r imageWithActions:^(UIGraphicsImageRendererContext *ctx) {
+        CGContextSetInterpolationQuality(ctx.CGContext, kCGInterpolationNone);
+        for (NSUInteger i = 0; i < text.length; i++) {
+            unichar c = [text characterAtIndex:i];
+            if (c < 32 || c > 95) c = '?';
+            CGImageRef glyph = CGImageCreateWithImageInRect(strip.CGImage, CGRectMake((c - 32) * 7, 0, 7, 9));
+            [[UIImage imageWithCGImage:glyph] drawAtPoint:CGPointMake(i * 6, 0)];
+            CGImageRelease(glyph);
+        }
+    }];
+}
+
+static UIImageView *pixelView(UIImage *img, CGFloat scale) {
+    UIImageView *v = [[UIImageView alloc] initWithImage:img];
+    v.layer.magnificationFilter = kCAFilterNearest;
+    v.frame = CGRectMake(0, 0, img.size.width * scale, img.size.height * scale);
+    v.userInteractionEnabled = NO;
+    return v;
+}
+
+static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scale) {
+    UIImage *img = pixelText(text, gold);
+    v.image = img;
+    CGPoint c = v.center;
+    v.bounds = CGRectMake(0, 0, img.size.width * scale, img.size.height * scale);
+    v.center = c;
+}
+
+/// A 9-slice pixel panel, each pixel `scale` points.
+static UIImage *panelImage(NSString *name, CGFloat scale) {
+    UIImage *base = controlImage(name);
+    UIImage *scaled = [UIImage imageWithCGImage:base.CGImage scale:1.0 / scale orientation:UIImageOrientationUp];
+    CGFloat cap = 6 * scale;
+    return [scaled resizableImageWithCapInsets:UIEdgeInsetsMake(cap, cap, cap, cap) resizingMode:UIImageResizingModeStretch];
+}
+
 @interface MenuViewController ()
+@property (nonatomic, strong) UIImageView *background, *logo, *subtitle, *countText, *wideText, *wideToggle;
 @property (nonatomic, strong) UIScrollView *scroll;
 @property (nonatomic, strong) NSMutableArray<UIButton *> *cards;
-@property (nonatomic, strong) UISwitch *wideSwitch;
-@property (nonatomic, strong) UILabel *wideLabel, *countLabel;
 @end
 
 @implementation MenuViewController
@@ -16,138 +70,117 @@
 - (BOOL)prefersHomeIndicatorAutoHidden { return YES; }
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations { return UIInterfaceOrientationMaskLandscape; }
 
+- (BOOL)singleGame { return [[NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"] length] > 0; }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithRed:0.05 green:0.12 blue:0.45 alpha:1];
+    self.view.backgroundColor = UIColor.blackColor;
 
-    UILabel *title = [UILabel new];
-    title.text = @"SUNKY";
-    title.font = [UIFont systemFontOfSize:44 weight:UIFontWeightBlack];
-    title.textColor = UIColor.whiteColor;
-    title.tag = 1;
-    [self.view addSubview:title];
-    UILabel *sub = [UILabel new];
-    sub.text = @"Pick a game";
-    sub.font = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
-    sub.textColor = [UIColor colorWithWhite:1 alpha:0.7];
-    sub.tag = 2;
-    [self.view addSubview:sub];
+    self.background = [[UIImageView alloc] initWithImage:controlImage(@"menu_bg")];
+    self.background.contentMode = UIViewContentModeScaleAspectFill;
+    self.background.layer.magnificationFilter = kCAFilterNearest;
+    self.background.clipsToBounds = YES;
+    [self.view addSubview:self.background];
+
+    self.logo = pixelView(pixelText(@"SUNKY", YES), 9);
+    self.subtitle = pixelView(pixelText([self singleGame] ? @"TAP TO PLAY" : @"PICK A GAME", NO), 3);
+    self.countText = pixelView(pixelText(@" ", YES), 3);
+    self.wideText = pixelView(pixelText(@"WIDESCREEN", NO), 2.5);
+    self.wideToggle = pixelView(controlImage(SunkyWidescreen() ? @"toggle_on" : @"toggle_off"), 3.5);
+    for (UIView *v in @[self.logo, self.subtitle, self.countText, self.wideText, self.wideToggle]) [self.view addSubview:v];
+    UIButton *wideHit = [UIButton buttonWithType:UIButtonTypeCustom];
+    wideHit.tag = 777;
+    [wideHit addTarget:self action:@selector(toggleWide) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:wideHit];
 
     self.scroll = [UIScrollView new];
     self.scroll.showsHorizontalScrollIndicator = NO;
+    self.scroll.clipsToBounds = NO;
     [self.view addSubview:self.scroll];
     self.cards = [NSMutableArray array];
-    // Single-game apps (SunkyOnly in Info.plist) show just their own game and start it straight away.
+
     NSString *only = [NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"];
-    if (only.length) {
-        title.text = @"SUNKY";
-        sub.text = @"Tap to play";
-    }
     for (int i = 0; i < kSunkyGameCount; i++) {
         if (only.length && ![only isEqualToString:@(kSunkyGames[i].file)]) continue;
+        const SunkyGame *g = &kSunkyGames[i];
         UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
         b.tag = i;
-        b.backgroundColor = [UIColor colorWithWhite:1 alpha:0.12];
-        b.layer.cornerRadius = 18;
-        b.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.3].CGColor;
-        b.layer.borderWidth = 2;
-        b.clipsToBounds = YES;
+        [b setBackgroundImage:panelImage(@"panel", 3) forState:UIControlStateNormal];
+        [b setBackgroundImage:panelImage(@"panel_on", 3) forState:UIControlStateHighlighted];
+        b.adjustsImageWhenHighlighted = NO;
         [b addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
 
-        NSString *iconPath = [NSBundle.mainBundle pathForResource:@(kSunkyGames[i].file) ofType:@"png" inDirectory:@"Games"];
+        NSString *iconPath = [NSBundle.mainBundle pathForResource:@(g->file) ofType:@"png" inDirectory:@"Games"];
         UIImageView *icon = [[UIImageView alloc] initWithImage:iconPath ? [UIImage imageWithContentsOfFile:iconPath] : nil];
         icon.contentMode = UIViewContentModeScaleAspectFit;
         icon.layer.magnificationFilter = kCAFilterNearest;
         icon.tag = 10;
         icon.userInteractionEnabled = NO;
         [b addSubview:icon];
-        UILabel *name = [UILabel new];
-        name.text = @(kSunkyGames[i].title);
-        name.font = [UIFont systemFontOfSize:18 weight:UIFontWeightBold];
-        name.textColor = UIColor.whiteColor;
-        name.textAlignment = NSTextAlignmentCenter;
-        name.adjustsFontSizeToFitWidth = YES;
-        name.tag = 11;
-        [b addSubview:name];
-        UILabel *detail = [UILabel new];
-        detail.text = @(kSunkyGames[i].subtitle);
-        detail.font = [UIFont systemFontOfSize:14 weight:UIFontWeightMedium];
-        detail.textColor = [UIColor colorWithWhite:1 alpha:0.75];
-        detail.textAlignment = NSTextAlignmentCenter;
-        detail.adjustsFontSizeToFitWidth = YES;
-        detail.tag = 12;
-        [b addSubview:detail];
-        UILabel *badge = [UILabel new];
-        badge.text = @" ✓ FINISHED ";
-        badge.font = [UIFont systemFontOfSize:13 weight:UIFontWeightHeavy];
-        badge.textColor = UIColor.whiteColor;
-        badge.backgroundColor = [UIColor colorWithRed:0.1 green:0.65 blue:0.25 alpha:1];
-        badge.layer.cornerRadius = 8;
-        badge.clipsToBounds = YES;
-        badge.tag = 13;
-        [badge sizeToFit];
-        [b addSubview:badge];
+
+        // "SUNKY THE GAME" + "PART 1", or the game's name + a short line
+        BOOL part = strncmp(g->subtitle, "Part", 4) == 0;
+        NSString *line1 = part ? @"SUNKY THE GAME" : @(g->title);
+        NSString *line2 = part ? @(g->subtitle) : @(g->subtitle);
+        UIImageView *t1 = pixelView(pixelText(line1, NO), 2), *t2 = pixelView(pixelText(line2, YES), 2);
+        t1.tag = 11; t2.tag = 12;
+        [b addSubview:t1];
+        [b addSubview:t2];
+
+        UIImageView *star = pixelView(controlImage(@"star"), 3);
+        star.tag = 13;
+        [b addSubview:star];
         [self.scroll addSubview:b];
         [self.cards addObject:b];
     }
-
-    self.countLabel = [UILabel new];
-    self.countLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
-    self.countLabel.textColor = [UIColor colorWithRed:0.55 green:1 blue:0.6 alpha:1];
-    [self.view addSubview:self.countLabel];
-
-    self.wideLabel = [UILabel new];
-    self.wideLabel.text = @"Widescreen";
-    self.wideLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
-    self.wideLabel.textColor = UIColor.whiteColor;
-    [self.wideLabel sizeToFit];
-    [self.view addSubview:self.wideLabel];
-    self.wideSwitch = [UISwitch new];
-    self.wideSwitch.on = SunkyWidescreen();
-    [self.wideSwitch addTarget:self action:@selector(wideChanged:) forControlEvents:UIControlEventValueChanged];
-    [self.view addSubview:self.wideSwitch];
-
-    UILabel *credit = [UILabel new];
-    credit.text = @"Games by LooneyDude · runs on OpenGMK";
-    credit.font = [UIFont systemFontOfSize:12];
-    credit.textColor = [UIColor colorWithWhite:1 alpha:0.5];
-    credit.tag = 3;
-    [self.view addSubview:credit];
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     UIEdgeInsets safe = self.view.safeAreaInsets;
     CGSize b = self.view.bounds.size;
-    CGFloat left = MAX(safe.left, 20), right = MAX(safe.right, 20);
-    UILabel *title = [self.view viewWithTag:1], *sub = [self.view viewWithTag:2], *credit = [self.view viewWithTag:3];
-    [title sizeToFit]; [sub sizeToFit]; [credit sizeToFit];
-    CGFloat top = MAX(safe.top, 16);
-    title.frame = CGRectMake(left, top, title.bounds.size.width, title.bounds.size.height);
-    sub.frame = CGRectMake(left + 2, CGRectGetMaxY(title.frame) - 2, sub.bounds.size.width, sub.bounds.size.height);
-    credit.frame = CGRectMake(left, b.height - MAX(safe.bottom, 10) - credit.bounds.size.height, credit.bounds.size.width, credit.bounds.size.height);
+    CGFloat left = MAX(safe.left, 24), right = MAX(safe.right, 24), top = MAX(safe.top, 14);
+    self.background.frame = self.view.bounds;
 
-    [self.countLabel sizeToFit];
-    self.countLabel.frame = CGRectMake(CGRectGetMaxX(sub.frame) + 14, sub.frame.origin.y, self.countLabel.bounds.size.width, sub.bounds.size.height);
-    CGSize sw = self.wideSwitch.bounds.size;
-    self.wideSwitch.frame = CGRectMake(b.width - right - sw.width, top + 6, sw.width, sw.height);
-    self.wideLabel.center = CGPointMake(CGRectGetMinX(self.wideSwitch.frame) - 10 - self.wideLabel.bounds.size.width / 2, self.wideSwitch.center.y);
+    CGRect f = self.logo.frame;
+    f.origin = CGPointMake(left, top);
+    self.logo.frame = f;
+    f = self.subtitle.frame;
+    f.origin = CGPointMake(left + 4, CGRectGetMaxY(self.logo.frame) + 6);
+    self.subtitle.frame = f;
+    f = self.countText.frame;
+    f.origin = CGPointMake(CGRectGetMaxX(self.subtitle.frame) + 18, self.subtitle.frame.origin.y);
+    self.countText.frame = f;
 
-    CGFloat y = CGRectGetMaxY(sub.frame) + 14;
-    CGFloat h = CGRectGetMinY(credit.frame) - 10 - y;
+    f = self.wideToggle.frame;
+    f.origin = CGPointMake(b.width - right - f.size.width, top + 4);
+    self.wideToggle.frame = f;
+    f = self.wideText.frame;
+    f.origin = CGPointMake(CGRectGetMinX(self.wideToggle.frame) - 10 - f.size.width,
+                           self.wideToggle.center.y - f.size.height / 2);
+    self.wideText.frame = f;
+    [self.view viewWithTag:777].frame = CGRectInset(CGRectUnion(self.wideText.frame, self.wideToggle.frame), -10, -10);
+
+    CGFloat y = CGRectGetMaxY(self.subtitle.frame) + 16;
+    CGFloat h = b.height - y - MAX(safe.bottom, 14);
     self.scroll.frame = CGRectMake(0, y, b.width, h);
-    CGFloat cardW = MIN(190, h * 0.82), gap = 16, x = left;
+    CGFloat cardW = MIN(200, h * 0.85), gap = 18, x = left;
+    if ([self singleGame]) x = (b.width - cardW) / 2;
     for (UIButton *card in self.cards) {
         card.frame = CGRectMake(x, 0, cardW, h);
-        UIView *icon = [card viewWithTag:10], *name = [card viewWithTag:11], *detail = [card viewWithTag:12];
-        icon.frame = CGRectMake(16, 14, cardW - 32, h - 90);
-        name.frame = CGRectMake(8, h - 70, cardW - 16, 26);
-        detail.frame = CGRectMake(8, h - 42, cardW - 16, 22);
-        UIView *badge = [card viewWithTag:13];
-        badge.frame = CGRectMake(cardW - badge.bounds.size.width - 8, 8, badge.bounds.size.width, 24);
+        UIView *icon = [card viewWithTag:10], *t1 = [card viewWithTag:11], *t2 = [card viewWithTag:12], *star = [card viewWithTag:13];
+        icon.frame = CGRectMake(20, 20, cardW - 40, h - 86);
+        // shrink the title to fit the card if needed
+        for (UIImageView *t in @[(UIImageView *)t1, (UIImageView *)t2]) {
+            CGFloat s = MIN(2, (cardW - 24) / t.image.size.width);
+            t.bounds = CGRectMake(0, 0, t.image.size.width * s, t.image.size.height * s);
+        }
+        t1.center = CGPointMake(cardW / 2, h - 52);
+        t2.center = CGPointMake(cardW / 2, h - 30);
+        star.center = CGPointMake(cardW - 22, 22);
         x += cardW + gap;
     }
-    self.scroll.contentSize = CGSizeMake(x - gap + right, h);
+    self.scroll.contentSize = CGSizeMake(MAX(x - gap + right, b.width), h);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -159,17 +192,22 @@
     for (UIButton *card in self.cards) {
         BOOL done = SunkyIsFinished(&kSunkyGames[card.tag]);
         [card viewWithTag:13].hidden = !done;
-        card.layer.borderColor = (done ? [UIColor colorWithRed:0.3 green:0.9 blue:0.4 alpha:0.9] : [UIColor colorWithWhite:1 alpha:0.3]).CGColor;
+        [card setBackgroundImage:panelImage(done ? @"panel_done" : @"panel", 3) forState:UIControlStateNormal];
     }
-    if ([[NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"] length]) { self.countLabel.text = @""; return; }
-    int n = SunkyFinishedCount();
-    self.countLabel.text = n == kSunkyGameCount ? [NSString stringWithFormat:@"🏆 All %d finished!", n]
-                                                : [NSString stringWithFormat:@"%d of %d finished", n, kSunkyGameCount];
+    if ([self singleGame]) {
+        self.countText.hidden = YES;
+    } else {
+        int n = SunkyFinishedCount();
+        NSString *t = n == kSunkyGameCount ? [NSString stringWithFormat:@"ALL %d FINISHED!", n]
+                                           : [NSString stringWithFormat:@"%d OF %d FINISHED", n, kSunkyGameCount];
+        setPixelText(self.countText, t, YES, 3);
+    }
     [self.view setNeedsLayout];
 }
 
-- (void)wideChanged:(UISwitch *)s {
-    SunkySetWidescreen(s.on);
+- (void)toggleWide {
+    SunkySetWidescreen(!SunkyWidescreen());
+    self.wideToggle.image = controlImage(SunkyWidescreen() ? @"toggle_on" : @"toggle_off");
 }
 
 // Test hook for the Simulator run (ci/sim.sh): -sunkyAutoplay <game> starts that game straight away.

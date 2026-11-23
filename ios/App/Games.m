@@ -4,9 +4,9 @@ const SunkyGame kSunkyGames[] = {
     { "p1",   "Sunky the Game", "Part 1",                  { 2, -1 } },        // room "End"
     { "p2",   "Sunky the Game", "Part 2",                  { 2, -1 } },        // room "End"
     { "p3",   "Sunky the Game", "Part 3",                  { 37, 24, -1 } },   // "Ending", "Credits"
-    { "mpeg", "Sunky.MPEG",     "The original sillypasta", { 44, -1 } },       // "Riddle" (last room)
-    { "tiff", "Silly.TIFF",     "Sunky.MPEG's sequel",     { 64, 71, -1 } },   // "Credits", "End"
-    { "g2",   "Sunky the Game 2", "April Fools 2016",      { 18, -1 }, 1, 0x10, 0x11 }, // Credits room; Shift jumps, Ctrl runs
+    { "mpeg", "Sunky.MPEG",     "The sillypasta", { 44, -1 } },       // "Riddle" (last room)
+    { "tiff", "Silly.TIFF",     "The sequel",     { 64, 71, -1 } },   // "Credits", "End"
+    { "g2",   "Sunky the Game 2", "April Fools",      { 18, -1 }, 1, 0x10, 0x11 }, // Credits room; Shift jumps, Ctrl runs
 };
 const int kSunkyGameCount = sizeof(kSunkyGames) / sizeof(kSunkyGames[0]);
 
