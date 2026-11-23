@@ -2,7 +2,7 @@
 # Runs each game in OpenGMK under a virtual screen, with screenshots and some key presses.
 # Usage: ci/lab.sh <out dir> [games...]
 set -uo pipefail
-out=$1; shift
+out=$(realpath -m "$1"); shift
 games=${*:-p1 p2 p3 mpeg tiff}
 emu=$PWD/ogmk/target/release/gm8emulator
 mkdir -p "$out"
