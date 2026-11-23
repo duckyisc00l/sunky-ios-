@@ -53,6 +53,10 @@ fn main() {
         if let Some(r) = r {
             let views: Vec<String> = r.views.iter().filter(|v| v.visible).map(|v| format!("{}x{}@{}x{}", v.source_w, v.source_h, v.port_w, v.port_h)).collect();
             let _ = writeln!(s, "ROOM {} {} {}x{} speed {} views {} [{}] inst {}", i, r.name, r.width, r.height, r.speed, r.views_enabled, views.join(" "), r.instances.len());
+            for inst in &r.instances {
+                let oname = g.objects.get(inst.object as usize).and_then(|o| o.as_ref()).map(|o| o.name.to_string()).unwrap_or_default();
+                let _ = writeln!(s, "  INST room {} obj {} {} at {},{}", i, inst.object, oname, inst.x, inst.y);
+            }
             let mut code = r.creation_code.to_string();
             for inst in &r.instances {
                 let cc = inst.creation_code.to_string();

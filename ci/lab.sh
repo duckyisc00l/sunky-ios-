@@ -12,7 +12,7 @@ for g in $games; do
   run=$(mktemp -d); cp "$exe" "$run/game.exe"; cd "$run"
   timeout 75 "$emu" game.exe > "$d/log.txt" 2>&1 &
   pid=$!
-  shot() { import -window root "$d/$1.png" 2>/dev/null; }
+  shot() { [ -n "$wid" ] && import -window "$wid" "$d/$1.png" 2>/dev/null; }
   wid=$(timeout 20 xdotool search --sync --class OpenGMK 2>/dev/null | head -1)
   echo "window: $wid" >> "$d/lab.txt"
   focus() { [ -n "$wid" ] && xdotool windowfocus "$wid" 2>/dev/null; }
@@ -30,6 +30,5 @@ for g in $games; do
   key Return; sleep 3; shot 09-enter3
   if kill -0 $pid 2>/dev/null; then echo "STILL RUNNING at end" >> "$d/log.txt"; kill $pid; else wait $pid; echo "EXITED code $?" >> "$d/log.txt"; fi
   cd - >/dev/null
-  for f in "$d"/*.png; do convert "$f" -trim +repage "$f" 2>/dev/null; done
   echo "== $g: $(tail -1 "$d/log.txt")"
 done
