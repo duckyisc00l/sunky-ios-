@@ -90,6 +90,9 @@ jobs:
           python3 -m venv /tmp/venv && /tmp/venv/bin/pip -q install pillow
           /tmp/venv/bin/python ci/make_icons.py ios/App/Games "$PWD/ios/iconsets"
           rm -rf ios/App/Assets.xcassets/AppIcon.appiconset && cp -R ios/iconsets/all/AppIcon.appiconset ios/App/Assets.xcassets/
+          # Sunky the Game 2's texture pages with phone wording (Butterscotch loads Art/txtr/<page>.png)
+          /tmp/venv/bin/python ci/txtr.py ios/App/Games/g2/data.win /tmp/g2pages
+          /tmp/venv/bin/python ci/g2_art.py /tmp/g2pages ios/App/Art
           du -sh ios/App/Games
 
       - name: Xcode project
