@@ -81,3 +81,35 @@ jobs:
           cd out && git init -q -b r-lab && git add -A
           git -c user.name=lab -c user.email=lab@local commit -qm "lab ${{ github.run_number }}"
           git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" r-lab
+
+  g2:
+    # Sunky the Game 2 is GameMaker Studio (bytecode 13): Butterscotch, not OpenGMK
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Games cache
+        uses: actions/cache@v4
+        with:
+          path: games
+          key: games-v1-${{ hashFiles('ci/games.txt') }}
+      - name: Download games
+        run: ci/fetch.sh && sudo apt-get install -y -qq p7zip-full >/dev/null && mkdir -p games/g2x && 7z x -y -ogames/g2x games/g2.exe >/dev/null
+      - name: Build Butterscotch (SDL2, Linux)
+        run: |
+          sudo rm -f /var/lib/man-db/auto-update
+          sudo apt-get update -qq && sudo apt-get install -y -qq libsdl2-dev xvfb xdotool imagemagick libgl1-mesa-dev >/dev/null
+          git clone -q https://github.com/ButterscotchRunner/Butterscotch bs && git -C bs checkout -q $(cat ci/BUTTERSCOTCH_COMMIT)
+          cmake -S bs -B bs/build -DBACKEND=sdl2 -DCMAKE_BUILD_TYPE=Release -DENABLE_FMOD=OFF > /tmp/cmake.log 2>&1 || { tail -40 /tmp/cmake.log; exit 1; }
+          cmake --build bs/build -j4 > /tmp/build.log 2>&1 || { grep -E "error" /tmp/build.log | head -30; exit 1; }
+          ls -la bs/build/butterscotch
+      - name: Run Sunky the Game 2
+        env: { LIBGL_ALWAYS_SOFTWARE: "1", SDL_AUDIODRIVER: dummy }
+        run: xvfb-run -a -s "-screen 0 1280x960x24" ci/lab-g2.sh bs/build/butterscotch games/g2x/data.win out/g2
+      - name: Publish to branch r-g2
+        if: always()
+        run: |
+          [ -d out/g2 ] || exit 0
+          cd out/g2 && git init -q -b r-g2 && git add -A
+          git -c user.name=lab -c user.email=lab@local commit -qm "g2 ${{ github.run_number }}"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" r-g2
