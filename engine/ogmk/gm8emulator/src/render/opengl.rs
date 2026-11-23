@@ -308,7 +308,7 @@ impl VertexBuffer {
 
 impl From<AtlasRect> for [f32; 4] {
     fn from(ar: AtlasRect) -> Self {
-        [ar.x as f32, ar.y as f32, ar.w as f32, ar.h as f32]
+        [ar.x as f32, ar.y as f32, ar.texel_w() as f32, ar.texel_h() as f32] // SUNKY-IOS: stored size
     }
 }
 
@@ -908,8 +908,8 @@ impl RendererTrait for RendererImpl {
                     0,                    // level
                     atl_ref.x as _,       // xoffset
                     atl_ref.y as _,       // yoffset
-                    atl_ref.w as _,       // width
-                    atl_ref.h as _,       // height
+                    atl_ref.texel_w() as _, // width (SUNKY-IOS: stored size)
+                    atl_ref.texel_h() as _, // height
                     gl::BGRA,             // format
                     gl::UNSIGNED_BYTE,    // type
                     pixels.as_ptr() as _, // pixels
@@ -1187,6 +1187,8 @@ impl RendererTrait for RendererImpl {
             h: height,
             origin_x: 0.0,
             origin_y: 0.0,
+            tex_w: 0,
+            tex_h: 0,
         }));
         Ok(AtlasRef(id))
     }
