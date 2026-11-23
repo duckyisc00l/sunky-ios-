@@ -51,8 +51,8 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
 }
 
 @interface MenuViewController ()
-@property (nonatomic, strong) UIImageView *heading, *countText;
-@property (nonatomic, strong) UIView *topBar, *topStripe, *bottomBar, *bottomStripe;
+@property (nonatomic, strong) UIImageView *themeBg, *logo, *countText;
+@property (nonatomic, copy) NSString *theme;
 @property (nonatomic, strong) UIScrollView *scroll;
 @property (nonatomic) NSInteger selected;
 @property (nonatomic, strong) NSMutableArray<UIButton *> *cards;
@@ -80,23 +80,15 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
         return;
     }
 
-    // Sonic 3 style save-select: blue checks, red and gold bars, a row of framed game cards.
-    UIGraphicsImageRenderer *r = [[UIGraphicsImageRenderer alloc] initWithSize:CGSizeMake(48, 48)];
-    UIImage *checks = [r imageWithActions:^(UIGraphicsImageRendererContext *c) {
-        [[UIColor colorWithRed:30/255.0 green:56/255.0 blue:170/255.0 alpha:1] setFill]; UIRectFill(CGRectMake(0, 0, 48, 48));
-        [[UIColor colorWithRed:20/255.0 green:40/255.0 blue:140/255.0 alpha:1] setFill];
-        UIRectFill(CGRectMake(24, 0, 24, 24)); UIRectFill(CGRectMake(0, 24, 24, 24));
-    }];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:checks];
-    UIColor *red = [UIColor colorWithRed:200/255.0 green:20/255.0 blue:30/255.0 alpha:1];
-    UIColor *gold = [UIColor colorWithRed:1 green:214/255.0 blue:0 alpha:1];
-    self.topBar = [UIView new]; self.topBar.backgroundColor = red;
-    self.bottomBar = [UIView new]; self.bottomBar.backgroundColor = red;
-    self.topStripe = [UIView new]; self.topStripe.backgroundColor = gold;
-    self.bottomStripe = [UIView new]; self.bottomStripe.backgroundColor = gold;
-    for (UIView *v in @[self.topBar, self.bottomBar, self.topStripe, self.bottomStripe]) [self.view addSubview:v];
-    self.heading = pixelView(pixelText(@"SELECT A GAME", YES), 4);
-    [self.view addSubview:self.heading];
+    // The menu dresses up as the next game you haven't finished: that game's background and title
+    // logo (ci/menu_themes.py), with the save-select cards underneath.
+    self.themeBg = [UIImageView new];
+    self.themeBg.contentMode = UIViewContentModeScaleAspectFill;
+    self.themeBg.clipsToBounds = YES;
+    [self.view addSubview:self.themeBg];
+    self.logo = [UIImageView new];
+    self.logo.contentMode = UIViewContentModeScaleAspectFit;
+    [self.view addSubview:self.logo];
     self.countText = pixelView(pixelText(@" ", NO), 2.2);
     [self.view addSubview:self.countText];
 
@@ -168,19 +160,15 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
     UIEdgeInsets safe = self.view.safeAreaInsets;
     CGSize b = self.view.bounds.size;
     CGFloat side = MAX(MAX(safe.left, safe.right), 16);
-    CGFloat topH = MAX(54, b.height * 0.14), botH = MAX(40, b.height * 0.10);
-    self.topBar.frame = CGRectMake(0, 0, b.width, topH);
-    self.topStripe.frame = CGRectMake(0, topH, b.width, 6);
-    self.bottomBar.frame = CGRectMake(0, b.height - botH, b.width, botH);
-    self.bottomStripe.frame = CGRectMake(0, b.height - botH - 6, b.width, 6);
-    CGFloat hs = MIN(4, (topH - 14) / 9.0);
-    self.heading.bounds = CGRectMake(0, 0, self.heading.image.size.width * hs, self.heading.image.size.height * hs);
-    self.heading.center = CGPointMake(b.width / 2, topH / 2);
-    self.countText.center = CGPointMake(b.width / 2, b.height - botH / 2);
+    self.themeBg.frame = self.view.bounds;
+    CGFloat logoH = b.height * 0.36;
+    self.logo.frame = CGRectMake(side, 6, b.width - 2 * side, logoH);
+    CGFloat countH = 26;
+    self.countText.center = CGPointMake(b.width / 2, b.height - countH / 2 - 2);
 
-    // cards: as tall as the space between the bars allows
-    CGFloat areaTop = topH + 6, areaH = b.height - botH - 6 - areaTop;
-    CGFloat ch = areaH * 0.82, cw = ch * 150.0 / 210.0, gap = 16;
+    // cards: between the logo and the counter
+    CGFloat areaTop = logoH + 10, areaH = b.height - countH - 4 - areaTop;
+    CGFloat ch = areaH - 24, cw = ch * 150.0 / 210.0, gap = 12;
     self.scroll.frame = CGRectMake(0, areaTop, b.width, areaH);
     self.scroll.contentInset = UIEdgeInsetsMake(0, side + 6, 0, side + 6);
     CGFloat y = (areaH - ch) / 2;
@@ -202,6 +190,9 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
     // more room than cards: centre them
     CGFloat spare = b.width - self.scroll.contentSize.width - 2 * (side + 6);
     if (spare > 0) self.scroll.contentInset = UIEdgeInsetsMake(0, side + 6 + spare / 2, 0, side + 6 + spare / 2);
+    if (self.selected >= 0 && !self.scroll.isTracking && !self.scroll.isDecelerating && !self.scroll.isDragging) {
+        [self.scroll scrollRectToVisible:CGRectInset(self.cards[self.selected].frame, -40, 0) animated:NO];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -217,6 +208,14 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
         [card viewWithTag:13].hidden = !fin;
         [card viewWithTag:14].hidden = !fin;
         if (!fin && firstOpen < 0) firstOpen = card.tag;
+    }
+    // dress the menu as the next game (all done: stays as the last one)
+    NSString *theme = @(kSunkyGames[firstOpen < 0 ? kSunkyGameCount - 1 : firstOpen].file);
+    if (![theme isEqualToString:self.theme]) {
+        self.theme = theme;
+        self.themeBg.image = controlImage([NSString stringWithFormat:@"theme_%@_bg", theme]);
+        self.logo.image = controlImage([NSString stringWithFormat:@"theme_%@_logo", theme]);
+        self.selected = -1; // and point at the new game
     }
     if (self.cards.count) [self pick:self.cards[self.selected < 0 ? MAX(0, firstOpen) : self.selected]];
     int n = SunkyFinishedCount();
