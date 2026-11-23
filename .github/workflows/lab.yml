@@ -25,26 +25,26 @@ jobs:
         run: |
           sudo apt-get install -y p7zip-full >/dev/null
           mkdir -p games/g2x && 7z x -y -ogames/g2x games/g2.exe >/dev/null && find games/g2x -maxdepth 2 | head -30
-      - name: Get OpenGMK
-        run: git clone -q https://github.com/OpenGMK/OpenGMK ogmk && git -C ogmk checkout -q $(cat ci/OGMK_COMMIT)
       - name: Install build deps
         run: |
           sudo rm -f /var/lib/man-db/auto-update
           sudo apt-get update -qq
-          sudo apt-get install -y -qq xvfb xdotool imagemagick libx11-dev libxcb1-dev libxcb-shape0-dev libxcb-xfixes0-dev libxrandr-dev libxi-dev libgl1-mesa-dev libgl1-mesa-dri libasound2-dev libpulse-dev libsoundio-dev pulseaudio >/dev/null
+          sudo apt-get install -y -qq xvfb xdotool imagemagick libx11-dev libxcb1-dev libxcb-shape0-dev libxcb-xfixes0-dev libxrandr-dev libxi-dev libgl1-mesa-dev libgl1-mesa-dri libasound2-dev libpulse-dev libjack-jackd2-dev pulseaudio >/dev/null
       - name: Cargo cache
         uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            ogmk/target
+            engine/ogmk/target
             ci/gm8info/target
-          key: cargo-v1-${{ hashFiles('ci/OGMK_COMMIT', 'ci/gm8info/**') }}
+          key: cargo-v2-${{ hashFiles('engine/**/*.rs', 'engine/**/Cargo.*', 'ci/gm8info/**') }}
+          restore-keys: cargo-v2-
       - name: Build OpenGMK and gm8info
         run: |
-          cd ogmk && cargo build --release -p gm8emulator -p gm8decompiler 2>&1 | tail -20
-          cd ../ci/gm8info && cargo build --release 2>&1 | tail -20
+          set -o pipefail
+          (cd engine/ogmk && cargo build --release -p gm8emulator 2>&1 | grep -vE "^\s+(Compiling|Downloaded|Downloading)")
+          (cd ci/gm8info && cargo build --release 2>&1 | tail -5)
       - name: Inspect games
         run: |
           mkdir -p out/info

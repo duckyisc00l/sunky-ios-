@@ -4,7 +4,7 @@
 set -uo pipefail
 out=$(realpath -m "$1"); shift
 games=${*:-p1 p2 p3 mpeg tiff}
-emu=$PWD/ogmk/target/release/gm8emulator
+emu=$PWD/engine/ogmk/target/release/gm8emulator
 mkdir -p "$out"
 for g in $games; do
   d=$out/$g; mkdir -p "$d"; exe=$PWD/games/$g.exe
