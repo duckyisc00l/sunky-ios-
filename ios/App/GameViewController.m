@@ -111,8 +111,10 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     // controls sit in the corners, inside the black bars beside the game where there's room.
     CGFloat bottom = MAX(safe.bottom, 10);
     CGFloat dr = self.dpad.bounds.size.width / 2, jr = self.jump.bounds.size.width / 2;
-    self.dpad.center = CGPointMake(14 + dr, b.height - bottom - dr - 4);
-    self.jump.center = CGPointMake(b.width - 14 - jr, b.height - bottom - jr - 8);
+    // In from the edges, where thumbs rest (not tucked into the corners)
+    CGFloat inset = MIN(70, b.width * 0.08);
+    self.dpad.center = CGPointMake(inset + dr, b.height - bottom - dr - 28);
+    self.jump.center = CGPointMake(b.width - inset - jr, b.height - bottom - jr - 34);
     self.start.center = CGPointMake(self.jump.center.x, self.jump.center.y - jr - 34);
     self.closeButton.center = CGPointMake(MAX(safe.left, 8) + 20, MAX(safe.top, 8) + 20);
     if (!self.run.hidden) { // RUN sits left of JUMP; START moves above the pair
