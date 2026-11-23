@@ -51,7 +51,10 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
 }
 
 @interface MenuViewController ()
-@property (nonatomic, strong) UIImageView *background, *emblem, *arrow, *countText;
+@property (nonatomic, strong) UIImageView *heading, *countText;
+@property (nonatomic, strong) UIView *topBar, *topStripe, *bottomBar, *bottomStripe;
+@property (nonatomic, strong) UIScrollView *scroll;
+@property (nonatomic) NSInteger selected;
 @property (nonatomic, strong) NSMutableArray<UIButton *> *cards;
 @end
 
@@ -77,48 +80,74 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
         return;
     }
 
-    // Sunky the Game's title screen: its sky, clouds, mountains and water, the winged emblem with
-    // thumbs-up Sunky, and the games listed in the game's gold lettering.
-    self.background = [[UIImageView alloc] initWithImage:controlImage(@"menu_title_bg")];
-    self.background.contentMode = UIViewContentModeScaleAspectFill;
-    self.background.clipsToBounds = YES;
-    [self.view addSubview:self.background];
-    self.emblem = [[UIImageView alloc] initWithImage:controlImage(@"menu_emblem")];
-    self.emblem.contentMode = UIViewContentModeScaleAspectFit;
-    [self.view addSubview:self.emblem];
+    // Sonic 3 style save-select: blue checks, red and gold bars, a row of framed game cards.
+    UIGraphicsImageRenderer *r = [[UIGraphicsImageRenderer alloc] initWithSize:CGSizeMake(48, 48)];
+    UIImage *checks = [r imageWithActions:^(UIGraphicsImageRendererContext *c) {
+        [[UIColor colorWithRed:30/255.0 green:56/255.0 blue:170/255.0 alpha:1] setFill]; UIRectFill(CGRectMake(0, 0, 48, 48));
+        [[UIColor colorWithRed:20/255.0 green:40/255.0 blue:140/255.0 alpha:1] setFill];
+        UIRectFill(CGRectMake(24, 0, 24, 24)); UIRectFill(CGRectMake(0, 24, 24, 24));
+    }];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:checks];
+    UIColor *red = [UIColor colorWithRed:200/255.0 green:20/255.0 blue:30/255.0 alpha:1];
+    UIColor *gold = [UIColor colorWithRed:1 green:214/255.0 blue:0 alpha:1];
+    self.topBar = [UIView new]; self.topBar.backgroundColor = red;
+    self.bottomBar = [UIView new]; self.bottomBar.backgroundColor = red;
+    self.topStripe = [UIView new]; self.topStripe.backgroundColor = gold;
+    self.bottomStripe = [UIView new]; self.bottomStripe.backgroundColor = gold;
+    for (UIView *v in @[self.topBar, self.bottomBar, self.topStripe, self.bottomStripe]) [self.view addSubview:v];
+    self.heading = pixelView(pixelText(@"SELECT A GAME", YES), 4);
+    [self.view addSubview:self.heading];
+    self.countText = pixelView(pixelText(@" ", NO), 2.2);
+    [self.view addSubview:self.countText];
+
+    self.scroll = [UIScrollView new];
+    self.scroll.showsHorizontalScrollIndicator = NO;
+    self.scroll.alwaysBounceHorizontal = YES;
+    self.scroll.delaysContentTouches = NO;
+    [self.view addSubview:self.scroll];
 
     self.cards = [NSMutableArray array];
+    self.selected = -1;
     for (int i = 0; i < kSunkyGameCount; i++) {
         const SunkyGame *g = &kSunkyGames[i];
-        UIButton *row = [UIButton buttonWithType:UIButtonTypeCustom];
-        row.tag = i;
-        [row addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
-        [row addTarget:self action:@selector(pointAt:) forControlEvents:UIControlEventTouchDown | UIControlEventTouchDragEnter];
-        // the emblem already says SUNKY THE GAME, so the list stays short and big
+        UIButton *card = [UIButton buttonWithType:UIButtonTypeCustom];
+        card.tag = i;
+        card.layer.borderColor = UIColor.blackColor.CGColor;
+        card.layer.borderWidth = 4;
+        [card addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
+        [card addTarget:self action:@selector(pick:) forControlEvents:UIControlEventTouchDown | UIControlEventTouchDragEnter];
+        UIView *box = [UIView new];
+        box.backgroundColor = UIColor.blackColor;
+        box.userInteractionEnabled = NO;
+        box.tag = 10;
+        [card addSubview:box];
+        NSString *iconPath = [NSBundle.mainBundle pathForResource:@(g->file) ofType:@"png" inDirectory:@"Games"];
+        UIImageView *pic = [[UIImageView alloc] initWithImage:iconPath ? [UIImage imageWithContentsOfFile:iconPath] : nil];
+        pic.contentMode = UIViewContentModeScaleAspectFill;
+        pic.clipsToBounds = YES;
+        pic.tag = 12;
+        [box addSubview:pic];
+        // the logo on the title already says SUNKY THE GAME, so names stay short and big
         NSString *name;
         if (strncmp(g->subtitle, "Part", 4) == 0) name = [@(g->subtitle) uppercaseString];
         else if (g->engine == 1) name = @"SUNKY 2";
         else name = [@(g->title) uppercaseString];
-        UIImageView *t = pixelView(pixelText(name, YES), 3);
+        UIImageView *t = pixelView(pixelText(name, NO), 2.4);
         t.tag = 11;
-        [row addSubview:t];
-        UIImageView *star = pixelView(controlImage(@"star"), 2.4);
+        [card addSubview:t];
+        UIImageView *star = pixelView(controlImage(@"star"), 3);
         star.tag = 13;
-        [row addSubview:star];
-        [self.view addSubview:row];
-        [self.cards addObject:row];
+        [card addSubview:star];
+        [self.scroll addSubview:card];
+        [self.cards addObject:card];
     }
-    self.arrow = pixelView(pixelText(@">", YES), 3);
-    [self.view addSubview:self.arrow];
-    self.countText = pixelView(pixelText(@" ", NO), 2.2);
-    [self.view addSubview:self.countText];
-    // the arrow blinks, like PRESS START does
-    [UIView animateWithDuration:0.45 delay:0 options:UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionAllowUserInteraction
-                     animations:^{ self.arrow.alpha = 0.15; } completion:nil];
 }
 
-- (void)pointAt:(UIButton *)row {
-    self.arrow.center = CGPointMake(CGRectGetMinX(row.frame) - 18, row.center.y);
+- (void)pick:(UIButton *)card {
+    self.selected = card.tag;
+    UIColor *gold = [UIColor colorWithRed:1 green:214/255.0 blue:0 alpha:1];
+    UIColor *white = [UIColor colorWithRed:230/255.0 green:230/255.0 blue:240/255.0 alpha:1];
+    for (UIButton *c in self.cards) c.backgroundColor = c.tag == self.selected ? gold : white;
 }
 
 - (void)viewDidLayoutSubviews {
@@ -126,39 +155,40 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
     if ([self singleGame]) return;
     UIEdgeInsets safe = self.view.safeAreaInsets;
     CGSize b = self.view.bounds.size;
-    CGFloat left = MAX(safe.left, 16), right = MAX(safe.right, 16);
-    self.background.frame = self.view.bounds;
+    CGFloat side = MAX(MAX(safe.left, safe.right), 16);
+    CGFloat topH = MAX(54, b.height * 0.14), botH = MAX(40, b.height * 0.10);
+    self.topBar.frame = CGRectMake(0, 0, b.width, topH);
+    self.topStripe.frame = CGRectMake(0, topH, b.width, 6);
+    self.bottomBar.frame = CGRectMake(0, b.height - botH, b.width, botH);
+    self.bottomStripe.frame = CGRectMake(0, b.height - botH - 6, b.width, 6);
+    CGFloat hs = MIN(4, (topH - 14) / 9.0);
+    self.heading.bounds = CGRectMake(0, 0, self.heading.image.size.width * hs, self.heading.image.size.height * hs);
+    self.heading.center = CGPointMake(b.width / 2, topH / 2);
+    self.countText.center = CGPointMake(b.width / 2, b.height - botH / 2);
 
-    // emblem on the left, as big as the height allows
-    CGFloat eh = b.height * 0.94;
-    CGFloat ew = MIN(eh * 590.0 / 455.0, b.width * 0.48);
-    eh = ew * 455.0 / 590.0;
-    self.emblem.frame = CGRectMake(left - 6, (b.height - eh) / 2, ew, eh);
-
-    // the list on the right, centred in the space left
-    CGFloat listX = CGRectGetMaxX(self.emblem.frame) + 30;
-    CGFloat listW = b.width - right - listX;
-    CGFloat rowH = MIN(46, (b.height - 70) / MAX(1, self.cards.count));
-    CGFloat top = (b.height - rowH * self.cards.count - 30) / 2;
+    // cards: as tall as the space between the bars allows
+    CGFloat areaTop = topH + 6, areaH = b.height - botH - 6 - areaTop;
+    CGFloat ch = areaH * 0.82, cw = ch * 150.0 / 210.0, gap = 16;
+    self.scroll.frame = CGRectMake(0, areaTop, b.width, areaH);
+    self.scroll.contentInset = UIEdgeInsetsMake(0, side + 6, 0, side + 6);
+    CGFloat y = (areaH - ch) / 2;
     for (NSUInteger i = 0; i < self.cards.count; i++) {
-        UIButton *row = self.cards[i];
-        UIImageView *t = (UIImageView *)[row viewWithTag:11], *star = (UIImageView *)[row viewWithTag:13];
-        CGFloat sc = MIN(3, (listW - 34) / t.image.size.width);
+        UIButton *card = self.cards[i];
+        card.frame = CGRectMake(i * (cw + gap), y, cw, ch);
+        UIView *box = [card viewWithTag:10];
+        box.frame = CGRectMake(10, 10, cw - 20, cw - 20);
+        [box viewWithTag:12].frame = box.bounds;
+        UIImageView *t = (UIImageView *)[card viewWithTag:11];
+        CGFloat sc = MIN(2.4, (cw - 16) / t.image.size.width);
         t.bounds = CGRectMake(0, 0, t.image.size.width * sc, t.image.size.height * sc);
-        row.frame = CGRectMake(listX, top + i * rowH, listW, rowH);
-        t.frame = CGRectMake(0, (rowH - t.bounds.size.height) / 2, t.bounds.size.width, t.bounds.size.height);
-        star.center = CGPointMake(CGRectGetMaxX(t.frame) + 8 + star.bounds.size.width / 2, rowH / 2);
+        t.center = CGPointMake(cw / 2, (CGRectGetMaxY(box.frame) + ch) / 2);
+        UIView *star = [card viewWithTag:13];
+        star.center = CGPointMake(cw - star.bounds.size.width / 2 + 8, star.bounds.size.height / 2 - 10);
     }
-    if (self.arrow.center.x < 1 && self.cards.count) [self pointAt:self.cards.firstObject];
-    else if (self.cards.count) {
-        // keep the arrow on its row after a layout change
-        UIButton *nearest = self.cards.firstObject;
-        for (UIButton *r in self.cards) if (fabs(r.center.y - self.arrow.center.y) < fabs(nearest.center.y - self.arrow.center.y)) nearest = r;
-        [self pointAt:nearest];
-    }
-    CGRect f = self.countText.frame;
-    f.origin = CGPointMake(listX, top + rowH * self.cards.count + 10);
-    self.countText.frame = f;
+    self.scroll.contentSize = CGSizeMake(self.cards.count * (cw + gap) - gap, areaH);
+    // more room than cards: centre them
+    CGFloat spare = b.width - self.scroll.contentSize.width - 2 * (side + 6);
+    if (spare > 0) self.scroll.contentInset = UIEdgeInsetsMake(0, side + 6 + spare / 2, 0, side + 6 + spare / 2);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -168,9 +198,13 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
 
 - (void)refreshFinished {
     if ([self singleGame]) return;
-    for (UIButton *row in self.cards) {
-        [row viewWithTag:13].hidden = !SunkyIsFinished(&kSunkyGames[row.tag]);
+    NSInteger firstOpen = -1;
+    for (UIButton *card in self.cards) {
+        BOOL fin = SunkyIsFinished(&kSunkyGames[card.tag]);
+        [card viewWithTag:13].hidden = !fin;
+        if (!fin && firstOpen < 0) firstOpen = card.tag;
     }
+    if (self.selected < 0 && self.cards.count) [self pick:self.cards[MAX(0, firstOpen)]];
     int n = SunkyFinishedCount();
     NSString *t = n == kSunkyGameCount ? [NSString stringWithFormat:@"ALL %d FINISHED!", n]
                                        : [NSString stringWithFormat:@"%d OF %d FINISHED", n, kSunkyGameCount];
