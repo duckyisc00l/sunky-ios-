@@ -26,8 +26,9 @@ pub unsafe extern "C" fn udon_ios_render(out: *mut f32, frames: u32) {
     match SOURCE.try_lock() {
         Ok(mut guard) => match guard.as_mut() {
             Some(src) => {
-                let n = src.write_samples(buf);
-                buf[n.min(buf.len())..].fill(0.0);
+                let len = buf.len();
+                let n = src.write_samples(buf).min(len);
+                buf[n..].fill(0.0);
             },
             None => buf.fill(0.0),
         },
