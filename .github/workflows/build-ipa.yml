@@ -5,11 +5,12 @@ on:
     inputs:
       build_number: { description: "build number shown in the app", required: true, default: "1" }
       simulator: { description: "also run it in the iPhone Simulator (yes/no)", required: false, default: "yes" }
+      runner: { description: "Mac to build on (macos-15 or macos-15-intel)", required: false, default: "macos-15" }
 permissions: { contents: write }
 concurrency: { group: build-ipa, cancel-in-progress: true }
 jobs:
   ipa:
-    runs-on: macos-15
+    runs-on: ${{ inputs.runner || 'macos-15' }}
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
@@ -26,7 +27,9 @@ jobs:
         working-directory: engine/ogmk
         run: |
           rustup show active-toolchain
-          rustup target add aarch64-apple-ios aarch64-apple-ios-sim
+          if [ "$(uname -m)" = arm64 ]; then echo "SIM_TARGET=aarch64-apple-ios-sim" >> $GITHUB_ENV; echo "SIM_ARCH=arm64" >> $GITHUB_ENV
+          else echo "SIM_TARGET=x86_64-apple-ios" >> $GITHUB_ENV; echo "SIM_ARCH=x86_64" >> $GITHUB_ENV; fi
+          rustup target add aarch64-apple-ios aarch64-apple-ios-sim x86_64-apple-ios
       - name: Cargo cache
         uses: actions/cache@v4
         with:
@@ -35,8 +38,8 @@ jobs:
             ~/.cargo/git
             engine/ogmk/target
             ci/gm8info/target
-          key: cargo-mac-v1-${{ hashFiles('engine/**/*.rs', 'engine/**/Cargo.*', 'ci/gm8info/**') }}
-          restore-keys: cargo-mac-v1-
+          key: cargo-mac-v1-${{ runner.arch }}-${{ hashFiles('engine/**/*.rs', 'engine/**/Cargo.*', 'ci/gm8info/**') }}
+          restore-keys: cargo-mac-v1-${{ runner.arch }}-
 
       - name: Build the runner (iPhone)
         working-directory: engine/ogmk
@@ -51,8 +54,8 @@ jobs:
         working-directory: engine/ogmk
         run: |
           set -o pipefail
-          cargo build --release --lib -p gm8emulator --features gles --target aarch64-apple-ios-sim 2>&1 | grep -vE "^\s+(Compiling|Downloaded|Downloading)"
-          mkdir -p ../../ios/lib/iphonesimulator && cp target/aarch64-apple-ios-sim/release/libgm8emulator.a ../../ios/lib/iphonesimulator/
+          cargo build --release --lib -p gm8emulator --features gles --target $SIM_TARGET 2>&1 | grep -vE "^\s+(Compiling|Downloaded|Downloading)"
+          mkdir -p ../../ios/lib/iphonesimulator && cp target/$SIM_TARGET/release/libgm8emulator.a ../../ios/lib/iphonesimulator/
 
       - name: Games and icons into the app
         run: |

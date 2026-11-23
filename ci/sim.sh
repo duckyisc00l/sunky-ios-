@@ -4,7 +4,7 @@
 set -uo pipefail
 out=$PWD/sim; mkdir -p "$out"
 xcodebuild -project Sunky.xcodeproj -scheme Sunky -configuration Release -sdk iphonesimulator \
-  -destination 'generic/platform=iOS Simulator' -derivedDataPath build-sim ARCHS=arm64 ONLY_ACTIVE_ARCH=NO \
+  -destination 'generic/platform=iOS Simulator' -derivedDataPath build-sim ARCHS=${SIM_ARCH:-arm64} ONLY_ACTIVE_ARCH=NO \
   CODE_SIGNING_ALLOWED=NO build > "$out/sim-build.log" 2>&1 || { grep -E "error:" "$out/sim-build.log" | head -30; exit 1; }
 app=$PWD/build-sim/Build/Products/Release-iphonesimulator/Sunky.app
 codesign --force --sign - --timestamp=none "$app"
