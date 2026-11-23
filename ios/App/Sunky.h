@@ -27,7 +27,8 @@ enum {
 // The games in this app (folder Games/ in the bundle)
 // endRooms: rooms that mean the player reached the ending (-1 terminated)
 // engine: 0 = OpenGMK (GameMaker 8 .exe), 1 = Butterscotch (GameMaker Studio data.win in Games/<file>/)
-typedef struct { const char *file; const char *title; const char *subtitle; int endRooms[4]; int engine; } SunkyGame;
+// jumpKey: key the JUMP button presses (0 = Space); runKey: key for the RUN button (0 = no RUN button)
+typedef struct { const char *file; const char *title; const char *subtitle; int endRooms[4]; int engine; int jumpKey; int runKey; } SunkyGame;
 
 // Butterscotch games (BSRunner.m)
 int32_t sunky_bs_run(const char *dataWinPath, const char *savesPath);

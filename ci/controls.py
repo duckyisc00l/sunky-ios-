@@ -27,6 +27,7 @@ FONT = {
     'M': ["10001", "11011", "10101", "10101", "10001", "10001", "10001"],
     'P': ["11110", "10001", "10001", "11110", "10000", "10000", "10000"],
     'X': ["10001", "10001", "01010", "00100", "01010", "10001", "10001"],
+    'N': ["10001", "11001", "10101", "10011", "10001", "10001", "10001"],
 }
 
 def text(im, s, x, y, colour, outline=BLACK):
@@ -110,7 +111,7 @@ def dpad(lit=None):
 # (the D-pad above is kept for reference; the app uses the joystick below)
 
 # ---- JUMP: a gold Sonic ring with JUMP inside ----
-def ring(pressed):
+def ring(pressed, label='JUMP'):
     S = 31
     im = Image.new('RGBA', (S, S), CLEAR)
     c = (S - 1) / 2
@@ -130,11 +131,13 @@ def ring(pressed):
     # sparkle
     for p in ((7, 6), (6, 7), (7, 7), (8, 7), (7, 8)):
         im.putpixel(p, WHITE)
-    text(im, 'JUMP', (S - text_width('JUMP')) // 2, 12, WHITE)
+    text(im, label, (S - text_width(label)) // 2, 12, WHITE)
     return im
 
 ring(False).save(os.path.join(out, 'jump.png'))
 ring(True).save(os.path.join(out, 'jump_on.png'))
+ring(False, 'RUN').save(os.path.join(out, 'run.png'))
+ring(True, 'RUN').save(os.path.join(out, 'run_on.png'))
 
 # ---- START: a small blue pill ----
 def pill(label, pressed, w=39, h=13):

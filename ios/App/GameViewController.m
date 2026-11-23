@@ -14,14 +14,14 @@
 @property (nonatomic, copy) NSString *exePath;
 @property (nonatomic, copy) NSString *title_;
 @property (nonatomic, strong) GameView *gameView;
-@property (nonatomic, strong) UIView *dpad, *jump, *start, *closeButton;
+@property (nonatomic, strong) UIView *dpad, *jump, *start, *closeButton, *run;
 @property (nonatomic) BOOL running;
 @property (nonatomic) const SunkyGame *game;
 @property (nonatomic, strong) UIImageView *stickKnob;
 @property (nonatomic, strong) NSTimer *endWatch;
 @end
 
-typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart, RoleGame, RoleClose };
+typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart, RoleGame, RoleClose, RoleRun };
 
 @implementation GameViewController {
     NSMapTable<UITouch *, NSNumber *> *_roles;
@@ -65,7 +65,9 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     self.jump = [self pixelImage:@"jump" scale:3.5];
     self.start = [self pixelImage:@"start" scale:3];
     self.closeButton = [self pixelImage:@"close" scale:3];
-    for (UIView *v in @[self.dpad, self.jump, self.start, self.closeButton]) [self.view addSubview:v];
+    self.run = [self pixelImage:@"run" scale:3];
+    self.run.hidden = !(self.game && self.game->runKey);
+    for (UIView *v in @[self.dpad, self.jump, self.start, self.closeButton, self.run]) [self.view addSubview:v];
 
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(controllerConnected:)
                                                name:GCControllerDidConnectNotification object:nil];
@@ -110,6 +112,10 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     if (!_dpadTouch) self.stickKnob.center = CGPointMake(self.dpad.bounds.size.width / 2, self.dpad.bounds.size.height / 2);
     self.jump.center = CGPointMake(b.width - right - 62, b.height - bottom - 72);
     self.start.center = CGPointMake(b.width - right - 62, self.jump.center.y - 95);
+    if (!self.run.hidden) { // RUN sits left of JUMP; START moves up a little
+        self.run.center = CGPointMake(self.jump.center.x - 105, self.jump.center.y + 12);
+        self.start.center = CGPointMake(self.jump.center.x - 40, self.jump.center.y - 100);
+    }
     self.closeButton.center = CGPointMake(side + 22, MAX(safe.top, 8) + 22);
 
 }
@@ -231,6 +237,8 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     if ([self isBS]) sunky_bs_key(vk, down); else ramen_ios_key(vk, down);
 }
 
+- (uint32_t)jumpKey { return (self.game && self.game->jumpKey) ? (uint32_t)self.game->jumpKey : VK_SPACE; }
+
 - (void)mouseButton:(BOOL)down {
     if ([self isBS]) sunky_bs_button(down); else ramen_ios_mouse_button(0, down);
 }
@@ -289,6 +297,7 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     if (hypot(inPad.x - half, inPad.y - half) < half + 30) return RoleDpad; // generous, so thumbs don't slip off
     if (hypot(p.x - self.jump.center.x, p.y - self.jump.center.y) < self.jump.bounds.size.width / 2 + 16) return RoleJump;
     if (CGRectContainsPoint(CGRectInset(self.start.frame, -12, -12), p)) return RoleStart;
+    if (!self.run.hidden && hypot(p.x - self.run.center.x, p.y - self.run.center.y) < self.run.bounds.size.width / 2 + 12) return RoleRun;
     if (CGRectContainsPoint(CGRectInset(self.closeButton.frame, -10, -10), p)) return RoleClose;
     if ([self isBS] || CGRectContainsPoint([self gameRect], p)) return RoleGame;
     return RoleNone;
@@ -318,7 +327,8 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
                 _dpadTouch = t;
                 [self updateDpadWithPoint:[t locationInView:self.dpad]];
                 break;
-            case RoleJump: [self key:VK_SPACE down:YES]; [self showPressed:self.jump name:@"jump" on:YES]; break;
+            case RoleJump: [self key:[self jumpKey] down:YES]; [self showPressed:self.jump name:@"jump" on:YES]; break;
+            case RoleRun: [self key:(uint32_t)self.game->runKey down:YES]; [self showPressed:self.run name:@"run" on:YES]; break;
             case RoleStart: [self key:VK_RETURN down:YES]; [self showPressed:self.start name:@"start" on:YES]; break;
             case RoleGame:
                 if (_mouseTouch) { role = RoleNone; break; }
@@ -356,7 +366,8 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
                 }];
                 break;
             }
-            case RoleJump: [self key:VK_SPACE down:NO]; [self showPressed:self.jump name:@"jump" on:NO]; break;
+            case RoleJump: [self key:[self jumpKey] down:NO]; [self showPressed:self.jump name:@"jump" on:NO]; break;
+            case RoleRun: [self key:(uint32_t)self.game->runKey down:NO]; [self showPressed:self.run name:@"run" on:NO]; break;
             case RoleStart: [self key:VK_RETURN down:NO]; [self showPressed:self.start name:@"start" on:NO]; break;
             case RoleGame: {
                 // Some buttons only react while the mouse is held, so keep every tap down for a few frames.
@@ -396,8 +407,12 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     };
     pad.dpad.valueChangedHandler = dir;
     pad.leftThumbstick.valueChangedHandler = dir;
-    pad.buttonA.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) { [weakSelf key:VK_SPACE down:pressed]; };
-    pad.buttonB.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) { [weakSelf key:VK_SPACE down:pressed]; };
+    pad.buttonA.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) { [weakSelf key:[weakSelf jumpKey] down:pressed]; };
+    pad.buttonB.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) {
+        GameViewController *me = weakSelf;
+        uint32_t k = (me.game && me.game->runKey) ? (uint32_t)me.game->runKey : [me jumpKey];
+        [me key:k down:pressed];
+    };
     pad.buttonMenu.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) { [weakSelf key:VK_RETURN down:pressed]; };
 }
 
