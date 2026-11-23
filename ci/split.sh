@@ -6,9 +6,9 @@ src=$1; out=$2; mkdir -p "$out"
 work=$(mktemp -d)
 while IFS='|' read -r file name; do
   [ -z "$file" ] && continue
-  [ -f "$src/Games/$file.exe" ] || { echo "skip $file (not in app)"; continue; }
+  [ -e "$src/Games/$file.exe" ] || [ -d "$src/Games/$file" ] || { echo "skip $file (not in app)"; continue; }
   d=$work/$file; mkdir -p "$d/Payload"; cp -R "$src" "$d/Payload/Sunky.app"; app=$d/Payload/Sunky.app
-  find "$app/Games" -type f ! -name "$file.exe" ! -name "$file.png" -delete
+  find "$app/Games" -mindepth 1 -maxdepth 1 ! -name "$file.exe" ! -name "$file.png" ! -name "$file" -exec rm -rf {} +
   pl=$app/Info.plist
   /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier com.duckyisc00l.sunky.$file" "$pl"
   /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $name" "$pl"
@@ -34,4 +34,5 @@ p2|Sunky 2
 p3|Sunky 3
 mpeg|Sunky.MPEG
 tiff|Silly.TIFF
+g2|Sunky TG2
 LIST

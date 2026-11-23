@@ -63,11 +63,30 @@ jobs:
           cargo build --release --lib -p gm8emulator --features gles --target $SIM_TARGET 2>&1 | grep -vE "^\s+(Compiling|Downloaded|Downloading)"
           mkdir -p ../../ios/lib/iphonesimulator && cp target/$SIM_TARGET/release/libgm8emulator.a ../../ios/lib/iphonesimulator/
 
+      - name: Build Butterscotch (for Sunky the Game 2)
+        run: |
+          set -e
+          build_bs() { # <sdk> <arch> <out dir>
+            cmake -S engine/butterscotch -B "bsb-$1" -DPLATFORM=ios -DCMAKE_SYSTEM_NAME=iOS \
+              -DCMAKE_OSX_SYSROOT=$1 -DCMAKE_OSX_ARCHITECTURES=$2 -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
+              -DCMAKE_BUILD_TYPE=Release -DENABLE_FMOD=OFF -DENABLE_PHYSICS=OFF -DVIDEO_BACKEND=none \
+              -DENABLE_LEGACY_GL=OFF > "bsb-$1.log" 2>&1 || { tail -30 "bsb-$1.log"; exit 1; }
+            cmake --build "bsb-$1" -j4 >> "bsb-$1.log" 2>&1 || { grep -E "error" "bsb-$1.log" | head -40; exit 1; }
+            mkdir -p "$3"
+            libtool -static -o "$3/libbutterscotch.a" $(find "bsb-$1" -name '*.a') 2>&1 | grep -v "has no symbols" || true
+            ls -la "$3/libbutterscotch.a"
+          }
+          build_bs iphoneos arm64 ios/lib/iphoneos
+          if [ "${{ inputs.simulator }}" = yes ]; then build_bs iphonesimulator $SIM_ARCH ios/lib/iphonesimulator; fi
+
       - name: Games and icons into the app
         run: |
           set -e
           mkdir -p ios/App/Games
           for g in p1 p2 p3 mpeg tiff; do cp games/$g.exe ios/App/Games/; done
+          brew install sevenzip >/dev/null 2>&1 || true
+          mkdir -p /tmp/g2x && 7zz x -y -o/tmp/g2x games/g2.exe >/dev/null
+          mkdir -p ios/App/Games/g2 && cp /tmp/g2x/data.win ios/App/Games/g2/
           python3 -m venv /tmp/venv && /tmp/venv/bin/pip -q install pillow
           /tmp/venv/bin/python ci/make_icons.py ios/App/Games "$PWD/ios/iconsets"
           rm -rf ios/App/Assets.xcassets/AppIcon.appiconset && cp -R ios/iconsets/all/AppIcon.appiconset ios/App/Assets.xcassets/

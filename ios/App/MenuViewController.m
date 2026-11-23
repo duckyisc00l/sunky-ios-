@@ -188,6 +188,12 @@
 
 - (void)play:(UIButton *)sender {
     const SunkyGame *g = &kSunkyGames[sender.tag];
+    if (g->engine == 1) { // GameMaker Studio: Games/<file>/data.win, saves in Documents/<file>
+        NSString *dataWin = [NSBundle.mainBundle pathForResource:@"data" ofType:@"win" inDirectory:[@"Games" stringByAppendingPathComponent:@(g->file)]];
+        if (!dataWin) { SunkyLog(@"missing data.win for %s", g->file); return; }
+        [self.navigationController pushViewController:[[GameViewController alloc] initWithGame:g exe:dataWin title:@(g->title)] animated:YES];
+        return;
+    }
     NSString *bundled = [NSBundle.mainBundle pathForResource:@(g->file) ofType:@"exe" inDirectory:@"Games"];
     if (!bundled) {
         SunkyLog(@"missing game file %s", g->file);

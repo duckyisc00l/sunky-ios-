@@ -12,6 +12,7 @@ GAMES = {  # sprite, background colour, number badge
     'p3': ((13, 31, 115), '3'),
     'mpeg': ((110, 0, 0), None),
     'tiff': ((88, 30, 130), None),
+    'g2': ((92, 148, 252), '2'),   # Super Mario sky, it's a Mario parody
 }
 DIGITS = {
     '1': ["0110", "1110", "0110", "0110", "0110", "0110", "1111"],
@@ -70,7 +71,7 @@ for g, (bg, digit) in GAMES.items():
 write_set('all', icon(trimmed('p1'), GAMES['p1'][0], None))  # the all-in-one app
 
 # preview
-prev = Image.new('RGB', (6 * 180, 180), (30, 30, 30))
-for i, n in enumerate(['all', 'p1', 'p2', 'p3', 'mpeg', 'tiff']):
+prev = Image.new('RGB', (7 * 180, 180), (30, 30, 30))
+for i, n in enumerate(['all', 'p1', 'p2', 'p3', 'mpeg', 'tiff', 'g2']):
     prev.paste(Image.open(os.path.join(sets_dir, n, 'AppIcon.appiconset', 'icon-1024.png')).resize((170, 170)), (i * 180 + 5, 5))
 prev.save('/tmp/icons-preview.png')

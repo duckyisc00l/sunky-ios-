@@ -126,13 +126,17 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     __weak GameViewController *weakTimerSelf = self;
     self.endWatch = [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer *t) { [weakTimerSelf checkEnding]; }];
     NSString *path = self.exePath;
+    BOOL isBS = [self isBS];
+    NSString *saves = [SunkyDocuments() stringByAppendingPathComponent:@(self.game ? self.game->file : "game")];
+    if (isBS) sunky_bs_set_widescreen(SunkyWidescreen() ? (float)(self.view.bounds.size.width / self.view.bounds.size.height) : 0);
     // Phone-friendly replacement art ("PRESS START" instead of "PRESS ENTER"), see engine overrides.rs
     NSString *art = [NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:@"Art"];
     setenv("SUNKY_OVERRIDES", art.fileSystemRepresentation, 1);
     __weak GameViewController *weakSelf = self;
     NSThread *t = [[NSThread alloc] initWithBlock:^{
         SunkyLog(@"starting %@", path);
-        int32_t code = sunky_run_game(path.fileSystemRepresentation);
+        int32_t code = isBS ? sunky_bs_run(path.fileSystemRepresentation, saves.fileSystemRepresentation)
+                            : sunky_run_game(path.fileSystemRepresentation);
         udon_ios_stop();
         SunkyLog(@"game ended with code %d", code);
         dispatch_async(dispatch_get_main_queue(), ^{ [weakSelf gameEnded:code]; });
@@ -153,17 +157,17 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
         uint32_t vk = (uint32_t)[p[1] intValue];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(at * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             SunkyLog(@"test key %u down", vk);
-            ramen_ios_key(vk, true);
+            [self key:vk down:YES];
         });
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((at + hold) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            ramen_ios_key(vk, false);
+            [self key:vk down:NO];
         });
     }
 }
 
 - (void)checkEnding {
     if (!self.game || SunkyIsFinished(self.game)) return;
-    int32_t room = sunky_current_room();
+    int32_t room = [self isBS] ? sunky_bs_current_room() : sunky_current_room();
     for (int i = 0; i < 4 && self.game->endRooms[i] >= 0; i++) {
         if (room == self.game->endRooms[i]) {
             SunkySetFinished(self.game);
@@ -214,9 +218,21 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
         message:nil preferredStyle:UIAlertControllerStyleAlert];
     [a addAction:[UIAlertAction actionWithTitle:@"Keep playing" style:UIAlertActionStyleCancel handler:nil]];
     [a addAction:[UIAlertAction actionWithTitle:@"Quit" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *x) {
-        ramen_ios_request_close();
+        if ([self isBS]) sunky_bs_quit(); else ramen_ios_request_close();
     }]];
     [self presentViewController:a animated:YES completion:nil];
+}
+
+// ---- Input goes to whichever engine runs this game ----
+
+- (BOOL)isBS { return self.game && self.game->engine == 1; }
+
+- (void)key:(uint32_t)vk down:(BOOL)down {
+    if ([self isBS]) sunky_bs_key(vk, down); else ramen_ios_key(vk, down);
+}
+
+- (void)mouseButton:(BOOL)down {
+    if ([self isBS]) sunky_bs_button(down); else ramen_ios_mouse_button(0, down);
 }
 
 // ---- Keys ----
@@ -227,14 +243,14 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     BOOL was = _dirDown[i] || _padDir[i];
     _dirDown[i] = down;
     BOOL now = _dirDown[i] || _padDir[i];
-    if (was != now) ramen_ios_key(kDirVK[i], now);
+    if (was != now) [self key:kDirVK[i] down:now];
 }
 
 - (void)setPadDir:(int)i down:(BOOL)down {
     BOOL was = _dirDown[i] || _padDir[i];
     _padDir[i] = down;
     BOOL now = _dirDown[i] || _padDir[i];
-    if (was != now) ramen_ios_key(kDirVK[i], now);
+    if (was != now) [self key:kDirVK[i] down:now];
 }
 
 - (void)updateDpadWithPoint:(CGPoint)p {
@@ -274,11 +290,16 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     if (hypot(p.x - self.jump.center.x, p.y - self.jump.center.y) < self.jump.bounds.size.width / 2 + 16) return RoleJump;
     if (CGRectContainsPoint(CGRectInset(self.start.frame, -12, -12), p)) return RoleStart;
     if (CGRectContainsPoint(CGRectInset(self.closeButton.frame, -10, -10), p)) return RoleClose;
-    if (CGRectContainsPoint([self gameRect], p)) return RoleGame;
+    if ([self isBS] || CGRectContainsPoint([self gameRect], p)) return RoleGame;
     return RoleNone;
 }
 
 - (void)sendMouse:(CGPoint)p {
+    if ([self isBS]) { // Butterscotch maps screen fractions to the game itself
+        CGSize b = self.view.bounds.size;
+        sunky_bs_pointer(p.x / MAX(1, b.width), p.y / MAX(1, b.height));
+        return;
+    }
     CGRect r = [self gameRect];
     uint32_t packed = ramen_ios_game_size();
     CGFloat gw = packed >> 16, gh = packed & 0xFFFF;
@@ -297,13 +318,13 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
                 _dpadTouch = t;
                 [self updateDpadWithPoint:[t locationInView:self.dpad]];
                 break;
-            case RoleJump: ramen_ios_key(VK_SPACE, true); [self showPressed:self.jump name:@"jump" on:YES]; break;
-            case RoleStart: ramen_ios_key(VK_RETURN, true); [self showPressed:self.start name:@"start" on:YES]; break;
+            case RoleJump: [self key:VK_SPACE down:YES]; [self showPressed:self.jump name:@"jump" on:YES]; break;
+            case RoleStart: [self key:VK_RETURN down:YES]; [self showPressed:self.start name:@"start" on:YES]; break;
             case RoleGame:
                 if (_mouseTouch) { role = RoleNone; break; }
                 _mouseTouch = t;
                 [self sendMouse:p];
-                ramen_ios_mouse_button(0, true);
+                [self mouseButton:YES];
                 _mouseDownAt = CACurrentMediaTime();
                 _mouseGeneration++;
                 break;
@@ -326,7 +347,7 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     for (UITouch *t in touches) {
         TouchRole role = [[_roles objectForKey:t] integerValue];
         switch (role) {
-            case RoleDpad:
+            case RoleDpad: {
                 _dpadTouch = nil;
                 for (int i = 0; i < 4; i++) [self setDir:i down:NO];
                 self.stickKnob.image = [self controlImage:@"stick_knob"];
@@ -334,16 +355,17 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
                     self.stickKnob.center = CGPointMake(self.dpad.bounds.size.width / 2, self.dpad.bounds.size.height / 2);
                 }];
                 break;
-            case RoleJump: ramen_ios_key(VK_SPACE, false); [self showPressed:self.jump name:@"jump" on:NO]; break;
-            case RoleStart: ramen_ios_key(VK_RETURN, false); [self showPressed:self.start name:@"start" on:NO]; break;
+            }
+            case RoleJump: [self key:VK_SPACE down:NO]; [self showPressed:self.jump name:@"jump" on:NO]; break;
+            case RoleStart: [self key:VK_RETURN down:NO]; [self showPressed:self.start name:@"start" on:NO]; break;
             case RoleGame: {
                 // Some buttons only react while the mouse is held, so keep every tap down for a few frames.
                 _mouseTouch = nil;
                 CFTimeInterval wait = 0.1 - (CACurrentMediaTime() - _mouseDownAt);
                 NSUInteger gen = _mouseGeneration;
-                if (wait <= 0) { ramen_ios_mouse_button(0, false); break; }
+                if (wait <= 0) { [self mouseButton:NO]; break; }
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(wait * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    if (gen == self->_mouseGeneration && !self->_mouseTouch) ramen_ios_mouse_button(0, false);
+                    if (gen == self->_mouseGeneration && !self->_mouseTouch) [self mouseButton:NO];
                 });
                 break;
             }
@@ -374,9 +396,9 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     };
     pad.dpad.valueChangedHandler = dir;
     pad.leftThumbstick.valueChangedHandler = dir;
-    pad.buttonA.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) { ramen_ios_key(VK_SPACE, pressed); };
-    pad.buttonB.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) { ramen_ios_key(VK_SPACE, pressed); };
-    pad.buttonMenu.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) { ramen_ios_key(VK_RETURN, pressed); };
+    pad.buttonA.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) { [weakSelf key:VK_SPACE down:pressed]; };
+    pad.buttonB.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) { [weakSelf key:VK_SPACE down:pressed]; };
+    pad.buttonMenu.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) { [weakSelf key:VK_RETURN down:pressed]; };
 }
 
 // ---- Hardware keyboards ----
@@ -406,7 +428,7 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
 - (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event {
     BOOL handled = NO;
     if (@available(iOS 13.4, *)) {
-        for (UIPress *p in presses) { uint32_t vk = [self vkForPress:p]; if (vk) { ramen_ios_key(vk, true); handled = YES; } }
+        for (UIPress *p in presses) { uint32_t vk = [self vkForPress:p]; if (vk) { [self key:vk down:YES]; handled = YES; } }
     }
     if (!handled) [super pressesBegan:presses withEvent:event];
 }
@@ -414,7 +436,7 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
 - (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event {
     BOOL handled = NO;
     if (@available(iOS 13.4, *)) {
-        for (UIPress *p in presses) { uint32_t vk = [self vkForPress:p]; if (vk) { ramen_ios_key(vk, false); handled = YES; } }
+        for (UIPress *p in presses) { uint32_t vk = [self vkForPress:p]; if (vk) { [self key:vk down:NO]; handled = YES; } }
     }
     if (!handled) [super pressesEnded:presses withEvent:event];
 }

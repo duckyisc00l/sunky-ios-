@@ -9,6 +9,9 @@ static __weak GameView *gCurrent;
 static EAGLContext *gContext;
 static GLuint gFbo, gColor;
 static CAEAGLLayer *gLayer;
+static GLint gScreenW, gScreenH;
+
+void sunky_gl_screen_size(int32_t *w, int32_t *h) { *w = gScreenW; *h = gScreenH; }
 
 @implementation GameView
 + (Class)layerClass { return [CAEAGLLayer class]; }
@@ -48,6 +51,7 @@ uint32_t sunky_gl_setup(void) {
     GLint w = 0, h = 0;
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &w);
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &h);
+    gScreenW = w; gScreenH = h;
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     SunkyLog(@"gl: screen %dx%d, storage %d, status 0x%x, %s", w, h, ok, status, glGetString(GL_VERSION));
     if (status != GL_FRAMEBUFFER_COMPLETE) return 0;
