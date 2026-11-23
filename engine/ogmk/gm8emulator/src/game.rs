@@ -16,6 +16,7 @@ pub mod savestate;
 pub mod surface;
 pub mod transition;
 pub mod view;
+pub mod wide; // SUNKY-IOS
 
 pub use background::Background;
 pub use replay::Replay;
@@ -1523,6 +1524,7 @@ impl Game {
             self.unscaled_height = height;
             self.window_inner_size = (width, height);
             self.renderer.resize_framebuffer(width, height, false);
+            wide::note_fb(width, height); // SUNKY-IOS
             let (width, height) = match self.scaling {
                 Scaling::Fixed(scale) => ((f64::from(width) * scale) as u32, (f64::from(height) * scale) as u32),
                 _ => (width, height),
@@ -1552,6 +1554,7 @@ impl Game {
     }
 
     pub fn load_room(&mut self, room_id: i32) -> Result<(), Box<dyn std::error::Error>> {
+        crate::CURRENT_ROOM.store(room_id, std::sync::atomic::Ordering::Relaxed); // SUNKY-IOS
         let (room, room_state, is_stored) = if let Some(room) = self.assets.rooms.get_asset(room_id) {
             if let Some(p) = self.stored_rooms.iter().position(|x| x.id == room_id) {
                 (room.clone(), self.stored_rooms.remove(p), true)

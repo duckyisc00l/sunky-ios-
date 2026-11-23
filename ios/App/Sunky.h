@@ -4,6 +4,8 @@
 #include <stdint.h>
 
 int32_t sunky_run_game(const char *path);
+int32_t sunky_current_room(void);
+void ramen_ios_set_widescreen(bool on);
 
 void ramen_ios_key(uint32_t vk, bool down);
 void ramen_ios_mouse_move(uint32_t x, uint32_t y);
@@ -23,9 +25,18 @@ enum {
 };
 
 // The games in this app (folder Games/ in the bundle)
-typedef struct { const char *file; const char *title; const char *subtitle; } SunkyGame;
+// endRooms: rooms that mean the player reached the ending (-1 terminated)
+typedef struct { const char *file; const char *title; const char *subtitle; int endRooms[4]; } SunkyGame;
 extern const SunkyGame kSunkyGames[];
 extern const int kSunkyGameCount;
+
+// Finished games (saved in NSUserDefaults)
+BOOL SunkyIsFinished(const SunkyGame *g);
+void SunkySetFinished(const SunkyGame *g);
+int SunkyFinishedCount(void);
+// Widescreen setting
+BOOL SunkyWidescreen(void);
+void SunkySetWidescreen(BOOL on);
 
 // Log file in Documents (stdout and stderr go there too)
 void SunkyLog(NSString *format, ...) NS_FORMAT_FUNCTION(1, 2);

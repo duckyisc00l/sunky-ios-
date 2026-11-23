@@ -63,6 +63,7 @@ jobs:
           pulseaudio --start --exit-idle-time=-1 || true
           pactl load-module module-null-sink >/dev/null 2>&1 || true
           EMU=engine/ogmk/target-gles/release/gm8emulator xvfb-run -a -s "-screen 0 1280x960x24" ci/lab.sh out/run-gles ${{ inputs.games || 'p1 p2 p3 mpeg tiff' }}
+          SUNKY_WIDE=2.16 EMU=engine/ogmk/target-gles/release/gm8emulator xvfb-run -a -s "-screen 0 1600x960x24" ci/lab.sh out/run-wide p1 mpeg
       - name: Publish results to branch r-lab
         if: always()
         run: |

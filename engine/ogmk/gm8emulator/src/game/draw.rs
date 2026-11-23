@@ -177,6 +177,27 @@ impl Game {
             }
         }
 
+        // SUNKY-IOS: widescreen (see wide.rs). Widen the view just for drawing.
+        let wide_plan = super::wide::plan(
+            self.room.views_enabled,
+            &self.room.views,
+            self.room.width,
+            self.unscaled_width,
+            self.unscaled_height,
+        );
+        let fb_w = wide_plan.as_ref().map(|p| p.port_w).unwrap_or(self.unscaled_width);
+        if super::wide::needs_fb(fb_w, self.unscaled_height) {
+            self.renderer.resize_framebuffer(fb_w, self.unscaled_height, false);
+        }
+        let wide_saved = wide_plan.as_ref().map(|p| {
+            let v = &mut self.room.views[p.view];
+            let saved = (v.source_x, v.source_w, v.port_w);
+            v.source_x = p.src_x;
+            v.source_w = p.src_w;
+            v.port_w = p.port_w;
+            saved
+        });
+
         // Draw all views
         if self.room.views_enabled {
             // Iter views in a non-borrowing way
@@ -203,16 +224,25 @@ impl Game {
             self.draw_view(0, 0, self.room.width, self.room.height, 0, 0, self.room.width, self.room.height, 0.0)?;
         }
 
+        // SUNKY-IOS: put the real view back, so game logic never sees the wide one
+        if let (Some(p), Some((x, w, pw))) = (wide_plan.as_ref(), wide_saved) {
+            let v = &mut self.room.views[p.view];
+            v.source_x = x;
+            v.source_w = w;
+            v.port_w = pw;
+        }
+        super::wide::publish(fb_w, self.unscaled_height, wide_plan.as_ref().map(|p| p.offset).unwrap_or(0));
+
         // Reset viewport
         self.renderer.set_view(
             0,
             0,
-            self.unscaled_width as _,
+            fb_w as _,
             self.unscaled_height as _,
             0.0,
             0,
             0,
-            self.unscaled_width as _,
+            fb_w as _,
             self.unscaled_height as _,
         );
 

@@ -1,11 +1,11 @@
 #import "Sunky.h"
 
 const SunkyGame kSunkyGames[] = {
-    { "p1",   "Sunky the Game",      "Part 1" },
-    { "p2",   "Sunky the Game",      "Part 2" },
-    { "p3",   "Sunky the Game",      "Part 3" },
-    { "mpeg", "Sunky.MPEG",          "The original sillypasta" },
-    { "tiff", "Silly.TIFF",          "Sunky.MPEG's sequel" },
+    { "p1",   "Sunky the Game", "Part 1",                  { 2, -1 } },        // room "End"
+    { "p2",   "Sunky the Game", "Part 2",                  { 2, -1 } },        // room "End"
+    { "p3",   "Sunky the Game", "Part 3",                  { 37, 24, -1 } },   // "Ending", "Credits"
+    { "mpeg", "Sunky.MPEG",     "The original sillypasta", { 44, -1 } },       // "Riddle" (last room)
+    { "tiff", "Silly.TIFF",     "Sunky.MPEG's sequel",     { 64, 71, -1 } },   // "Credits", "End"
 };
 const int kSunkyGameCount = sizeof(kSunkyGames) / sizeof(kSunkyGames[0]);
 
@@ -21,3 +21,14 @@ void SunkyLog(NSString *format, ...) {
     fprintf(stderr, "[app] %s\n", s.UTF8String);
     fflush(stderr);
 }
+
+static NSString *finishedKey(const SunkyGame *g) { return [NSString stringWithFormat:@"finished.%s", g->file]; }
+BOOL SunkyIsFinished(const SunkyGame *g) { return [NSUserDefaults.standardUserDefaults boolForKey:finishedKey(g)]; }
+void SunkySetFinished(const SunkyGame *g) { [NSUserDefaults.standardUserDefaults setBool:YES forKey:finishedKey(g)]; }
+int SunkyFinishedCount(void) {
+    int n = 0;
+    for (int i = 0; i < kSunkyGameCount; i++) n += SunkyIsFinished(&kSunkyGames[i]);
+    return n;
+}
+BOOL SunkyWidescreen(void) { return [NSUserDefaults.standardUserDefaults boolForKey:@"widescreen"]; }
+void SunkySetWidescreen(BOOL on) { [NSUserDefaults.standardUserDefaults setBool:on forKey:@"widescreen"]; }

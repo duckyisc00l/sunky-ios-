@@ -297,6 +297,7 @@ pub fn run(args: Vec<String>) -> i32 {
 #[cfg(target_os = "ios")]
 #[no_mangle]
 pub unsafe extern "C" fn sunky_run_game(path: *const std::os::raw::c_char) -> i32 {
+    CURRENT_ROOM.store(-1, std::sync::atomic::Ordering::Relaxed);
     let path = std::ffi::CStr::from_ptr(path).to_string_lossy().into_owned();
     let args = vec!["gm8emulator".to_string(), path, "-r".to_string()];
     match std::panic::catch_unwind(|| run(args)) {
@@ -311,4 +312,13 @@ pub unsafe extern "C" fn sunky_run_game(path: *const std::os::raw::c_char) -> i3
             2
         },
     }
+}
+
+/// SUNKY-IOS: the room the running game is in (the app uses it to notice a game's ending).
+pub static CURRENT_ROOM: std::sync::atomic::AtomicI32 = std::sync::atomic::AtomicI32::new(-1);
+
+/// SUNKY-IOS: room the running game is in, or -1.
+#[no_mangle]
+pub extern "C" fn sunky_current_room() -> i32 {
+    CURRENT_ROOM.load(std::sync::atomic::Ordering::Relaxed)
 }

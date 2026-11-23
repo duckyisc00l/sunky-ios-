@@ -21,6 +21,28 @@ static SCREEN: AtomicU32 = AtomicU32::new((640 << 16) | 480);
 /// Size the game asked its window to be (packed w << 16 | h), for the app to read.
 static GAME_SIZE: AtomicU32 = AtomicU32::new((640 << 16) | 480);
 static CLOSE: AtomicBool = AtomicBool::new(false);
+static WIDE: AtomicBool = AtomicBool::new(false);
+/// Where the game's own window starts inside the (possibly widescreen) picture, in game pixels.
+static MOUSE_OFFSET: AtomicU32 = AtomicU32::new(0);
+
+/// Turns widescreen on or off (the runner widens scrolling levels to the screen's shape).
+#[no_mangle]
+pub extern "C" fn ramen_ios_set_widescreen(on: bool) {
+    WIDE.store(on, Ordering::Relaxed);
+}
+
+/// For the runner: (screen width, screen height, widescreen on).
+pub fn widescreen_target() -> (u32, u32, bool) {
+    let s = SCREEN.load(Ordering::Relaxed);
+    (s >> 16, s & 0xFFFF, WIDE.load(Ordering::Relaxed))
+}
+
+/// For the runner: the size of the picture it shows (what `ramen_ios_game_size` reports) and where
+/// the game's real window starts inside it.
+pub fn set_display(w: u32, h: u32, offset: u32) {
+    GAME_SIZE.store((w.min(65535) << 16) | h.min(65535), Ordering::Relaxed);
+    MOUSE_OFFSET.store(offset, Ordering::Relaxed);
+}
 
 fn push(e: Event) {
     if let Ok(mut q) = QUEUE.lock() {
@@ -67,9 +89,11 @@ pub extern "C" fn ramen_ios_key(vk: u32, down: bool) {
     }
 }
 
-/// Pointer position in drawable pixels.
+/// Pointer position in picture pixels (the size `ramen_ios_game_size` reports).
 #[no_mangle]
 pub extern "C" fn ramen_ios_mouse_move(x: u32, y: u32) {
+    // x is in picture pixels; the game wants its own window's pixels
+    let x = x.saturating_sub(MOUSE_OFFSET.load(Ordering::Relaxed));
     push(Event::MouseMove((x.min(u16::MAX as u32) as u16, y.min(u16::MAX as u32) as u16)));
 }
 

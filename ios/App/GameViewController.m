@@ -17,6 +17,8 @@
 @property (nonatomic, strong) UIView *dpad, *jump, *start, *closeButton;
 @property (nonatomic, strong) UIView *dpadKnob;
 @property (nonatomic) BOOL running;
+@property (nonatomic) const SunkyGame *game;
+@property (nonatomic, strong) NSTimer *endWatch;
 @end
 
 typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart, RoleGame, RoleClose };
@@ -31,8 +33,9 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     NSUInteger _mouseGeneration;
 }
 
-- (instancetype)initWithExe:(NSString *)exePath title:(NSString *)title {
+- (instancetype)initWithGame:(const SunkyGame *)game exe:(NSString *)exePath title:(NSString *)title {
     if ((self = [super init])) {
+        _game = game;
         _exePath = [exePath copy];
         _title_ = [title copy];
         _roles = [NSMapTable strongToStrongObjectsMapTable];
@@ -139,6 +142,9 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     [self.gameView makeCurrent];
     CGFloat s = self.gameView.contentScaleFactor;
     ramen_ios_resize((uint32_t)(self.gameView.bounds.size.width * s), (uint32_t)(self.gameView.bounds.size.height * s));
+    ramen_ios_set_widescreen(SunkyWidescreen());
+    __weak GameViewController *weakTimerSelf = self;
+    self.endWatch = [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer *t) { [weakTimerSelf checkEnding]; }];
     NSString *path = self.exePath;
     __weak GameViewController *weakSelf = self;
     NSThread *t = [[NSThread alloc] initWithBlock:^{
@@ -172,7 +178,40 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     }
 }
 
+- (void)checkEnding {
+    if (!self.game || SunkyIsFinished(self.game)) return;
+    int32_t room = sunky_current_room();
+    for (int i = 0; i < 4 && self.game->endRooms[i] >= 0; i++) {
+        if (room == self.game->endRooms[i]) {
+            SunkySetFinished(self.game);
+            SunkyLog(@"reached the ending (room %d)", room);
+            [self showFinishedBanner];
+            return;
+        }
+    }
+}
+
+- (void)showFinishedBanner {
+    UILabel *b = [UILabel new];
+    b.text = [NSString stringWithFormat:@"  ✓ FINISHED: %@  ", self.title_];
+    b.font = [UIFont systemFontOfSize:20 weight:UIFontWeightHeavy];
+    b.textColor = UIColor.whiteColor;
+    b.backgroundColor = [UIColor colorWithRed:0.1 green:0.65 blue:0.25 alpha:0.95];
+    b.layer.cornerRadius = 14;
+    b.clipsToBounds = YES;
+    [b sizeToFit];
+    b.frame = CGRectInset(b.frame, 0, -8);
+    b.center = CGPointMake(self.view.bounds.size.width / 2, -40);
+    b.userInteractionEnabled = NO;
+    [self.view addSubview:b];
+    CGFloat y = MAX(self.view.safeAreaInsets.top, 10) + b.bounds.size.height / 2;
+    [UIView animateWithDuration:0.4 animations:^{ b.center = CGPointMake(b.center.x, y); } completion:^(BOOL f) {
+        [UIView animateWithDuration:0.4 delay:4 options:0 animations:^{ b.alpha = 0; } completion:^(BOOL f2) { [b removeFromSuperview]; }];
+    }];
+}
+
 - (void)gameEnded:(int32_t)code {
+    [self.endWatch invalidate];
     UIApplication.sharedApplication.idleTimerDisabled = NO;
     if (code == 0) {
         [self.navigationController popViewControllerAnimated:YES];

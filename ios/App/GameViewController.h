@@ -1,4 +1,5 @@
 #import <UIKit/UIKit.h>
+#import "Sunky.h"
 @interface GameViewController : UIViewController
-- (instancetype)initWithExe:(NSString *)exePath title:(NSString *)title;
+- (instancetype)initWithGame:(const SunkyGame *)game exe:(NSString *)exePath title:(NSString *)title;
 @end
