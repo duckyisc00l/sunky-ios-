@@ -15,7 +15,6 @@
 @property (nonatomic, copy) NSString *title_;
 @property (nonatomic, strong) GameView *gameView;
 @property (nonatomic, strong) UIView *dpad, *jump, *start, *closeButton;
-@property (nonatomic, strong) UIView *dpadKnob;
 @property (nonatomic) BOOL running;
 @property (nonatomic) const SunkyGame *game;
 @property (nonatomic, strong) NSTimer *endWatch;
@@ -57,24 +56,11 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     self.gameView.userInteractionEnabled = NO; // touches are handled by this controller's view
     [self.view addSubview:self.gameView];
 
-    self.dpad = [self pad];
-    self.dpadKnob = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    self.dpadKnob.backgroundColor = [UIColor colorWithWhite:1 alpha:0.45];
-    self.dpadKnob.layer.cornerRadius = 22;
-    self.dpadKnob.userInteractionEnabled = NO;
-    [self.dpad addSubview:self.dpadKnob];
-    for (NSString *arrow in @[@"◀", @"▲", @"▶", @"▼"]) {
-        UILabel *l = [UILabel new];
-        l.text = arrow;
-        l.textColor = [UIColor colorWithWhite:1 alpha:0.7];
-        l.font = [UIFont boldSystemFontOfSize:20];
-        l.tag = 100 + [@[@"◀", @"▲", @"▶", @"▼"] indexOfObject:arrow];
-        [l sizeToFit];
-        [self.dpad addSubview:l];
-    }
-    self.jump = [self buttonWithTitle:@"JUMP" size:96];
-    self.start = [self buttonWithTitle:@"START" size:64];
-    self.closeButton = [self buttonWithTitle:@"✕" size:40];
+    // Retro pixel-art controls (drawn by ci/controls.py), scaled up with hard pixels
+    self.dpad = [self pixelImage:@"dpad" scale:5];
+    self.jump = [self pixelImage:@"jump" scale:3.5];
+    self.start = [self pixelImage:@"start" scale:3];
+    self.closeButton = [self pixelImage:@"close" scale:3];
     for (UIView *v in @[self.dpad, self.jump, self.start, self.closeButton]) [self.view addSubview:v];
 
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(controllerConnected:)
@@ -82,29 +68,23 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     for (GCController *c in GCController.controllers) [self setUpController:c];
 }
 
-- (UIView *)pad {
-    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 150)];
-    v.backgroundColor = [UIColor colorWithWhite:1 alpha:0.12];
-    v.layer.cornerRadius = 75;
-    v.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.35].CGColor;
-    v.layer.borderWidth = 2;
+- (UIImage *)controlImage:(NSString *)name {
+    NSString *path = [NSBundle.mainBundle pathForResource:name ofType:@"png" inDirectory:@"Controls"];
+    return path ? [UIImage imageWithContentsOfFile:path] : nil;
+}
+
+- (UIImageView *)pixelImage:(NSString *)name scale:(CGFloat)scale {
+    UIImage *img = [self controlImage:name];
+    UIImageView *v = [[UIImageView alloc] initWithImage:img];
+    v.frame = CGRectMake(0, 0, img.size.width * scale, img.size.height * scale);
+    v.layer.magnificationFilter = kCAFilterNearest;
+    v.alpha = 0.9;
     v.userInteractionEnabled = NO;
     return v;
 }
 
-- (UIView *)buttonWithTitle:(NSString *)title size:(CGFloat)size {
-    UILabel *b = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size, size)];
-    b.text = title;
-    b.textAlignment = NSTextAlignmentCenter;
-    b.textColor = [UIColor colorWithWhite:1 alpha:0.85];
-    b.font = [UIFont boldSystemFontOfSize:size > 60 ? 18 : (size > 50 ? 13 : 18)];
-    b.backgroundColor = [UIColor colorWithWhite:1 alpha:0.15];
-    b.layer.cornerRadius = size / 2;
-    b.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.35].CGColor;
-    b.layer.borderWidth = 2;
-    b.clipsToBounds = YES;
-    b.userInteractionEnabled = NO;
-    return b;
+- (void)showPressed:(UIView *)v name:(NSString *)name on:(BOOL)on {
+    ((UIImageView *)v).image = [self controlImage:on ? [name stringByAppendingString:@"_on"] : name];
 }
 
 /// Where the game picture is, in view points (same aspect fit as the runner).
@@ -122,16 +102,11 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     UIEdgeInsets safe = self.view.safeAreaInsets;
     CGSize b = self.view.bounds.size;
     CGFloat side = MAX(safe.left, 12), right = MAX(safe.right, 12), bottom = MAX(safe.bottom, 12);
-    self.dpad.center = CGPointMake(side + 85, b.height - bottom - 85);
-    self.jump.center = CGPointMake(b.width - right - 60, b.height - bottom - 70);
-    self.start.center = CGPointMake(b.width - right - 40, self.jump.center.y - 100);
-    self.closeButton.center = CGPointMake(side + 24, MAX(safe.top, 8) + 24);
-    CGFloat c = 75;
-    [self.dpad viewWithTag:100].center = CGPointMake(18, c);
-    [self.dpad viewWithTag:101].center = CGPointMake(c, 18);
-    [self.dpad viewWithTag:102].center = CGPointMake(150 - 18, c);
-    [self.dpad viewWithTag:103].center = CGPointMake(c, 150 - 18);
-    if (!_dpadTouch) self.dpadKnob.center = CGPointMake(c, c);
+    self.dpad.center = CGPointMake(side + 90, b.height - bottom - 90);
+    self.jump.center = CGPointMake(b.width - right - 62, b.height - bottom - 72);
+    self.start.center = CGPointMake(b.width - right - 62, self.jump.center.y - 95);
+    self.closeButton.center = CGPointMake(side + 22, MAX(safe.top, 8) + 22);
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -255,8 +230,8 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
 }
 
 - (void)updateDpadWithPoint:(CGPoint)p {
-    CGPoint c = CGPointMake(75, 75);
-    CGFloat dx = p.x - c.x, dy = p.y - c.y;
+    CGFloat half = self.dpad.bounds.size.width / 2;
+    CGFloat dx = p.x - half, dy = p.y - half;
     CGFloat dist = hypot(dx, dy);
     BOOL want[4] = {NO, NO, NO, NO};
     if (dist > 18) {
@@ -269,17 +244,22 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
         want[3] = angle > 202.5 && angle < 337.5;  // down
     }
     for (int i = 0; i < 4; i++) [self setDir:i down:want[i]];
-    CGFloat r = MIN(dist, 50);
-    self.dpadKnob.center = dist > 0 ? CGPointMake(c.x + dx / dist * r, c.y + dy / dist * r) : c;
+    [self showDpad:want];
+}
+
+- (void)showDpad:(BOOL *)dirs {
+    NSString *name = dirs[2] ? @"dpad_right" : dirs[0] ? @"dpad_left" : dirs[1] ? @"dpad_up" : dirs[3] ? @"dpad_down" : @"dpad";
+    ((UIImageView *)self.dpad).image = [self controlImage:name];
 }
 
 // ---- Touches ----
 
 - (TouchRole)roleForPoint:(CGPoint)p {
     CGPoint inPad = [self.view convertPoint:p toView:self.dpad];
-    if (hypot(inPad.x - 75, inPad.y - 75) < 110) return RoleDpad; // generous, so thumbs don't slip off
-    if (hypot(p.x - self.jump.center.x, p.y - self.jump.center.y) < 70) return RoleJump;
-    if (hypot(p.x - self.start.center.x, p.y - self.start.center.y) < 45) return RoleStart;
+    CGFloat half = self.dpad.bounds.size.width / 2;
+    if (hypot(inPad.x - half, inPad.y - half) < half + 30) return RoleDpad; // generous, so thumbs don't slip off
+    if (hypot(p.x - self.jump.center.x, p.y - self.jump.center.y) < self.jump.bounds.size.width / 2 + 16) return RoleJump;
+    if (CGRectContainsPoint(CGRectInset(self.start.frame, -12, -12), p)) return RoleStart;
     if (CGRectContainsPoint(CGRectInset(self.closeButton.frame, -10, -10), p)) return RoleClose;
     if (CGRectContainsPoint([self gameRect], p)) return RoleGame;
     return RoleNone;
@@ -293,9 +273,6 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     ramen_ios_mouse_move((uint32_t)MAX(0, MIN(gw - 1, x)), (uint32_t)MAX(0, MIN(gh - 1, y)));
 }
 
-- (void)highlight:(UIView *)v on:(BOOL)on {
-    v.backgroundColor = [UIColor colorWithWhite:1 alpha:on ? 0.4 : 0.15];
-}
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     for (UITouch *t in touches) {
@@ -307,8 +284,8 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
                 _dpadTouch = t;
                 [self updateDpadWithPoint:[t locationInView:self.dpad]];
                 break;
-            case RoleJump: ramen_ios_key(VK_SPACE, true); [self highlight:self.jump on:YES]; break;
-            case RoleStart: ramen_ios_key(VK_RETURN, true); [self highlight:self.start on:YES]; break;
+            case RoleJump: ramen_ios_key(VK_SPACE, true); [self showPressed:self.jump name:@"jump" on:YES]; break;
+            case RoleStart: ramen_ios_key(VK_RETURN, true); [self showPressed:self.start name:@"start" on:YES]; break;
             case RoleGame:
                 if (_mouseTouch) { role = RoleNone; break; }
                 _mouseTouch = t;
@@ -339,10 +316,10 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
             case RoleDpad:
                 _dpadTouch = nil;
                 for (int i = 0; i < 4; i++) [self setDir:i down:NO];
-                self.dpadKnob.center = CGPointMake(75, 75);
+                ((UIImageView *)self.dpad).image = [self controlImage:@"dpad"];
                 break;
-            case RoleJump: ramen_ios_key(VK_SPACE, false); [self highlight:self.jump on:NO]; break;
-            case RoleStart: ramen_ios_key(VK_RETURN, false); [self highlight:self.start on:NO]; break;
+            case RoleJump: ramen_ios_key(VK_SPACE, false); [self showPressed:self.jump name:@"jump" on:NO]; break;
+            case RoleStart: ramen_ios_key(VK_RETURN, false); [self showPressed:self.start name:@"start" on:NO]; break;
             case RoleGame: {
                 // Some buttons only react while the mouse is held, so keep every tap down for a few frames.
                 _mouseTouch = nil;
