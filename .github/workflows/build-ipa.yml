@@ -56,6 +56,10 @@ jobs:
         run: |
           set -o pipefail
           export IPHONEOS_DEPLOYMENT_TARGET=14.0 SDKROOT=$(xcrun --sdk iphonesimulator --show-sdk-path)
+          # Rust 1.77 doesn't mark x86_64-apple-ios as a simulator target, so C/C++ crates would get the
+          # device SDK. A later -isysroot wins.
+          sim_flags="-isysroot $SDKROOT"
+          export CFLAGS_x86_64_apple_ios="$sim_flags" CXXFLAGS_x86_64_apple_ios="$sim_flags"
           cargo build --release --lib -p gm8emulator --features gles --target $SIM_TARGET 2>&1 | grep -vE "^\s+(Compiling|Downloaded|Downloading)"
           mkdir -p ../../ios/lib/iphonesimulator && cp target/$SIM_TARGET/release/libgm8emulator.a ../../ios/lib/iphonesimulator/
 
