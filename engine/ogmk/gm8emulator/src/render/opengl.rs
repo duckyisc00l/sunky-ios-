@@ -844,6 +844,10 @@ impl RendererTrait for RendererImpl {
                 // TODO: find proper fix or maybe allow allocating 16384x8192?
                 size = 8192;
             }
+            // SUNKY-IOS: lab can pretend to be an iPhone (SUNKY_MAX_TEXTURE=4096)
+            if let Some(cap) = std::env::var("SUNKY_MAX_TEXTURE").ok().and_then(|v| v.parse::<GLint>().ok()) {
+                size = size.min(cap);
+            }
             assert_eq!(self.gl.GetError(), 0);
         }
         size.max(0) as u32

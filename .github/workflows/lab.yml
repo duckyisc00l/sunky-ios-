@@ -72,7 +72,7 @@ jobs:
         run: |
           pulseaudio --start --exit-idle-time=-1 || true
           pactl load-module module-null-sink >/dev/null 2>&1 || true
-          export SUNKY_OVERRIDES=$PWD/ios/App/Art
+          export SUNKY_OVERRIDES=$PWD/ios/App/Art SUNKY_MAX_TEXTURE=4096
           EMU=engine/ogmk/target-gles/release/gm8emulator xvfb-run -a -s "-screen 0 1280x960x24" ci/lab.sh out/run-gles ${{ inputs.games || 'p1 p2 p3 mpeg tiff' }}
           SUNKY_WIDE=2.16 EMU=engine/ogmk/target-gles/release/gm8emulator xvfb-run -a -s "-screen 0 1600x960x24" ci/lab.sh out/run-wide p1 mpeg
       - name: Publish results to branch r-lab
