@@ -87,11 +87,7 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
     self.countText = pixelView(pixelText(@" ", YES), 3);
     self.wideText = pixelView(pixelText(@"WIDESCREEN", NO), 2.5);
     self.wideToggle = pixelView(controlImage(SunkyWidescreen() ? @"toggle_on" : @"toggle_off"), 3.5);
-    for (UIView *v in @[self.logo, self.subtitle, self.countText, self.wideText, self.wideToggle]) [self.view addSubview:v];
-    UIButton *wideHit = [UIButton buttonWithType:UIButtonTypeCustom];
-    wideHit.tag = 777;
-    [wideHit addTarget:self action:@selector(toggleWide) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:wideHit];
+    for (UIView *v in @[self.logo, self.subtitle, self.countText]) [self.view addSubview:v];
 
     self.scroll = [UIScrollView new];
     self.scroll.showsHorizontalScrollIndicator = NO;
@@ -151,15 +147,6 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
     f = self.countText.frame;
     f.origin = CGPointMake(CGRectGetMaxX(self.subtitle.frame) + 18, self.subtitle.frame.origin.y);
     self.countText.frame = f;
-
-    f = self.wideToggle.frame;
-    f.origin = CGPointMake(b.width - right - f.size.width, top + 4);
-    self.wideToggle.frame = f;
-    f = self.wideText.frame;
-    f.origin = CGPointMake(CGRectGetMinX(self.wideToggle.frame) - 10 - f.size.width,
-                           self.wideToggle.center.y - f.size.height / 2);
-    self.wideText.frame = f;
-    [self.view viewWithTag:777].frame = CGRectInset(CGRectUnion(self.wideText.frame, self.wideToggle.frame), -10, -10);
 
     CGFloat y = CGRectGetMaxY(self.subtitle.frame) + 16;
     CGFloat h = b.height - y - MAX(safe.bottom, 14);

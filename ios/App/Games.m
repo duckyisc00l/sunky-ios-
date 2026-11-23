@@ -31,5 +31,5 @@ int SunkyFinishedCount(void) {
     for (int i = 0; i < kSunkyGameCount; i++) n += SunkyIsFinished(&kSunkyGames[i]);
     return n;
 }
-BOOL SunkyWidescreen(void) { return [NSUserDefaults.standardUserDefaults boolForKey:@"widescreen"]; }
+BOOL SunkyWidescreen(void) { return YES; } // always on (where it would look wrong, the games stay normal by themselves)
 void SunkySetWidescreen(BOOL on) { [NSUserDefaults.standardUserDefaults setBool:on forKey:@"widescreen"]; }
