@@ -7,3 +7,7 @@ Payload/
 *.ipa
 *.xcodeproj/
 target-gles/
+ios/lib/
+ios/App/Games/
+ios/App/Assets.xcassets/AppIcon.appiconset/
+ios/build/

@@ -122,12 +122,13 @@ impl Window {
         let (w, h) = builder.size;
         GAME_SIZE.store(((w as u32) << 16) | h as u32, Ordering::Relaxed);
         CLOSE.store(false, Ordering::Relaxed);
-        if let Ok(mut q) = QUEUE.lock() {
-            q.clear();
-        }
         // Report the real drawable size straight away, so the runner scales to the screen.
         let s = SCREEN.load(Ordering::Relaxed);
-        Ok(Window { events: vec![Event::Resize(((s >> 16) as u16, (s & 0xFFFF) as u16))] })
+        if let Ok(mut q) = QUEUE.lock() {
+            q.clear();
+            q.push(Event::Resize(((s >> 16) as u16, (s & 0xFFFF) as u16)));
+        }
+        Ok(Window { events: Vec::new() })
     }
 
     pub(crate) fn events(&self) -> &[Event] {

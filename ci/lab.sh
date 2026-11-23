@@ -13,15 +13,21 @@ for g in $games; do
   timeout 75 "$emu" game.exe > "$d/log.txt" 2>&1 &
   pid=$!
   shot() { import -window root "$d/$1.png" 2>/dev/null; }
-  key() { xdotool key --clearmodifiers "$@" 2>/dev/null; }
+  wid=$(timeout 20 xdotool search --sync --class OpenGMK 2>/dev/null | head -1)
+  echo "window: $wid" >> "$d/lab.txt"
+  focus() { [ -n "$wid" ] && xdotool windowfocus "$wid" 2>/dev/null; }
+  key() { focus; xdotool key --clearmodifiers "$@" 2>/dev/null; }
+  hold() { focus; xdotool keydown "$1"; sleep "$2"; xdotool keyup "$1"; }
+  click() { [ -n "$wid" ] && xdotool mousemove --window "$wid" "$1" "$2" click 1 2>/dev/null; }
   sleep 6; shot 01-start
-  sleep 6; shot 02-12s
-  key Return; sleep 3; shot 03-enter
-  key z; sleep 3; shot 04-z
-  key space; sleep 3; shot 05-space
-  xdotool keydown Right; sleep 4; shot 06-right; xdotool keyup Right
-  key Up; key x; sleep 2; shot 07-jump
-  sleep 15; shot 08-late
+  click 307 448; sleep 3; shot 02-click-play      # Part 1's PLAY
+  click 547 443; sleep 3; shot 03-click-play2     # Part 3's PLAY
+  key Return; sleep 3; shot 04-enter
+  key Return; sleep 3; shot 05-enter2
+  key space; sleep 2; hold Right 4; shot 06-right
+  key space; sleep 1; shot 07-jump
+  hold Right 5; key space; sleep 2; shot 08-run
+  key Return; sleep 3; shot 09-enter3
   if kill -0 $pid 2>/dev/null; then echo "STILL RUNNING at end" >> "$d/log.txt"; kill $pid; else wait $pid; echo "EXITED code $?" >> "$d/log.txt"; fi
   cd - >/dev/null
   for f in "$d"/*.png; do convert "$f" -trim +repage "$f" 2>/dev/null; done

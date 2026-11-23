@@ -1,0 +1,118 @@
+name: build-ipa
+# Builds the unsigned IPA on a Mac. Started by hand (Mac minutes count 10x).
+on:
+  workflow_dispatch:
+    inputs:
+      build_number: { description: "build number shown in the app", required: true, default: "1" }
+      simulator: { description: "also run it in the iPhone Simulator (yes/no)", required: false, default: "yes" }
+permissions: { contents: write }
+concurrency: { group: build-ipa, cancel-in-progress: true }
+jobs:
+  ipa:
+    runs-on: macos-15
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Games cache
+        uses: actions/cache@v4
+        with:
+          path: games
+          key: games-mac-v1-${{ hashFiles('ci/games.txt') }}
+      - name: Download games from Game Jolt
+        run: ci/fetch.sh
+
+      - name: Rust toolchain for iPhone
+        working-directory: engine/ogmk
+        run: |
+          rustup show active-toolchain
+          rustup target add aarch64-apple-ios aarch64-apple-ios-sim
+      - name: Cargo cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            engine/ogmk/target
+            ci/gm8info/target
+          key: cargo-mac-v1-${{ hashFiles('engine/**/*.rs', 'engine/**/Cargo.*', 'ci/gm8info/**') }}
+          restore-keys: cargo-mac-v1-
+
+      - name: Build the runner (iPhone)
+        working-directory: engine/ogmk
+        run: |
+          set -o pipefail
+          cargo build --release --lib -p gm8emulator --features gles --target aarch64-apple-ios 2>&1 | grep -vE "^\s+(Compiling|Downloaded|Downloading)"
+          mkdir -p ../../ios/lib/iphoneos && cp target/aarch64-apple-ios/release/libgm8emulator.a ../../ios/lib/iphoneos/
+          ls -la ../../ios/lib/iphoneos
+
+      - name: Build the runner (Simulator)
+        if: inputs.simulator == 'yes'
+        working-directory: engine/ogmk
+        run: |
+          set -o pipefail
+          cargo build --release --lib -p gm8emulator --features gles --target aarch64-apple-ios-sim 2>&1 | grep -vE "^\s+(Compiling|Downloaded|Downloading)"
+          mkdir -p ../../ios/lib/iphonesimulator && cp target/aarch64-apple-ios-sim/release/libgm8emulator.a ../../ios/lib/iphonesimulator/
+
+      - name: Games and icons into the app
+        run: |
+          set -e
+          mkdir -p ios/App/Games
+          for g in p1 p2 p3 mpeg tiff; do cp games/$g.exe ios/App/Games/; done
+          (cd ci/gm8info && cargo build --release 2>&1 | tail -2)
+          for g in p1 p2 p3 mpeg tiff; do ci/gm8info/target/release/gm8info games/$g.exe out/info/$g >/dev/null 2>&1 || true; done
+          python3 -m venv /tmp/venv && /tmp/venv/bin/pip -q install pillow
+          /tmp/venv/bin/python ci/icons.py out/info ios/App/Games ios/App/Assets.xcassets/AppIcon.appiconset
+          du -sh ios/App/Games
+
+      - name: Xcode project
+        working-directory: ios
+        run: |
+          brew install xcodegen >/dev/null
+          sed -i '' 's/CURRENT_PROJECT_VERSION: "1"/CURRENT_PROJECT_VERSION: "${{ inputs.build_number }}"/' project.yml
+          xcodegen generate
+
+      - name: Build IPA
+        working-directory: ios
+        run: |
+          set -o pipefail
+          xcodebuild -project Sunky.xcodeproj -scheme Sunky -configuration Release -sdk iphoneos \
+            -destination 'generic/platform=iOS' -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build 2>&1 | tee build.log | grep -E "error:|warning: .*(Sunky|App/)|BUILD" || true
+          grep -q "BUILD SUCCEEDED" build.log
+          app=build/Build/Products/Release-iphoneos/Sunky.app
+          test -x "$app/Sunky"
+          file "$app/Sunky"
+          rm -rf Payload && mkdir Payload && cp -R "$app" Payload/
+          zip -qry Sunky.ipa Payload
+          ls -la Sunky.ipa
+
+      - name: Simulator run
+        if: inputs.simulator == 'yes'
+        continue-on-error: true
+        working-directory: ios
+        run: ../ci/sim.sh
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs
+          path: |
+            ios/build.log
+            ios/sim/**
+          if-no-files-found: ignore
+
+      - name: Publish simulator results to branch r-sim
+        if: always() && inputs.simulator == 'yes'
+        run: |
+          [ -d ios/sim ] || exit 0
+          cd ios/sim && git init -q -b r-sim && git add -A
+          git -c user.name=sim -c user.email=sim@local commit -qm "sim ${{ github.run_number }}"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" r-sim
+
+      - name: Release
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          gh release create "build-${{ inputs.build_number }}" ios/Sunky.ipa --title "Sunky build ${{ inputs.build_number }}" \
+            --notes "Unsigned IPA. Install with SideStore, Sideloadly, AltStore or LiveContainer."

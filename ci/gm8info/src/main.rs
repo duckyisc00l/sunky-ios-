@@ -83,5 +83,8 @@ fn main() {
     for (i, x) in g.sprites.iter().enumerate() {
         if let Some(x) = x { let _ = writeln!(s, "SPRITE {} {} frames {} {}x{}", i, x.name, x.frames.len(), x.frames.first().map(|f| f.width).unwrap_or(0), x.frames.first().map(|f| f.height).unwrap_or(0)); }
     }
+    if let Some(ico) = &g.ico_file_raw {
+        fs::write(outdir.join("icon.ico"), ico).unwrap();
+    }
     fs::write(outdir.join("summary.txt"), s).unwrap();
 }

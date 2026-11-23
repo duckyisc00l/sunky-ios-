@@ -214,7 +214,9 @@ pub fn run(args: Vec<String>) -> i32 {
         },
     };
 
-    let absolute_path = match file_path.canonicalize() {
+    // SUNKY-IOS: keep an absolute path as given. On iPhone the game is a symlink in its own save
+    // folder (Documents/<game>/game.exe), and the game's folder must be that one, not the app bundle.
+    let absolute_path = match if file_path.is_absolute() { Ok(file_path.to_path_buf()) } else { file_path.canonicalize() } {
         Ok(p) => p,
         Err(e) => {
             eprintln!("Failed to resolve game path: {}", e);
