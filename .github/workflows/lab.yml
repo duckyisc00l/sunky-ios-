@@ -53,8 +53,11 @@ jobs:
         run: |
           mkdir -p out/info
           for g in p1 p2 p3 mpeg tiff; do
-            ci/gm8info/target/release/gm8info games/$g.exe out/info/$g > out/info/$g.log 2>&1 || echo "gm8info failed for $g"
+            SPRITES="Title,SunkyStand,Sunky,SunkyDance,SillyTitle,Stand,SunkyFly,Sunky Did a Thing,SUNKY???" \
+              ci/gm8info/target/release/gm8info games/$g.exe out/info/$g > out/info/$g.log 2>&1 || echo "gm8info failed for $g"
           done
+          python3 -c "import PIL" 2>/dev/null || pip install -q --break-system-packages pillow
+          python3 ci/rawpng.py out/info
           python3 ci/gen8.py games/g2x/data.win > out/info/g2.txt || true
           cat out/info/g2.txt
       - name: Run games (virtual screen)

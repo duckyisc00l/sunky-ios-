@@ -87,6 +87,20 @@ fn main() {
     for (i, x) in g.sprites.iter().enumerate() {
         if let Some(x) = x { let _ = writeln!(s, "SPRITE {} {} frames {} {}x{}", i, x.name, x.frames.len(), x.frames.first().map(|f| f.width).unwrap_or(0), x.frames.first().map(|f| f.height).unwrap_or(0)); }
     }
+    // Sprites named in $SPRITES (comma-separated): first, middle and last frame as raw pixels
+    if let Ok(names) = std::env::var("SPRITES") {
+        let want: Vec<&str> = names.split(',').collect();
+        fs::create_dir_all(outdir.join("sprites")).unwrap();
+        for x in g.sprites.iter().flatten() {
+            let n = x.name.to_string();
+            if !want.contains(&n.as_str()) || x.frames.is_empty() { continue; }
+            let last = x.frames.len() - 1;
+            for fi in [0, last / 2, last] {
+                let f = &x.frames[fi];
+                fs::write(outdir.join("sprites").join(format!("{}_{}_{}x{}.raw", clean(&n), fi, f.width, f.height)), &f.data).unwrap();
+            }
+        }
+    }
     if let Some(ico) = &g.ico_file_raw {
         fs::write(outdir.join("icon.ico"), ico).unwrap();
     }
