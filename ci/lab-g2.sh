@@ -5,6 +5,7 @@ set -uo pipefail
 bs=$(realpath "$1"); data=$(realpath "$2"); out=$(realpath -m "$3"); mkdir -p "$out"
 "$bs" "$data" --print-unknown-functions > "$out/unknown-functions.txt" 2>&1
 "$bs" "$data" --print-rooms > "$out/rooms.txt" 2>&1
+python3 "$(dirname "$0")/strings.py" "$data" > "$out/strings.txt" 2>&1
 cd "$(dirname "$data")"
 timeout 60 "$bs" "$data" --disable-log-colours > "$out/log.txt" 2>&1 &
 pid=$!
