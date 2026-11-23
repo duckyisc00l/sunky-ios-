@@ -95,9 +95,22 @@ fn main() {
             let n = x.name.to_string();
             if !want.contains(&n.as_str()) || x.frames.is_empty() { continue; }
             let last = x.frames.len() - 1;
-            for fi in [0, last / 2, last] {
+            let all = std::env::var("SPRITES_ALL").map(|a| a.split(',').any(|n| n == x.name.to_string())).unwrap_or(false);
+            let frames: Vec<usize> = if all { (0..=last).collect() } else { vec![0, last / 2, last] };
+            for fi in frames {
                 let f = &x.frames[fi];
                 fs::write(outdir.join("sprites").join(format!("{}_{}_{}x{}.raw", clean(&n), fi, f.width, f.height)), &f.data).unwrap();
+            }
+        }
+    }
+    // Every background, so on-screen instructions can be found
+    if std::env::var_os("BACKGROUNDS").is_some() {
+        fs::create_dir_all(outdir.join("backgrounds")).unwrap();
+        for b in g.backgrounds.iter().flatten() {
+            if let Some(d) = &b.data {
+                if b.width > 0 && b.height > 0 {
+                    fs::write(outdir.join("backgrounds").join(format!("{}_0_{}x{}.raw", clean(&b.name.to_string()), b.width, b.height)), d).unwrap();
+                }
             }
         }
     }

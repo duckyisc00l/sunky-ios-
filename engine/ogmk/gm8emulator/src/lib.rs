@@ -10,6 +10,7 @@ pub mod input;
 pub mod instance;
 pub mod instancelist;
 pub mod math;
+pub mod overrides; // SUNKY-IOS
 pub mod render;
 pub mod tile;
 pub mod types;
@@ -206,13 +207,14 @@ pub fn run(args: Vec<String>) -> i32 {
         strict,                                 // strict: bool
         multithread,                            // multithread: bool
     );
-    let assets = match assets {
+    let mut assets = match assets {
         Ok(assets) => assets,
         Err(err) => {
             eprintln!("failed to load '{}' - {}", input, err);
             return EXIT_FAILURE;
         },
     };
+    overrides::apply(&mut assets); // SUNKY-IOS
 
     // SUNKY-IOS: keep an absolute path as given. On iPhone the game is a symlink in its own save
     // folder (Documents/<game>/game.exe), and the game's folder must be that one, not the app bundle.
