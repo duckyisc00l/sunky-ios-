@@ -20,6 +20,10 @@ static void crashHandler(int sig) {
     raise(sig);
 }
 
+static void uncaughtException(NSException *e) {
+    SunkyLog(@"uncaught exception: %@ %@\n%@", e.name, e.reason, e.callStackSymbols);
+}
+
 int main(int argc, char *argv[]) {
     @autoreleasepool {
         // Everything the runner prints goes to Documents/log.txt (the previous run's is kept too).
@@ -35,9 +39,7 @@ int main(int argc, char *argv[]) {
         gLogFd = fileno(stderr);
         int sigs[] = { SIGSEGV, SIGBUS, SIGILL, SIGABRT, SIGFPE, SIGTRAP };
         for (int i = 0; i < 6; i++) signal(sigs[i], crashHandler);
-        NSSetUncaughtExceptionHandler(^(NSException *e) {
-            SunkyLog(@"uncaught exception: %@ %@\n%@", e.name, e.reason, e.callStackSymbols);
-        });
+        NSSetUncaughtExceptionHandler(&uncaughtException);
         NSDictionary *info = NSBundle.mainBundle.infoDictionary;
         SunkyLog(@"Sunky %@ (build %@), iOS %@", info[@"CFBundleShortVersionString"], info[@"CFBundleVersion"],
                  UIDevice.currentDevice.systemVersion);
