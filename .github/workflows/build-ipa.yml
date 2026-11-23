@@ -68,10 +68,9 @@ jobs:
           set -e
           mkdir -p ios/App/Games
           for g in p1 p2 p3 mpeg tiff; do cp games/$g.exe ios/App/Games/; done
-          (cd ci/gm8info && cargo build --release 2>&1 | tail -2)
-          for g in p1 p2 p3 mpeg tiff; do ci/gm8info/target/release/gm8info games/$g.exe out/info/$g >/dev/null 2>&1 || true; done
           python3 -m venv /tmp/venv && /tmp/venv/bin/pip -q install pillow
-          /tmp/venv/bin/python ci/icons.py out/info ios/App/Games ios/App/Assets.xcassets/AppIcon.appiconset
+          /tmp/venv/bin/python ci/make_icons.py ios/App/Games "$PWD/ios/iconsets"
+          rm -rf ios/App/Assets.xcassets/AppIcon.appiconset && cp -R ios/iconsets/all/AppIcon.appiconset ios/App/Assets.xcassets/
           du -sh ios/App/Games
 
       - name: Xcode project

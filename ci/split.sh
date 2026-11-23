@@ -15,9 +15,9 @@ while IFS='|' read -r file name; do
   /usr/libexec/PlistBuddy -c "Set :CFBundleName $name" "$pl"
   /usr/libexec/PlistBuddy -c "Add :SunkyOnly string $file" "$pl"
   # its own icon, from the game's icon
-  ic=$work/icons-$file/Assets.xcassets; mkdir -p "$ic/AppIcon.appiconset"
+  ic=$work/icons-$file/Assets.xcassets; mkdir -p "$ic"
   echo '{"info":{"author":"xcode","version":1}}' > "$ic/Contents.json"
-  /tmp/venv/bin/python ../ci/icons.py --single "$app/Games/$file.png" "$ic/AppIcon.appiconset"
+  cp -R "iconsets/$file/AppIcon.appiconset" "$ic/"
   rm -f "$app"/AppIcon*.png "$app/Assets.car"
   xcrun actool "$ic" --compile "$app" --platform iphoneos --minimum-deployment-target 14.0 \
     --app-icon AppIcon --target-device iphone --target-device ipad \

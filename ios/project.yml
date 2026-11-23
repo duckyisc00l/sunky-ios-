@@ -8,11 +8,14 @@ targets:
     platform: iOS
     sources:
       - path: App
-        excludes: ["Games/**", "Controls/**", "Info.plist"]
+        excludes: ["Games/**", "Controls/**", "Art/**", "Info.plist"]
       - path: App/Games
         type: folder
         buildPhase: resources
       - path: App/Controls
+        type: folder
+        buildPhase: resources
+      - path: App/Art
         type: folder
         buildPhase: resources
     scheme: {}

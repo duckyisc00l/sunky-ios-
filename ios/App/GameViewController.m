@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UIView *dpad, *jump, *start, *closeButton;
 @property (nonatomic) BOOL running;
 @property (nonatomic) const SunkyGame *game;
+@property (nonatomic, strong) UIImageView *stickKnob;
 @property (nonatomic, strong) NSTimer *endWatch;
 @end
 
@@ -57,7 +58,10 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     [self.view addSubview:self.gameView];
 
     // Retro pixel-art controls (drawn by ci/controls.py), scaled up with hard pixels
-    self.dpad = [self pixelImage:@"dpad" scale:5];
+    self.dpad = [self pixelImage:@"stick_base" scale:4.5];
+    self.stickKnob = [self pixelImage:@"stick_knob" scale:4.5];
+    self.stickKnob.alpha = 1;
+    [self.dpad addSubview:self.stickKnob];
     self.jump = [self pixelImage:@"jump" scale:3.5];
     self.start = [self pixelImage:@"start" scale:3];
     self.closeButton = [self pixelImage:@"close" scale:3];
@@ -102,7 +106,8 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     UIEdgeInsets safe = self.view.safeAreaInsets;
     CGSize b = self.view.bounds.size;
     CGFloat side = MAX(safe.left, 12), right = MAX(safe.right, 12), bottom = MAX(safe.bottom, 12);
-    self.dpad.center = CGPointMake(side + 90, b.height - bottom - 90);
+    self.dpad.center = CGPointMake(side + 96, b.height - bottom - 96);
+    if (!_dpadTouch) self.stickKnob.center = CGPointMake(self.dpad.bounds.size.width / 2, self.dpad.bounds.size.height / 2);
     self.jump.center = CGPointMake(b.width - right - 62, b.height - bottom - 72);
     self.start.center = CGPointMake(b.width - right - 62, self.jump.center.y - 95);
     self.closeButton.center = CGPointMake(side + 22, MAX(safe.top, 8) + 22);
@@ -121,6 +126,9 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     __weak GameViewController *weakTimerSelf = self;
     self.endWatch = [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer *t) { [weakTimerSelf checkEnding]; }];
     NSString *path = self.exePath;
+    // Phone-friendly replacement art ("PRESS START" instead of "PRESS ENTER"), see engine overrides.rs
+    NSString *art = [NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:@"Art"];
+    setenv("SUNKY_OVERRIDES", art.fileSystemRepresentation, 1);
     __weak GameViewController *weakSelf = self;
     NSThread *t = [[NSThread alloc] initWithBlock:^{
         SunkyLog(@"starting %@", path);
@@ -245,11 +253,16 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     }
     for (int i = 0; i < 4; i++) [self setDir:i down:want[i]];
     [self showDpad:want];
+    // the knob follows the thumb, up to the edge of the well
+    CGFloat travel = half * 0.55;
+    CGFloat r = MIN(dist, travel);
+    self.stickKnob.center = dist > 0 ? CGPointMake(half + dx / dist * r, half + dy / dist * r) : CGPointMake(half, half);
 }
 
 - (void)showDpad:(BOOL *)dirs {
-    NSString *name = dirs[2] ? @"dpad_right" : dirs[0] ? @"dpad_left" : dirs[1] ? @"dpad_up" : dirs[3] ? @"dpad_down" : @"dpad";
-    ((UIImageView *)self.dpad).image = [self controlImage:name];
+    // joystick: the knob is moved in updateDpadWithPoint; just light it up while pushed
+    BOOL any = dirs[0] || dirs[1] || dirs[2] || dirs[3];
+    self.stickKnob.image = [self controlImage:any ? @"stick_knob_on" : @"stick_knob"];
 }
 
 // ---- Touches ----
@@ -316,7 +329,10 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
             case RoleDpad:
                 _dpadTouch = nil;
                 for (int i = 0; i < 4; i++) [self setDir:i down:NO];
-                ((UIImageView *)self.dpad).image = [self controlImage:@"dpad"];
+                self.stickKnob.image = [self controlImage:@"stick_knob"];
+                [UIView animateWithDuration:0.08 animations:^{
+                    self.stickKnob.center = CGPointMake(self.dpad.bounds.size.width / 2, self.dpad.bounds.size.height / 2);
+                }];
                 break;
             case RoleJump: ramen_ios_key(VK_SPACE, false); [self showPressed:self.jump name:@"jump" on:NO]; break;
             case RoleStart: ramen_ios_key(VK_RETURN, false); [self showPressed:self.start name:@"start" on:NO]; break;

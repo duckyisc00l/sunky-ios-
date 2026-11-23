@@ -6852,14 +6852,16 @@ impl Game {
         unimplemented!("Called unimplemented kernel function show_text")
     }
 
-    pub fn show_message(&mut self, _args: &[Value]) -> gml::Result<Value> {
-        // Expected arg count: 1
-        unimplemented!("Called unimplemented kernel function show_message")
+    // SUNKY-IOS: dialogs (were unimplemented, which crashed the runner); see dialog.rs
+    pub fn show_message(&mut self, args: &[Value]) -> gml::Result<Value> {
+        let message = expect_args!(args, [any])?;
+        crate::dialog::message(&self.decode_str(message.repr().as_ref()));
+        Ok(Default::default())
     }
 
-    pub fn show_question(&mut self, _args: &[Value]) -> gml::Result<Value> {
-        // Expected arg count: 1
-        unimplemented!("Called unimplemented kernel function show_question")
+    pub fn show_question(&mut self, args: &[Value]) -> gml::Result<Value> {
+        let message = expect_args!(args, [any])?;
+        Ok(crate::dialog::question(&self.decode_str(message.repr().as_ref())).into())
     }
 
     pub fn show_error(&mut self, args: &[Value]) -> gml::Result<Value> {
@@ -7046,9 +7048,17 @@ impl Game {
         unimplemented!("Called unimplemented kernel function get_integer")
     }
 
-    pub fn get_string(&mut self, _args: &[Value]) -> gml::Result<Value> {
-        // Expected arg count: 2
-        unimplemented!("Called unimplemented kernel function get_string")
+    pub fn get_string(&mut self, args: &[Value]) -> gml::Result<Value> {
+        let (prompt, default) = expect_args!(args, [any, any])?;
+        let answer = crate::dialog::input(
+            &self.decode_str(prompt.repr().as_ref()),
+            &self.decode_str(default.repr().as_ref()),
+        );
+        let bytes = match self.encode_str_maybe(&answer) {
+            Some(b) => b.into_owned(),
+            None => answer.into_bytes(),
+        };
+        Ok(Value::Str(bytes.into()))
     }
 
     pub fn get_color(&mut self, _args: &[Value]) -> gml::Result<Value> {

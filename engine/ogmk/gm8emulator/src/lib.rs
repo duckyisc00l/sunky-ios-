@@ -11,6 +11,7 @@ pub mod instance;
 pub mod instancelist;
 pub mod math;
 pub mod overrides; // SUNKY-IOS
+pub mod dialog; // SUNKY-IOS
 pub mod render;
 pub mod tile;
 pub mod types;

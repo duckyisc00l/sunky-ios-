@@ -107,9 +107,7 @@ def dpad(lit=None):
     tri(16, 6, 'up'); tri(16, 26, 'down'); tri(6, 16, 'left'); tri(26, 16, 'right')
     return im
 
-dpad().save(os.path.join(out, 'dpad.png'))
-for d in ('up', 'down', 'left', 'right'):
-    dpad(d).save(os.path.join(out, f'dpad_{d}.png'))
+# (the D-pad above is kept for reference; the app uses the joystick below)
 
 # ---- JUMP: a gold Sonic ring with JUMP inside ----
 def ring(pressed):
@@ -174,9 +172,57 @@ close().save(os.path.join(out, 'close.png'))
 
 # preview sheet for checking
 sheet = Image.new('RGBA', (200, 60), (60, 60, 60, 255))
-for i, n in enumerate(['dpad', 'dpad_right', 'jump', 'jump_on']):
+for i, n in enumerate(['jump', 'jump_on']):
     sheet.alpha_composite(Image.open(os.path.join(out, n + '.png')), (i * 36 + 2, 2))
 sheet.alpha_composite(Image.open(os.path.join(out, 'start.png')), (150, 5))
 sheet.alpha_composite(Image.open(os.path.join(out, 'start_on.png')), (150, 22))
 sheet.alpha_composite(Image.open(os.path.join(out, 'close.png')), (150, 40))
 sheet.resize((800, 240), Image.NEAREST).save('/tmp/controls-preview.png')
+
+# ---- Joystick: a round blue base and a gold ball that follows the thumb ----
+def joystick_base():
+    S = 41
+    im = Image.new('RGBA', (S, S), CLEAR)
+    c = (S - 1) / 2
+    for y in range(S):
+        for x in range(S):
+            d = ((x - c) ** 2 + (y - c) ** 2) ** 0.5
+            if d <= 20.2:
+                if d > 19.2: col = BLACK
+                elif d > 16.5:
+                    shade = (x - c) + (y - c)
+                    col = BLUE_LIGHT if shade < -12 else BLUE_DARK if shade > 12 else BLUE
+                elif d > 15.5: col = BLACK
+                else: col = (16, 40, 150, 255)  # well
+                im.putpixel((x, y), col)
+    # small arrow ticks on the rim
+    for (px, py) in [(20, 2), (19, 3), (20, 3), (21, 3), (20, 38), (19, 37), (20, 37), (21, 37),
+                     (2, 20), (3, 19), (3, 20), (3, 21), (38, 20), (37, 19), (37, 20), (37, 21)]:
+        im.putpixel((px, py), WHITE)
+    return im
+
+def joystick_knob(pressed):
+    S = 19
+    im = Image.new('RGBA', (S, S), CLEAR)
+    c = (S - 1) / 2
+    for y in range(S):
+        for x in range(S):
+            d = ((x - c) ** 2 + (y - c) ** 2) ** 0.5
+            if d <= 9.2:
+                if d > 8.2: col = BLACK
+                else:
+                    shade = (x - c) + (y - c)
+                    col = YELLOW_LIGHT if shade < -6 else ORANGE if shade > 5 else YELLOW
+                    if pressed and shade >= -6: col = YELLOW_LIGHT if shade < 0 else YELLOW
+                im.putpixel((x, y), col)
+    for p in ((5, 5), (6, 5), (5, 6)):
+        im.putpixel(p, WHITE)
+    return im
+
+joystick_base().save(os.path.join(out, 'stick_base.png'))
+joystick_knob(False).save(os.path.join(out, 'stick_knob.png'))
+joystick_knob(True).save(os.path.join(out, 'stick_knob_on.png'))
+prev = Image.new('RGBA', (90, 45), (60, 60, 60, 255))
+prev.alpha_composite(joystick_base(), (2, 2)); prev.alpha_composite(joystick_knob(False), (13, 13))
+prev.alpha_composite(joystick_base(), (46, 2)); prev.alpha_composite(joystick_knob(True), (63, 9))
+prev.resize((540, 270), Image.NEAREST).save('/tmp/stick-preview.png')
