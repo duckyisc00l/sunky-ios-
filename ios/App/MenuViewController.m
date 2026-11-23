@@ -75,6 +75,16 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = UIColor.blackColor;
+    if ([self singleGame]) { // only the all-in-one app has a menu
+        for (int i = 0; i < kSunkyGameCount; i++) {
+            if ([[NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"] isEqualToString:@(kSunkyGames[i].file)]) {
+                UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
+                b.tag = i;
+                self.cards = [NSMutableArray arrayWithObject:b];
+            }
+        }
+        return;
+    }
 
     self.background = [[UIImageView alloc] initWithImage:controlImage(@"menu_bg")];
     self.background.contentMode = UIViewContentModeScaleAspectFill;
@@ -133,6 +143,7 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
+    if ([self singleGame]) return;
     UIEdgeInsets safe = self.view.safeAreaInsets;
     CGSize b = self.view.bounds.size;
     CGFloat left = MAX(safe.left, 24), right = MAX(safe.right, 24), top = MAX(safe.top, 14);
@@ -176,6 +187,7 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
 }
 
 - (void)refreshFinished {
+    if ([self singleGame]) return;
     for (UIButton *card in self.cards) {
         BOOL done = SunkyIsFinished(&kSunkyGames[card.tag]);
         [card viewWithTag:13].hidden = !done;
@@ -201,9 +213,11 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     static BOOL done;
+    if ([self singleGame]) { // straight (back) into the game
+        [self play:self.cards.firstObject];
+        return;
+    }
     NSString *auto_ = [NSUserDefaults.standardUserDefaults stringForKey:@"sunkyAutoplay"];
-    NSString *only = [NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"];
-    if (only.length) auto_ = only;
     if (done || !auto_) return;
     done = YES;
     for (UIButton *card in self.cards) {
@@ -216,7 +230,7 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
     if (g->engine == 1) { // GameMaker Studio: Games/<file>/data.win, saves in Documents/<file>
         NSString *dataWin = [NSBundle.mainBundle pathForResource:@"data" ofType:@"win" inDirectory:[@"Games" stringByAppendingPathComponent:@(g->file)]];
         if (!dataWin) { SunkyLog(@"missing data.win for %s", g->file); return; }
-        [self.navigationController pushViewController:[[GameViewController alloc] initWithGame:g exe:dataWin title:@(g->title)] animated:YES];
+        [self.navigationController pushViewController:[[GameViewController alloc] initWithGame:g exe:dataWin title:@(g->title)] animated:![self singleGame]];
         return;
     }
     NSString *bundled = [NSBundle.mainBundle pathForResource:@(g->file) ofType:@"exe" inDirectory:@"Games"];
@@ -237,7 +251,7 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
     }
     NSString *title = [NSString stringWithFormat:@"%s %s", g->title, g->subtitle];
     if (strncmp(g->subtitle, "Part", 4) != 0) title = @(g->title);
-    [self.navigationController pushViewController:[[GameViewController alloc] initWithGame:g exe:link title:title] animated:YES];
+    [self.navigationController pushViewController:[[GameViewController alloc] initWithGame:g exe:link title:title] animated:![self singleGame]];
 }
 
 @end

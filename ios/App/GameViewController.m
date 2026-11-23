@@ -67,6 +67,8 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     self.closeButton = [self pixelImage:@"close" scale:3];
     self.run = [self pixelImage:@"run" scale:3];
     self.run.hidden = !(self.game && self.game->runKey);
+    // single-game apps have no menu to go back to, so no quit button
+    self.closeButton.hidden = [[NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"] length] > 0;
     for (UIView *v in @[self.dpad, self.jump, self.start, self.closeButton, self.run]) [self.view addSubview:v];
 
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(controllerConnected:)
@@ -215,7 +217,7 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     [self.endWatch invalidate];
     UIApplication.sharedApplication.idleTimerDisabled = NO;
     if (code == 0) {
-        [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:self.closeButton.hidden ? NO : YES];
         return;
     }
     UIAlertController *a = [UIAlertController alertControllerWithTitle:@"The game stopped"
@@ -306,7 +308,7 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     if (hypot(p.x - self.jump.center.x, p.y - self.jump.center.y) < self.jump.bounds.size.width / 2 + 16) return RoleJump;
     if (CGRectContainsPoint(CGRectInset(self.start.frame, -12, -12), p)) return RoleStart;
     if (!self.run.hidden && hypot(p.x - self.run.center.x, p.y - self.run.center.y) < self.run.bounds.size.width / 2 + 12) return RoleRun;
-    if (CGRectContainsPoint(CGRectInset(self.closeButton.frame, -10, -10), p)) return RoleClose;
+    if (!self.closeButton.hidden && CGRectContainsPoint(CGRectInset(self.closeButton.frame, -10, -10), p)) return RoleClose;
     if ([self isBS] || CGRectContainsPoint([self gameRect], p)) return RoleGame;
     return RoleNone;
 }
