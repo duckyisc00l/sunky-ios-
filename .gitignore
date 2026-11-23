@@ -1,0 +1,8 @@
+games/
+ogmk/
+target/
+out/
+build/
+Payload/
+*.ipa
+*.xcodeproj/

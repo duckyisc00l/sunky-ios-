@@ -1,0 +1,10 @@
+[package]
+name = "gm8info"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-2.0-only"
+
+[dependencies]
+gm8exe = { path = "../../ogmk/gm8exe" }
+
+[workspace]

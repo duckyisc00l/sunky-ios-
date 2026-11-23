@@ -1,0 +1,65 @@
+name: lab
+on:
+  workflow_dispatch:
+    inputs:
+      games: { description: "games to run (blank = all)", required: false, default: "" }
+  push:
+    branches: [main]
+    paths: ["ci/**", ".github/workflows/lab.yml"]
+permissions: { contents: write }
+concurrency: { group: lab, cancel-in-progress: true }
+jobs:
+  lab:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Games cache
+        uses: actions/cache@v4
+        with: { path: games, key: games-v1-${{ hashFiles('ci/games.txt') }} }
+      - name: Download games from Game Jolt
+        run: ci/fetch.sh
+      - name: Unpack Sunky the Game 2 installer
+        run: |
+          sudo apt-get install -y p7zip-full >/dev/null
+          mkdir -p games/g2x && 7z x -y -ogames/g2x games/g2.exe >/dev/null && find games/g2x -maxdepth 2 | head -30
+      - name: Get OpenGMK
+        run: git clone -q https://github.com/OpenGMK/OpenGMK ogmk && git -C ogmk checkout -q $(cat ci/OGMK_COMMIT)
+      - name: Install build deps
+        run: |
+          sudo rm -f /var/lib/man-db/auto-update
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb xdotool imagemagick libx11-dev libxcb1-dev libxcb-shape0-dev libxcb-xfixes0-dev libxrandr-dev libxi-dev libgl1-mesa-dev libgl1-mesa-dri libasound2-dev libpulse-dev libsoundio-dev pulseaudio >/dev/null
+      - name: Cargo cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ogmk/target
+            ci/gm8info/target
+          key: cargo-v1-${{ hashFiles('ci/OGMK_COMMIT', 'ci/gm8info/**') }}
+      - name: Build OpenGMK and gm8info
+        run: |
+          cd ogmk && cargo build --release -p gm8emulator -p gm8decompiler 2>&1 | tail -20
+          cd ../ci/gm8info && cargo build --release 2>&1 | tail -20
+      - name: Inspect games
+        run: |
+          mkdir -p out/info
+          for g in p1 p2 p3 mpeg tiff g2; do
+            exe=games/$g.exe; [ $g = g2 ] && exe=$(ls games/g2x/*.exe | head -1)
+            ci/gm8info/target/release/gm8info "$exe" out/info/$g > out/info/$g.log 2>&1 || echo "gm8info failed for $g"
+            head -3 out/info/$g/summary.txt 2>/dev/null; grep -c . out/info/$g/summary.txt 2>/dev/null || true
+          done
+      - name: Run games (virtual screen)
+        env: { LIBGL_ALWAYS_SOFTWARE: "1" }
+        run: |
+          pulseaudio --start --exit-idle-time=-1 || true
+          pactl load-module module-null-sink >/dev/null 2>&1 || true
+          xvfb-run -s "-screen 0 1280x960x24" ci/lab.sh out/run ${{ inputs.games }}
+      - name: Publish results to branch r-lab
+        if: always()
+        run: |
+          cd out && git init -q -b r-lab && git add -A
+          git -c user.name=lab -c user.email=lab@local commit -qm "lab ${{ github.run_number }}"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" r-lab
