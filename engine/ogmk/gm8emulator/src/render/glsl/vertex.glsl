@@ -1,4 +1,3 @@
-#version 330 core
 
 struct Light {
     vec4 pos; // padded vec3
@@ -68,7 +67,7 @@ void main() {
                     ray = world_pos.xyz - ray;
                     float dist = length(ray);
                     if (dist < lights[i].range) {
-                        this_light_col /= 1 + (4 / lights[i].range) * dist;
+                        this_light_col /= 1.0 + (4.0 / lights[i].range) * dist;
                     } else {
                         this_light_col = vec3(0.0);
                     }

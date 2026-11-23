@@ -11,10 +11,16 @@ use rect_packer::DensePacker;
 use std::{any::Any, f64::consts::PI, ffi::CStr, mem::{offset_of, size_of}, ptr};
 
 /// Auto-generated OpenGL bindings from gl_generator
+#[cfg(not(feature = "gles"))]
 pub mod gl {
     #![allow(clippy::all)]
     include!(concat!(env!("OUT_DIR"), "/gl_bindings.rs"));
 }
+// SUNKY-IOS: OpenGL ES 3.0 (iPhone, and the Linux lab's ES test build)
+#[cfg(feature = "gles")]
+pub mod gles;
+#[cfg(feature = "gles")]
+pub use gles as gl;
 use gl::types::{GLchar, GLenum, GLint, GLsizei, GLuint};
 
 #[cfg(target_os = "windows")]
@@ -23,19 +29,39 @@ mod wgl;
 mod wgl_ffi;
 #[cfg(target_os = "windows")]
 use wgl as native_gl;
-#[cfg(unix)]
+#[cfg(target_os = "linux")]
 pub mod glx;
-#[cfg(unix)]
+#[cfg(all(target_os = "linux", not(feature = "gles")))]
 use glx as native_gl;
+// SUNKY-IOS: EGL on Linux (lab) and EAGL on iPhone for the ES build
+#[cfg(all(target_os = "linux", feature = "gles"))]
+mod egl;
+#[cfg(all(target_os = "linux", feature = "gles"))]
+use egl as native_gl;
+#[cfg(target_os = "ios")]
+pub mod eagl;
+#[cfg(target_os = "ios")]
+use eagl as native_gl;
 
+// SUNKY-IOS: the shader files have no #version line; it depends on the GL flavour.
+#[cfg(not(feature = "gles"))]
 macro_rules! shader_file {
     ($path: expr) => {
-        concat!(include_str!($path), "\0").as_bytes()
+        concat!("#version 330 core\n", include_str!($path), "\0").as_bytes()
+    };
+}
+#[cfg(feature = "gles")]
+macro_rules! shader_file {
+    ($path: expr) => {
+        concat!("#version 300 es\nprecision highp float;\nprecision highp int;\nprecision highp sampler2D;\n", include_str!($path), "\0").as_bytes()
     };
 }
 
-// requires at least GL 3.3
+// requires at least GL 3.3 (or ES 3.0)
+#[cfg(not(feature = "gles"))]
 pub const OPENGL_VERSION: (i32, i32) = (3, 3);
+#[cfg(feature = "gles")]
+pub const OPENGL_VERSION: (i32, i32) = (3, 0);
 
 #[derive(Clone, Copy, PartialEq)]
 #[repr(u32)]

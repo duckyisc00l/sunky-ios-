@@ -1,4 +1,5 @@
 use crate::types::Colour;
+#[cfg(not(target_os = "ios"))] // SUNKY-IOS
 use clipboard::{ClipboardContext, ClipboardProvider};
 use imgui::{self, ImColor32, TableColumnSetup, WindowToken};
 
@@ -359,6 +360,14 @@ impl IoCustomFunctions for imgui::Io {
 }
 pub struct EmuClipboardProvider;
 impl imgui::ClipboardBackend for EmuClipboardProvider {
+    #[cfg(target_os = "ios")] // SUNKY-IOS: no clipboard for the TAS tools on iPhone
+    fn get(&mut self) -> Option<String> {
+        None
+    }
+    #[cfg(target_os = "ios")]
+    fn set(&mut self, _value: &str) {}
+
+    #[cfg(not(target_os = "ios"))]
     fn get(&mut self) -> Option<String> {
         if let Ok(ctx) = ClipboardProvider::new() {
             let mut ctx: ClipboardContext = ctx;
@@ -368,6 +377,7 @@ impl imgui::ClipboardBackend for EmuClipboardProvider {
         }
     }
 
+    #[cfg(not(target_os = "ios"))]
     fn set(&mut self, value: &str) {
         if let Ok(ctx) = ClipboardProvider::new() {
             let mut ctx: ClipboardContext = ctx;

@@ -42,8 +42,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // opengl bindings
     let mut bindings = File::create(&Path::new(&out).join("gl_bindings.rs"))?;
-    Registry::new(Api::Gl, (3, 3), Profile::Core, Fallbacks::All, &OPENGL_EXTENSIONS)
-        .write_bindings(StructGenerator, &mut bindings)?;
+    // SUNKY-IOS: OpenGL ES 3.0 bindings for the `gles` feature (iPhone)
+    if env::var_os("CARGO_FEATURE_GLES").is_some() {
+        Registry::new(Api::Gles2, (3, 0), Profile::Core, Fallbacks::All, &OPENGL_EXTENSIONS)
+            .write_bindings(StructGenerator, &mut bindings)?;
+    } else {
+        Registry::new(Api::Gl, (3, 3), Profile::Core, Fallbacks::All, &OPENGL_EXTENSIONS)
+            .write_bindings(StructGenerator, &mut bindings)?;
+    }
 
     // WGL (Windows OpenGL) Bindings
     if cfg!(target_os = "windows") {
@@ -58,13 +64,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     // GLX (OpenGL Extension for X) Bindings
-    if cfg!(any(
-        target_os = "linux",
-        target_os = "dragonfly",
-        target_os = "freebsd",
-        target_os = "netbsd",
-        target_os = "openbsd",
-    )) {
+    if env::var("CARGO_CFG_TARGET_OS").map(|t| t == "linux").unwrap_or(false) { // SUNKY-IOS: target, not host
         let mut file = File::create(&Path::new(&out).join("glx_bindings.rs"))?;
         Registry::new(Api::Glx, (1, 4), Profile::Core, Fallbacks::All, [
             "GLX_ARB_create_context",
