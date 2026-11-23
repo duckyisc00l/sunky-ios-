@@ -37,7 +37,14 @@
     self.scroll.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:self.scroll];
     self.cards = [NSMutableArray array];
+    // Single-game apps (SunkyOnly in Info.plist) show just their own game and start it straight away.
+    NSString *only = [NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"];
+    if (only.length) {
+        title.text = @"SUNKY";
+        sub.text = @"Tap to play";
+    }
     for (int i = 0; i < kSunkyGameCount; i++) {
+        if (only.length && ![only isEqualToString:@(kSunkyGames[i].file)]) continue;
         UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
         b.tag = i;
         b.backgroundColor = [UIColor colorWithWhite:1 alpha:0.12];
@@ -154,6 +161,7 @@
         [card viewWithTag:13].hidden = !done;
         card.layer.borderColor = (done ? [UIColor colorWithRed:0.3 green:0.9 blue:0.4 alpha:0.9] : [UIColor colorWithWhite:1 alpha:0.3]).CGColor;
     }
+    if ([[NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"] length]) { self.countLabel.text = @""; return; }
     int n = SunkyFinishedCount();
     self.countLabel.text = n == kSunkyGameCount ? [NSString stringWithFormat:@"🏆 All %d finished!", n]
                                                 : [NSString stringWithFormat:@"%d of %d finished", n, kSunkyGameCount];
@@ -169,10 +177,12 @@
     [super viewDidAppear:animated];
     static BOOL done;
     NSString *auto_ = [NSUserDefaults.standardUserDefaults stringForKey:@"sunkyAutoplay"];
+    NSString *only = [NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"];
+    if (only.length) auto_ = only;
     if (done || !auto_) return;
     done = YES;
-    for (int i = 0; i < kSunkyGameCount; i++) {
-        if ([auto_ isEqualToString:@(kSunkyGames[i].file)]) [self play:self.cards[i]];
+    for (UIButton *card in self.cards) {
+        if ([auto_ isEqualToString:@(kSunkyGames[card.tag].file)]) [self play:card];
     }
 }
 

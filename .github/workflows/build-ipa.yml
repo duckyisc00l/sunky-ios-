@@ -96,6 +96,10 @@ jobs:
           zip -qry Sunky.ipa Payload
           ls -la Sunky.ipa
 
+      - name: Single-game IPAs
+        working-directory: ios
+        run: ../ci/split.sh build/Build/Products/Release-iphoneos/Sunky.app "$PWD/single"
+
       - name: Simulator run
         if: inputs.simulator == 'yes'
         continue-on-error: true
@@ -123,5 +127,5 @@ jobs:
       - name: Release
         env: { GH_TOKEN: "${{ github.token }}" }
         run: |
-          gh release create "build-${{ inputs.build_number }}" ios/Sunky.ipa --title "Sunky build ${{ inputs.build_number }}" \
-            --notes "Unsigned IPA. Install with SideStore, Sideloadly, AltStore or LiveContainer."
+          gh release create "build-${{ inputs.build_number }}" ios/Sunky.ipa ios/single/*.ipa --title "Sunky build ${{ inputs.build_number }}" \
+            --notes "Unsigned IPAs: Sunky.ipa has every game; the others are one game each. Install with SideStore, Sideloadly, AltStore or LiveContainer."
