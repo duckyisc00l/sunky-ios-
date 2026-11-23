@@ -58,11 +58,11 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     [self.view addSubview:self.gameView];
 
     // Retro pixel-art controls (drawn by ci/controls.py), scaled up with hard pixels
-    self.dpad = [self pixelImage:@"stick_base" scale:4.5];
-    self.stickKnob = [self pixelImage:@"stick_knob" scale:4.5];
+    self.dpad = [self pixelImage:@"stick_base" scale:3.6];
+    self.stickKnob = [self pixelImage:@"stick_knob" scale:3.6];
     self.stickKnob.alpha = 1;
     [self.dpad addSubview:self.stickKnob];
-    self.jump = [self pixelImage:@"jump" scale:3.5];
+    self.jump = [self pixelImage:@"jump" scale:3.2];
     self.start = [self pixelImage:@"start" scale:3];
     self.closeButton = [self pixelImage:@"close" scale:3];
     self.run = [self pixelImage:@"run" scale:3];
@@ -107,16 +107,22 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     [super viewDidLayoutSubviews];
     UIEdgeInsets safe = self.view.safeAreaInsets;
     CGSize b = self.view.bounds.size;
-    CGFloat side = MAX(safe.left, 12), right = MAX(safe.right, 12), bottom = MAX(safe.bottom, 12);
-    self.dpad.center = CGPointMake(side + 96, b.height - bottom - 96);
-    if (!_dpadTouch) self.stickKnob.center = CGPointMake(self.dpad.bounds.size.width / 2, self.dpad.bounds.size.height / 2);
-    self.jump.center = CGPointMake(b.width - right - 62, b.height - bottom - 72);
-    self.start.center = CGPointMake(b.width - right - 62, self.jump.center.y - 95);
-    if (!self.run.hidden) { // RUN sits left of JUMP; START moves up a little
-        self.run.center = CGPointMake(self.jump.center.x - 105, self.jump.center.y + 12);
-        self.start.center = CGPointMake(self.jump.center.x - 40, self.jump.center.y - 100);
+    // The notch is in the middle of the side edges, so the bottom corners are free to use:
+    // controls sit in the corners, inside the black bars beside the game where there's room.
+    CGFloat bottom = MAX(safe.bottom, 10);
+    CGFloat dr = self.dpad.bounds.size.width / 2, jr = self.jump.bounds.size.width / 2;
+    self.dpad.center = CGPointMake(14 + dr, b.height - bottom - dr - 4);
+    self.jump.center = CGPointMake(b.width - 14 - jr, b.height - bottom - jr - 8);
+    self.start.center = CGPointMake(self.jump.center.x, self.jump.center.y - jr - 34);
+    self.closeButton.center = CGPointMake(MAX(safe.left, 8) + 20, MAX(safe.top, 8) + 20);
+    if (!self.run.hidden) { // RUN sits left of JUMP; START moves above the pair
+        self.run.center = CGPointMake(self.jump.center.x - jr - self.run.bounds.size.width / 2 - 6, self.jump.center.y + 14);
+        self.start.center = CGPointMake(self.jump.center.x - 30, self.jump.center.y - jr - 34);
     }
-    self.closeButton.center = CGPointMake(side + 22, MAX(safe.top, 8) + 22);
+    // In widescreen the game fills the screen, so the controls get a little more see-through
+    CGFloat alpha = SunkyWidescreen() ? 0.7 : 0.9;
+    for (UIView *v in @[self.dpad, self.jump, self.start, self.run]) v.alpha = alpha;
+    if (!_dpadTouch) self.stickKnob.center = CGPointMake(self.dpad.bounds.size.width / 2, self.dpad.bounds.size.height / 2);
 
 }
 
