@@ -45,6 +45,7 @@ jobs:
         working-directory: engine/ogmk
         run: |
           set -o pipefail
+          export IPHONEOS_DEPLOYMENT_TARGET=14.0 SDKROOT=$(xcrun --sdk iphoneos --show-sdk-path)
           cargo build --release --lib -p gm8emulator --features gles --target aarch64-apple-ios 2>&1 | grep -vE "^\s+(Compiling|Downloaded|Downloading)"
           mkdir -p ../../ios/lib/iphoneos && cp target/aarch64-apple-ios/release/libgm8emulator.a ../../ios/lib/iphoneos/
           ls -la ../../ios/lib/iphoneos
@@ -54,6 +55,7 @@ jobs:
         working-directory: engine/ogmk
         run: |
           set -o pipefail
+          export IPHONEOS_DEPLOYMENT_TARGET=14.0 SDKROOT=$(xcrun --sdk iphonesimulator --show-sdk-path)
           cargo build --release --lib -p gm8emulator --features gles --target $SIM_TARGET 2>&1 | grep -vE "^\s+(Compiling|Downloaded|Downloading)"
           mkdir -p ../../ios/lib/iphonesimulator && cp target/$SIM_TARGET/release/libgm8emulator.a ../../ios/lib/iphonesimulator/
 
