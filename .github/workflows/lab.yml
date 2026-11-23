@@ -48,17 +48,17 @@ jobs:
       - name: Inspect games
         run: |
           mkdir -p out/info
-          for g in p1 p2 p3 mpeg tiff g2; do
-            exe=games/$g.exe; [ $g = g2 ] && exe=$(ls games/g2x/*.exe | head -1)
-            ci/gm8info/target/release/gm8info "$exe" out/info/$g > out/info/$g.log 2>&1 || echo "gm8info failed for $g"
-            head -3 out/info/$g/summary.txt 2>/dev/null; grep -c . out/info/$g/summary.txt 2>/dev/null || true
+          for g in p1 p2 p3 mpeg tiff; do
+            ci/gm8info/target/release/gm8info games/$g.exe out/info/$g > out/info/$g.log 2>&1 || echo "gm8info failed for $g"
           done
+          python3 ci/gen8.py games/g2x/data.win > out/info/g2.txt || true
+          cat out/info/g2.txt
       - name: Run games (virtual screen)
         env: { LIBGL_ALWAYS_SOFTWARE: "1" }
         run: |
           pulseaudio --start --exit-idle-time=-1 || true
           pactl load-module module-null-sink >/dev/null 2>&1 || true
-          xvfb-run -s "-screen 0 1280x960x24" ci/lab.sh out/run ${{ inputs.games }}
+          xvfb-run -s "-screen 0 1280x960x24" ci/lab.sh out/run ${{ inputs.games || 'p1 p2 p3 mpeg tiff' }}
       - name: Publish results to branch r-lab
         if: always()
         run: |

@@ -3,12 +3,11 @@
 # Usage: ci/lab.sh <out dir> [games...]
 set -uo pipefail
 out=$1; shift
-games=${*:-p1 p2 p3 mpeg tiff g2}
+games=${*:-p1 p2 p3 mpeg tiff}
 emu=$PWD/ogmk/target/release/gm8emulator
 mkdir -p "$out"
 for g in $games; do
   d=$out/$g; mkdir -p "$d"; exe=$PWD/games/$g.exe
-  [ "$g" = g2 ] && exe=$(ls $PWD/games/g2x/*.exe 2>/dev/null | head -1)
   [ -f "$exe" ] || { echo "no exe for $g" > "$d/log.txt"; continue; }
   run=$(mktemp -d); cp "$exe" "$run/game.exe"; cd "$run"
   timeout 75 "$emu" game.exe > "$d/log.txt" 2>&1 &
