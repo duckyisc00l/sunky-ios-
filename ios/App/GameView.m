@@ -32,6 +32,13 @@ void SunkySetPaused(BOOL paused) {
 
 int32_t sunky_gl_pause_count(void) { return atomic_load(&gPauseCount); }
 
+bool sunky_gl_paused(void) {
+    pthread_mutex_lock(&gPauseLock);
+    bool p = gPaused;
+    pthread_mutex_unlock(&gPauseLock);
+    return p;
+}
+
 static void waitWhilePaused(void) {
     pthread_mutex_lock(&gPauseLock);
     if (gPaused) {

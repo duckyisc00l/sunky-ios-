@@ -27,6 +27,8 @@ void sunky_gl_present(void);
 void sunky_gl_teardown(void);
 void sunky_gl_screen_size(int32_t *w, int32_t *h);
 int32_t sunky_gl_pause_count(void);
+bool sunky_gl_paused(void);
+void bs_ios_suspend_audio(bool suspend);
 
 typedef struct { int kind; int a; int b; float x, y; } BSEvent; // kind: 0 key, 1 pointer, 2 button
 #define BS_QUEUE 256
@@ -83,7 +85,10 @@ int32_t sunky_bs_run(const char *dataWinPath, const char *savesPath) {
             if (r == 1) break;
             if (r == 0) {
                 int32_t pauses = sunky_gl_pause_count();
+                bool away = sunky_gl_paused();
+                if (away) bs_ios_suspend_audio(true); // Sunky 2 has its own sound player: quiet it too
                 sunky_gl_present(); // waits here while the app is in the background
+                if (away) bs_ios_suspend_audio(false);
                 if (sunky_gl_pause_count() != pauses) { last = now = CACurrentMediaTime(); } // don't count the time away
             }
             // pace to the room speed (GameMaker games run at a fixed frame rate)
