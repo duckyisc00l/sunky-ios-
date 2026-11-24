@@ -13,15 +13,14 @@ for g in $games; do
   rooms=$(grep -E "^ROOM [0-9]+ .* views true" "$info/$g/summary.txt" | awk '{print $2}')
   for r in $rooms; do
     run=$(mktemp -d); cp "$exe" "$run/game.exe"
-    ( cd "$run" && SUNKY_START_ROOM=$r timeout 14 "$emu" game.exe > "$out/$g-$r.log" 2>&1 ) &
-    pid=$!
-    wid=$(timeout 10 xdotool search --sync --class OpenGMK 2>/dev/null | head -1)
+    ( cd "$run" && SUNKY_START_ROOM=$r exec timeout -s KILL 13 "$emu" game.exe > "$out/$g-$r.log" 2>&1 ) &
+    start=$(date +%s)
+    wid=$(timeout 6 xdotool search --sync --class OpenGMK 2>/dev/null | head -1)
     for t in 1 3 6 10; do
-      sleep $(( t - ${prev:-0} )); prev=$t
-      [ -n "$wid" ] && import -window "$wid" "$out/$g-$r-$t.png" 2>/dev/null
+      while [ $(( $(date +%s) - start )) -lt $t ]; do sleep 0.2; done
+      [ -n "$wid" ] && timeout 4 import -window "$wid" "$out/$g-$r-$t.png" 2>/dev/null
     done
-    prev=0
-    kill $pid 2>/dev/null; wait $pid 2>/dev/null
-    echo "$g room $r: $(tail -1 "$out/$g-$r.log" | cut -c1-120)"
+    pkill -KILL -f gm8emulator 2>/dev/null; wait 2>/dev/null; rm -rf "$run"
+    echo "$g room $r: $(ls "$out"/$g-$r-*.png 2>/dev/null | wc -l) shots; $(grep -m1 -iE 'panic|error' "$out/$g-$r.log" | cut -c1-120)"
   done
 done
