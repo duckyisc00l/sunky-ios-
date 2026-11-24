@@ -24,6 +24,7 @@ jobs:
           sudo apt-get install -y p7zip-full >/dev/null
           mkdir -p games/g2x && 7z x -y -ogames/g2x games/g2.exe >/dev/null && find games/g2x -maxdepth 2 | head -30
       - name: Install build deps
+        timeout-minutes: 8
         run: |
           sudo rm -f /var/lib/man-db/auto-update
           sudo apt-get update -qq
