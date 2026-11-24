@@ -50,10 +50,18 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
     v.center = c;
 }
 
+/// Lets a drag that starts on a game card scroll the row instead of being held by the card.
+@interface CardScroll : UIScrollView
+@end
+@implementation CardScroll
+- (BOOL)touchesShouldCancelInContentView:(UIView *)view { return YES; }
+@end
+
 @interface MenuViewController ()
 @property (nonatomic, strong) UIImageView *themeBg, *logo, *countText;
 @property (nonatomic, copy) NSString *theme;
-@property (nonatomic, strong) UIScrollView *scroll;
+@property (nonatomic) BOOL wantsScrollToPick;
+@property (nonatomic, strong) CardScroll *scroll;
 @property (nonatomic) NSInteger selected;
 @property (nonatomic, strong) NSMutableArray<UIButton *> *cards;
 @end
@@ -92,7 +100,8 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
     self.countText = pixelView(pixelText(@" ", NO), 2.2);
     [self.view addSubview:self.countText];
 
-    self.scroll = [UIScrollView new];
+    self.scroll = [CardScroll new];
+    self.scroll.canCancelContentTouches = YES;
     self.scroll.showsHorizontalScrollIndicator = NO;
     self.scroll.alwaysBounceHorizontal = YES;
     self.scroll.delaysContentTouches = NO;
@@ -107,7 +116,6 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
         card.layer.borderColor = UIColor.blackColor.CGColor;
         card.layer.borderWidth = 4;
         [card addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
-        [card addTarget:self action:@selector(pick:) forControlEvents:UIControlEventTouchDown | UIControlEventTouchDragEnter];
         UIView *box = [UIView new];
         box.backgroundColor = UIColor.blackColor;
         box.userInteractionEnabled = NO;
@@ -190,7 +198,8 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
     // more room than cards: centre them
     CGFloat spare = b.width - self.scroll.contentSize.width - 2 * (side + 6);
     if (spare > 0) self.scroll.contentInset = UIEdgeInsetsMake(0, side + 6 + spare / 2, 0, side + 6 + spare / 2);
-    if (self.selected >= 0 && !self.scroll.isTracking && !self.scroll.isDecelerating && !self.scroll.isDragging) {
+    if (self.wantsScrollToPick && self.selected >= 0) {
+        self.wantsScrollToPick = NO;
         [self.scroll scrollRectToVisible:CGRectInset(self.cards[self.selected].frame, -40, 0) animated:NO];
     }
 }
@@ -216,6 +225,7 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
         self.themeBg.image = controlImage([NSString stringWithFormat:@"theme_%@_bg", theme]);
         self.logo.image = controlImage([NSString stringWithFormat:@"theme_%@_logo", theme]);
         self.selected = -1; // and point at the new game
+        self.wantsScrollToPick = YES;
     }
     if (self.cards.count) [self pick:self.cards[self.selected < 0 ? MAX(0, firstOpen) : self.selected]];
     int n = SunkyFinishedCount();
@@ -243,6 +253,7 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
 }
 
 - (void)play:(UIButton *)sender {
+    if (![self singleGame]) [self pick:sender];
     const SunkyGame *g = &kSunkyGames[sender.tag];
     if (g->engine == 1) { // GameMaker Studio: Games/<file>/data.win, saves in Documents/<file>
         NSString *dataWin = [NSBundle.mainBundle pathForResource:@"data" ofType:@"win" inDirectory:[@"Games" stringByAppendingPathComponent:@(g->file)]];
