@@ -14,6 +14,14 @@ static UIViewController *topController(void) {
 
 int32_t sunky_dialog(int32_t kind, const char *text, const char *def, char *out, size_t outLen) {
     if ([NSThread isMainThread]) return 1; // never block the UI thread
+    // Test hook for the Simulator run (ci/sim.sh): -sunkyDialogAnswer <text> answers every pop-up.
+    NSString *autoAnswer = [NSUserDefaults.standardUserDefaults stringForKey:@"sunkyDialogAnswer"];
+    if (autoAnswer) {
+        SunkyLog(@"test: pop-up \"%s\" answered \"%@\"", text ?: "", autoAnswer);
+        if (kind == 2 && out && outLen > 0) strlcpy(out, autoAnswer.UTF8String, outLen);
+        ramen_ios_mouse_button(0, false);
+        return 1;
+    }
     NSString *message = @(text ?: "");
     NSString *defaultText = @(def ?: "");
     __block int32_t result = 1;
