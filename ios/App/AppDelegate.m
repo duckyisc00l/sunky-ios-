@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 #import "MenuViewController.h"
 #import "Audio.h"
+#import "Sunky.h"
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)app didFinishLaunchingWithOptions:(NSDictionary *)options {
@@ -13,7 +14,12 @@
     [self.window makeKeyAndVisible];
     return YES;
 }
+- (void)applicationWillResignActive:(UIApplication *)application {
+    SunkySetPaused(YES); // the game waits (no drawing in the background) and goes quiet
+    [SunkyAudio pause];
+}
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    SunkySetPaused(NO);
     [SunkyAudio resume];
 }
 - (UIInterfaceOrientationMask)application:(UIApplication *)app supportedInterfaceOrientationsForWindow:(UIWindow *)window {

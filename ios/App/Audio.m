@@ -62,6 +62,9 @@ static OSStatus render(void *ref, AudioUnitRenderActionFlags *flags, const Audio
         if ([n.userInfo[AVAudioSessionInterruptionTypeKey] unsignedIntegerValue] == AVAudioSessionInterruptionTypeEnded) [SunkyAudio resume];
     }];
 }
++ (void)pause {
+    if (gUnit) AudioOutputUnitStop(gUnit);
+}
 + (void)resume {
     if (!gUnit) return;
     [AVAudioSession.sharedInstance setActive:YES error:nil];

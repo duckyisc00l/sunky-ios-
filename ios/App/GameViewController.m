@@ -257,6 +257,7 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
 }
 
 - (void)askToClose {
+    if (self.presentedViewController) return; // already asking (or a game pop-up is up)
     UIAlertController *a = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"Quit %@?", self.title_]
         message:nil preferredStyle:UIAlertControllerStyleAlert];
     [a addAction:[UIAlertAction actionWithTitle:@"Keep playing" style:UIAlertActionStyleCancel handler:nil]];

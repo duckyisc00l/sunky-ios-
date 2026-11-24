@@ -13,6 +13,37 @@ static GLint gScreenW, gScreenH;
 
 void sunky_gl_screen_size(int32_t *w, int32_t *h) { *w = gScreenW; *h = gScreenH; }
 
+// ---- Pausing while the app is in the background ----
+// iOS kills apps that draw with OpenGL in the background, so when the app stops being active the
+// game thread finishes its GPU work and waits at its next present until the app is back.
+#include <pthread.h>
+#include <stdatomic.h>
+static pthread_mutex_t gPauseLock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t gPauseCond = PTHREAD_COND_INITIALIZER;
+static bool gPaused;
+static atomic_int gPauseCount;
+
+void SunkySetPaused(BOOL paused) {
+    pthread_mutex_lock(&gPauseLock);
+    gPaused = paused;
+    pthread_cond_broadcast(&gPauseCond);
+    pthread_mutex_unlock(&gPauseLock);
+}
+
+int32_t sunky_gl_pause_count(void) { return atomic_load(&gPauseCount); }
+
+static void waitWhilePaused(void) {
+    pthread_mutex_lock(&gPauseLock);
+    if (gPaused) {
+        pthread_mutex_unlock(&gPauseLock);
+        glFinish();
+        pthread_mutex_lock(&gPauseLock);
+        while (gPaused) pthread_cond_wait(&gPauseCond, &gPauseLock);
+        atomic_fetch_add(&gPauseCount, 1);
+    }
+    pthread_mutex_unlock(&gPauseLock);
+}
+
 @implementation GameView
 + (Class)layerClass { return [CAEAGLLayer class]; }
 + (GameView *)current { return gCurrent; }
@@ -62,6 +93,7 @@ uint32_t sunky_gl_setup(void) {
 }
 
 void sunky_gl_present(void) {
+    waitWhilePaused();
     glBindRenderbuffer(GL_RENDERBUFFER, gColor);
     [gContext presentRenderbuffer:GL_RENDERBUFFER];
 }

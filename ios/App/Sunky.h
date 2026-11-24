@@ -51,4 +51,7 @@ void SunkySetWidescreen(BOOL on);
 
 // Log file in Documents (stdout and stderr go there too)
 void SunkyLog(NSString *format, ...) NS_FORMAT_FUNCTION(1, 2);
+
+// Pause the running game while the app isn't active (GameView.m)
+void SunkySetPaused(BOOL paused);
 NSString *SunkyDocuments(void);
