@@ -4,11 +4,8 @@ on:
     inputs:
       games: { description: "games to run (blank = all)", required: false, default: "" }
       rooms: { description: "screenshot every room in widescreen (yes/no)", required: false, default: "no" }
-  push:
-    branches: [main]
-    paths: ["ci/**", "engine/**", ".github/workflows/lab.yml"]
 permissions: { contents: write }
-concurrency: { group: lab, cancel-in-progress: true }
+concurrency: { group: lab, cancel-in-progress: false }
 jobs:
   lab:
     runs-on: ubuntu-24.04
