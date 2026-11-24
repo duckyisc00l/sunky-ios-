@@ -177,14 +177,17 @@ impl Game {
             }
         }
 
-        // SUNKY-IOS: widescreen (see wide.rs). Widen the view just for drawing.
+        // SUNKY-IOS: widescreen (see wide.rs). Widen the view just for drawing, except while
+        // something fills the whole view (a cutscene picture like Part 2's Act 2 intro, or a
+        // full-screen overlay): widening would show the level beside it.
         let wide_plan = super::wide::plan(
             self.room.views_enabled,
             &self.room.views,
             self.room.width,
             self.unscaled_width,
             self.unscaled_height,
-        );
+        )
+        .filter(|p| !self.sunky_view_covered(p.view));
         let fb_w = wide_plan.as_ref().map(|p| p.port_w).unwrap_or(self.unscaled_width);
         if super::wide::needs_fb(fb_w, self.unscaled_height) {
             self.renderer.resize_framebuffer(fb_w, self.unscaled_height, false);
@@ -253,6 +256,45 @@ impl Game {
         }
 
         Ok(())
+    }
+
+    /// SUNKY-IOS: is there a visible instance whose sprite covers the whole of view `vi`?
+    fn sunky_view_covered(&self, vi: usize) -> bool {
+        let v = match self.room.views.get(vi) {
+            Some(v) => v,
+            None => return false,
+        };
+        let (vx, vy, vw, vh) = (v.source_x as f64, v.source_y as f64, v.source_w as f64, v.source_h as f64);
+        let mut it = self.room.instance_list.iter_by_drawing();
+        while let Some(idx) = it.next(&self.room.instance_list) {
+            let inst = self.room.instance_list.get(idx);
+            if !inst.visible.get() {
+                continue
+            }
+            let sprite = match self.assets.sprites.get_asset(inst.sprite_index.get()) {
+                Some(s) => s,
+                None => continue,
+            };
+            let xs: f64 = inst.image_xscale.get().into();
+            let ys: f64 = inst.image_yscale.get().into();
+            let angle: f64 = inst.image_angle.get().into();
+            let alpha: f64 = inst.image_alpha.get().into();
+            if xs <= 0.0 || ys <= 0.0 || angle != 0.0 || alpha <= 0.0 {
+                continue
+            }
+            let (w, h) = (sprite.width as f64 * xs, sprite.height as f64 * ys);
+            if w + 2.0 < vw || h + 2.0 < vh {
+                continue
+            }
+            let x: f64 = inst.x.get().into();
+            let y: f64 = inst.y.get().into();
+            let left = x - sprite.origin_x as f64 * xs;
+            let top = y - sprite.origin_y as f64 * ys;
+            if left <= vx + 2.0 && top <= vy + 2.0 && left + w >= vx + vw - 2.0 && top + h >= vy + vh - 2.0 {
+                return true
+            }
+        }
+        false
     }
 
     pub fn draw_instance_default(&mut self, idx: usize) -> gml::Result<()> {
