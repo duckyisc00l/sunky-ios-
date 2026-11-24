@@ -12507,6 +12507,12 @@ impl Game {
 
     pub fn sound_volume(&mut self, args: &[Value]) -> gml::Result<Value> {
         let (sound_id, volume) = expect_args!(args, [int, real])?;
+        {
+            // SUNKY-IOS: remember it for sound_fade, and stop any fade on this sound
+            let mut st = sunky_fade::STATE.lock().unwrap();
+            st.fades.retain(|f| f.sound != sound_id);
+            st.volume.insert(sound_id, volume.into());
+        }
         if let Some(sound) = self.assets.sounds.get_asset(sound_id) {
             // Deliberately written in a way that will produce an error when Kind::Midi is added
             use asset::sound::FileType;
@@ -12521,9 +12527,50 @@ impl Game {
         }
     }
 
-    pub fn sound_fade(&mut self, _args: &[Value]) -> gml::Result<Value> {
-        // Expected arg count: 3
-        unimplemented!("Called unimplemented kernel function sound_fade")
+    // SUNKY-IOS: sound_fade(index, value, time) changes a sound's volume to `value` over `time`
+    // milliseconds (Part 3, Sunky.MPEG and Silly.TIFF use it; OpenGMK left it unimplemented, which
+    // stopped the game). The fade is stepped by sunky_tick_sound_fades() every frame.
+    pub fn sound_fade(&mut self, args: &[Value]) -> gml::Result<Value> {
+        let (sound_id, volume, time) = expect_args!(args, [int, real, real])?;
+        if self.assets.sounds.get_asset(sound_id).is_none() {
+            return Err(gml::Error::NonexistentAsset(asset::Type::Sound, sound_id))
+        }
+        let target: f64 = volume.into();
+        let ms: f64 = time.into();
+        let mut st = sunky_fade::STATE.lock().unwrap();
+        let from = st.volume.get(&sound_id).copied().unwrap_or(1.0);
+        st.fades.retain(|f| f.sound != sound_id);
+        st.fades.push(sunky_fade::Fade { sound: sound_id, from, to: target, start: std::time::Instant::now(), ms: ms.max(0.0) });
+        drop(st);
+        self.sunky_tick_sound_fades();
+        Ok(Default::default())
+    }
+
+    /// SUNKY-IOS: moves every running sound_fade along; called once a frame.
+    pub fn sunky_tick_sound_fades(&mut self) {
+        let mut st = sunky_fade::STATE.lock().unwrap();
+        if st.fades.is_empty() {
+            return
+        }
+        let now = std::time::Instant::now();
+        let mut set = Vec::new();
+        st.fades.retain(|f| {
+            let t = if f.ms <= 0.0 { 1.0 } else { (now.duration_since(f.start).as_secs_f64() * 1000.0 / f.ms).min(1.0) };
+            set.push((f.sound, f.from + (f.to - f.from) * t));
+            t < 1.0
+        });
+        for (id, v) in &set {
+            st.volume.insert(*id, *v);
+        }
+        drop(st);
+        for (id, v) in set {
+            if let Some(sound) = self.assets.sounds.get_asset(id) {
+                use asset::sound::FileType;
+                if let FileType::Wav(handle) = &sound.handle {
+                    handle.set_volume(v);
+                }
+            }
+        }
     }
 
     pub fn sound_pan(&mut self, _args: &[Value]) -> gml::Result<Value> {
@@ -14017,5 +14064,40 @@ impl Game {
             });
         }
         Ok(Default::default())
+    }
+}
+
+/// SUNKY-IOS: state for sound_fade (volumes the game set, and fades in progress).
+mod sunky_fade {
+    use std::{collections::HashMap, sync::Mutex};
+    pub struct Fade {
+        pub sound: i32,
+        pub from: f64,
+        pub to: f64,
+        pub start: std::time::Instant,
+        pub ms: f64,
+    }
+    #[derive(Default)]
+    pub struct State {
+        pub fades: Vec<Fade>,
+        pub volume: HashMap<i32, f64>,
+    }
+    static INNER: Mutex<Option<State>> = Mutex::new(None);
+    pub struct Guard(std::sync::MutexGuard<'static, Option<State>>);
+    impl std::ops::Deref for Guard {
+        type Target = State;
+        fn deref(&self) -> &State { self.0.as_ref().unwrap() }
+    }
+    impl std::ops::DerefMut for Guard {
+        fn deref_mut(&mut self) -> &mut State { self.0.as_mut().unwrap() }
+    }
+    pub struct Lock;
+    pub static STATE: Lock = Lock;
+    impl Lock {
+        pub fn lock(&self) -> Result<Guard, ()> {
+            let mut g = INNER.lock().unwrap_or_else(|e| e.into_inner());
+            if g.is_none() { *g = Some(State::default()); }
+            Ok(Guard(g))
+        }
     }
 }
