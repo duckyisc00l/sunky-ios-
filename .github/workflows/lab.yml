@@ -9,7 +9,7 @@ concurrency: { group: lab, cancel-in-progress: false }
 jobs:
   lab:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 100
     steps:
       - uses: actions/checkout@v4
       - name: Games cache
@@ -66,6 +66,7 @@ jobs:
           git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" r-info
 
       - name: Run games (virtual screen)
+        if: ${{ inputs.rooms != 'yes' }}
         env: { LIBGL_ALWAYS_SOFTWARE: "1" }
         run: |
           pulseaudio --start --exit-idle-time=-1 || true

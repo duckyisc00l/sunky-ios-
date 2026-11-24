@@ -6,6 +6,7 @@ on:
       build_number: { description: "build number shown in the app", required: true, default: "1" }
       simulator: { description: "also run it in the iPhone Simulator (yes/no)", required: false, default: "yes" }
       runner: { description: "Mac to build on (macos-15 or macos-15-intel)", required: false, default: "macos-15" }
+      sim_games: { description: "games to run in the Simulator (blank = all)", required: false, default: "" }
 permissions: { contents: write }
 concurrency: { group: build-ipa, cancel-in-progress: true }
 jobs:
@@ -125,7 +126,7 @@ jobs:
         if: inputs.simulator == 'yes'
         continue-on-error: true
         working-directory: ios
-        env: { SIM_GAMES: "p1 p2 p3 mpeg tiff g2" }
+        env: { SIM_GAMES: "${{ inputs.sim_games || 'p1 p2 p3 mpeg tiff g2' }}" }
         run: ../ci/sim.sh
 
       - name: Upload build log
@@ -149,5 +150,6 @@ jobs:
       - name: Release
         env: { GH_TOKEN: "${{ github.token }}" }
         run: |
+          gh release upload "build-${{ inputs.build_number }}" ios/Sunky.ipa ios/single/*.ipa --clobber 2>/dev/null && exit 0  # already made: replace the files
           gh release create "build-${{ inputs.build_number }}" ios/Sunky.ipa ios/single/*.ipa --title "Sunky build ${{ inputs.build_number }}" \
             --notes "Unsigned IPAs: Sunky.ipa has every game; the others are one game each. Install with SideStore, Sideloadly, AltStore or LiveContainer."
