@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       games: { description: "games to run (blank = all)", required: false, default: "" }
+      rooms: { description: "screenshot every room in widescreen (yes/no)", required: false, default: "no" }
   push:
     branches: [main]
     paths: ["ci/**", "engine/**", ".github/workflows/lab.yml"]
@@ -75,6 +76,13 @@ jobs:
           export SUNKY_OVERRIDES=$PWD/ios/App/Art SUNKY_MAX_TEXTURE=4096
           EMU=engine/ogmk/target-gles/release/gm8emulator xvfb-run -a -s "-screen 0 1280x960x24" ci/lab.sh out/run-gles ${{ inputs.games || 'p1 p2 p3 mpeg tiff' }}
           SUNKY_WIDE=2.16 EMU=engine/ogmk/target-gles/release/gm8emulator xvfb-run -a -s "-screen 0 1600x960x24" ci/lab.sh out/run-wide p1 mpeg
+      - name: Widescreen sweep of every room with a camera
+        if: ${{ inputs.rooms == 'yes' }}
+        env: { LIBGL_ALWAYS_SOFTWARE: "1" }
+        run: |
+          export SUNKY_OVERRIDES=$PWD/ios/App/Art SUNKY_MAX_TEXTURE=4096 SUNKY_WIDE=2.16
+          xvfb-run -a -s "-screen 0 1600x960x24" ci/lab-rooms.sh out/info out/rooms ${{ inputs.games || 'p1 p2 p3 mpeg tiff' }}
+          python3 ci/sheets.py out/rooms
       - name: Publish results to branch r-lab
         if: always()
         run: |

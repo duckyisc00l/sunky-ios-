@@ -2223,6 +2223,12 @@ impl Game {
     pub fn run(&mut self) -> Result<(), Box<dyn std::error::Error>> {
         self.init()?;
         handle_scene_change!(self);
+        // SUNKY-IOS: lab only: SUNKY_START_ROOM=<id> jumps straight to a room (cutscene checks)
+        #[cfg(not(target_os = "ios"))]
+        if let Some(id) = std::env::var("SUNKY_START_ROOM").ok().and_then(|v| v.parse::<ID>().ok()) {
+            self.scene_change = Some(SceneChange::Room(id));
+            handle_scene_change!(self);
+        }
 
         let mut time_now = Instant::now();
         let mut time_last = time_now;
