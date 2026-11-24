@@ -50,19 +50,17 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
     v.center = c;
 }
 
-/// Lets a drag that starts on a game card scroll the row instead of being held by the card.
-@interface CardScroll : UIScrollView
-@end
-@implementation CardScroll
-- (BOOL)touchesShouldCancelInContentView:(UIView *)view { return YES; }
-@end
+/// A 9-slice pixel panel, each pixel `scale` points.
+static UIImage *panelImage(NSString *name, CGFloat scale) {
+    UIImage *base = controlImage(name);
+    UIImage *scaled = [UIImage imageWithCGImage:base.CGImage scale:1.0 / scale orientation:UIImageOrientationUp];
+    CGFloat cap = 6 * scale;
+    return [scaled resizableImageWithCapInsets:UIEdgeInsetsMake(cap, cap, cap, cap) resizingMode:UIImageResizingModeStretch];
+}
 
 @interface MenuViewController ()
-@property (nonatomic, strong) UIImageView *themeBg, *logo, *countText;
-@property (nonatomic, copy) NSString *theme;
-@property (nonatomic) BOOL wantsScrollToPick;
-@property (nonatomic, strong) CardScroll *scroll;
-@property (nonatomic) NSInteger selected;
+@property (nonatomic, strong) UIImageView *background, *logo, *subtitle, *countText, *wideText, *wideToggle;
+@property (nonatomic, strong) UIScrollView *scroll;
 @property (nonatomic, strong) NSMutableArray<UIButton *> *cards;
 @end
 
@@ -88,77 +86,58 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
         return;
     }
 
-    // The menu dresses up as the next game you haven't finished: that game's background and title
-    // logo (ci/menu_themes.py), with the save-select cards underneath.
-    self.themeBg = [UIImageView new];
-    self.themeBg.contentMode = UIViewContentModeScaleAspectFill;
-    self.themeBg.clipsToBounds = YES;
-    [self.view addSubview:self.themeBg];
-    self.logo = [UIImageView new];
-    self.logo.contentMode = UIViewContentModeScaleAspectFit;
-    [self.view addSubview:self.logo];
-    self.countText = pixelView(pixelText(@" ", NO), 2.2);
-    [self.view addSubview:self.countText];
+    self.background = [[UIImageView alloc] initWithImage:controlImage(@"menu_bg")];
+    self.background.contentMode = UIViewContentModeScaleAspectFill;
+    self.background.layer.magnificationFilter = kCAFilterNearest;
+    self.background.clipsToBounds = YES;
+    [self.view addSubview:self.background];
 
-    self.scroll = [CardScroll new];
-    self.scroll.canCancelContentTouches = YES;
+    self.logo = pixelView(pixelText(@"SUNKY", YES), 9);
+    self.subtitle = pixelView(pixelText([self singleGame] ? @"TAP TO PLAY" : @"PICK A GAME", NO), 3);
+    self.countText = pixelView(pixelText(@" ", YES), 3);
+    self.wideText = pixelView(pixelText(@"WIDESCREEN", NO), 2.5);
+    self.wideToggle = pixelView(controlImage(SunkyWidescreen() ? @"toggle_on" : @"toggle_off"), 3.5);
+    for (UIView *v in @[self.logo, self.subtitle, self.countText]) [self.view addSubview:v];
+
+    self.scroll = [UIScrollView new];
     self.scroll.showsHorizontalScrollIndicator = NO;
-    self.scroll.alwaysBounceHorizontal = YES;
-    self.scroll.delaysContentTouches = NO;
+    self.scroll.clipsToBounds = NO;
     [self.view addSubview:self.scroll];
-
     self.cards = [NSMutableArray array];
-    self.selected = -1;
+
+    NSString *only = [NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"];
     for (int i = 0; i < kSunkyGameCount; i++) {
+        if (only.length && ![only isEqualToString:@(kSunkyGames[i].file)]) continue;
         const SunkyGame *g = &kSunkyGames[i];
-        UIButton *card = [UIButton buttonWithType:UIButtonTypeCustom];
-        card.tag = i;
-        card.layer.borderColor = UIColor.blackColor.CGColor;
-        card.layer.borderWidth = 4;
-        [card addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
-        UIView *box = [UIView new];
-        box.backgroundColor = UIColor.blackColor;
-        box.userInteractionEnabled = NO;
-        box.tag = 10;
-        [card addSubview:box];
+        UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
+        b.tag = i;
+        [b setBackgroundImage:panelImage(@"panel", 3) forState:UIControlStateNormal];
+        [b setBackgroundImage:panelImage(@"panel_on", 3) forState:UIControlStateHighlighted];
+        b.adjustsImageWhenHighlighted = NO;
+        [b addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
+
         NSString *iconPath = [NSBundle.mainBundle pathForResource:@(g->file) ofType:@"png" inDirectory:@"Games"];
-        UIImageView *pic = [[UIImageView alloc] initWithImage:iconPath ? [UIImage imageWithContentsOfFile:iconPath] : nil];
-        pic.contentMode = UIViewContentModeScaleAspectFill;
-        pic.clipsToBounds = YES;
-        pic.tag = 12;
-        [box addSubview:pic];
-        // the logo on the title already says SUNKY THE GAME, so names stay short and big
-        NSString *name;
-        if (strncmp(g->subtitle, "Part", 4) == 0) name = [@(g->subtitle) uppercaseString];
-        else if (g->engine == 1) name = @"SUNKY 2";
-        else name = [@(g->title) uppercaseString];
-        UIImageView *t = pixelView(pixelText(name, NO), 2.4);
-        t.tag = 11;
-        [card addSubview:t];
-        // once finished, the card turns into that game's own ending (ci/finished_cards.py)
-        UIImageView *skin = [[UIImageView alloc] initWithImage:controlImage([@"done_" stringByAppendingString:@(g->file)])];
-        skin.userInteractionEnabled = NO;
-        skin.tag = 14;
-        [card addSubview:skin];
+        UIImageView *icon = [[UIImageView alloc] initWithImage:iconPath ? [UIImage imageWithContentsOfFile:iconPath] : nil];
+        icon.contentMode = UIViewContentModeScaleAspectFit;
+        icon.layer.magnificationFilter = kCAFilterNearest;
+        icon.tag = 10;
+        icon.userInteractionEnabled = NO;
+        [b addSubview:icon];
+
+        // "SUNKY THE GAME" + "PART 1", or the game's name + a short line
+        BOOL part = strncmp(g->subtitle, "Part", 4) == 0;
+        NSString *line1 = part ? @"SUNKY THE GAME" : @(g->title);
+        NSString *line2 = part ? @(g->subtitle) : @(g->subtitle);
+        UIImageView *t1 = pixelView(pixelText(line1, NO), 2), *t2 = pixelView(pixelText(line2, YES), 2);
+        t1.tag = 11; t2.tag = 12;
+        [b addSubview:t1];
+        [b addSubview:t2];
+
         UIImageView *star = pixelView(controlImage(@"star"), 3);
         star.tag = 13;
-        [card addSubview:star];
-        [self.scroll addSubview:card];
-        [self.cards addObject:card];
-    }
-}
-
-- (void)pick:(UIButton *)card {
-    self.selected = card.tag;
-    UIColor *gold = [UIColor colorWithRed:1 green:214/255.0 blue:0 alpha:1];
-    UIColor *white = [UIColor colorWithRed:230/255.0 green:230/255.0 blue:240/255.0 alpha:1];
-    for (UIButton *c in self.cards) {
-        BOOL on = c.tag == self.selected;
-        c.backgroundColor = on ? gold : white;
-        // finished cards are covered by their own art, so they show the pick with a gold edge
-        BOOL fin = SunkyIsFinished(&kSunkyGames[c.tag]);
-        c.layer.borderColor = (fin && on ? gold : UIColor.blackColor).CGColor;
-        c.layer.borderWidth = fin && on ? 7 : 4;
+        [b addSubview:star];
+        [self.scroll addSubview:b];
+        [self.cards addObject:b];
     }
 }
 
@@ -167,41 +146,39 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
     if ([self singleGame]) return;
     UIEdgeInsets safe = self.view.safeAreaInsets;
     CGSize b = self.view.bounds.size;
-    CGFloat side = MAX(MAX(safe.left, safe.right), 16);
-    self.themeBg.frame = self.view.bounds;
-    CGFloat logoH = b.height * 0.36;
-    self.logo.frame = CGRectMake(side, 6, b.width - 2 * side, logoH);
-    CGFloat countH = 26;
-    self.countText.center = CGPointMake(b.width / 2, b.height - countH / 2 - 2);
+    CGFloat left = MAX(safe.left, 24), right = MAX(safe.right, 24), top = MAX(safe.top, 14);
+    self.background.frame = self.view.bounds;
 
-    // cards: between the logo and the counter
-    CGFloat areaTop = logoH + 10, areaH = b.height - countH - 4 - areaTop;
-    CGFloat ch = areaH - 24, cw = ch * 150.0 / 210.0, gap = 12;
-    self.scroll.frame = CGRectMake(0, areaTop, b.width, areaH);
-    self.scroll.contentInset = UIEdgeInsetsMake(0, side + 6, 0, side + 6);
-    CGFloat y = (areaH - ch) / 2;
-    for (NSUInteger i = 0; i < self.cards.count; i++) {
-        UIButton *card = self.cards[i];
-        card.frame = CGRectMake(i * (cw + gap), y, cw, ch);
-        UIView *box = [card viewWithTag:10];
-        box.frame = CGRectMake(10, 10, cw - 20, cw - 20);
-        [box viewWithTag:12].frame = box.bounds;
-        UIImageView *t = (UIImageView *)[card viewWithTag:11];
-        CGFloat sc = MIN(2.4, (cw - 16) / t.image.size.width);
-        t.bounds = CGRectMake(0, 0, t.image.size.width * sc, t.image.size.height * sc);
-        t.center = CGPointMake(cw / 2, (CGRectGetMaxY(box.frame) + ch) / 2);
-        [card viewWithTag:14].frame = card.bounds;
-        UIView *star = [card viewWithTag:13];
-        star.center = CGPointMake(cw - star.bounds.size.width / 2 + 8, star.bounds.size.height / 2 - 10);
+    CGRect f = self.logo.frame;
+    f.origin = CGPointMake(left, top);
+    self.logo.frame = f;
+    f = self.subtitle.frame;
+    f.origin = CGPointMake(left + 4, CGRectGetMaxY(self.logo.frame) + 6);
+    self.subtitle.frame = f;
+    f = self.countText.frame;
+    f.origin = CGPointMake(CGRectGetMaxX(self.subtitle.frame) + 18, self.subtitle.frame.origin.y);
+    self.countText.frame = f;
+
+    CGFloat y = CGRectGetMaxY(self.subtitle.frame) + 16;
+    CGFloat h = b.height - y - MAX(safe.bottom, 14);
+    self.scroll.frame = CGRectMake(0, y, b.width, h);
+    CGFloat cardW = MIN(200, h * 0.85), gap = 18, x = left;
+    if ([self singleGame]) x = (b.width - cardW) / 2;
+    for (UIButton *card in self.cards) {
+        card.frame = CGRectMake(x, 0, cardW, h);
+        UIView *icon = [card viewWithTag:10], *t1 = [card viewWithTag:11], *t2 = [card viewWithTag:12], *star = [card viewWithTag:13];
+        icon.frame = CGRectMake(20, 20, cardW - 40, h - 86);
+        // shrink the title to fit the card if needed
+        for (UIImageView *t in @[(UIImageView *)t1, (UIImageView *)t2]) {
+            CGFloat s = MIN(2, (cardW - 24) / t.image.size.width);
+            t.bounds = CGRectMake(0, 0, t.image.size.width * s, t.image.size.height * s);
+        }
+        t1.center = CGPointMake(cardW / 2, h - 52);
+        t2.center = CGPointMake(cardW / 2, h - 30);
+        star.center = CGPointMake(cardW - 22, 22);
+        x += cardW + gap;
     }
-    self.scroll.contentSize = CGSizeMake(self.cards.count * (cw + gap) - gap, areaH);
-    // more room than cards: centre them
-    CGFloat spare = b.width - self.scroll.contentSize.width - 2 * (side + 6);
-    if (spare > 0) self.scroll.contentInset = UIEdgeInsetsMake(0, side + 6 + spare / 2, 0, side + 6 + spare / 2);
-    if (self.wantsScrollToPick && self.selected >= 0) {
-        self.wantsScrollToPick = NO;
-        [self.scroll scrollRectToVisible:CGRectInset(self.cards[self.selected].frame, -40, 0) animated:NO];
-    }
+    self.scroll.contentSize = CGSizeMake(MAX(x - gap + right, b.width), h);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -211,30 +188,26 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
 
 - (void)refreshFinished {
     if ([self singleGame]) return;
-    NSInteger firstOpen = -1;
     for (UIButton *card in self.cards) {
-        BOOL fin = SunkyIsFinished(&kSunkyGames[card.tag]);
-        [card viewWithTag:13].hidden = !fin;
-        [card viewWithTag:14].hidden = !fin;
-        if (!fin && firstOpen < 0) firstOpen = card.tag;
+        BOOL done = SunkyIsFinished(&kSunkyGames[card.tag]);
+        [card viewWithTag:13].hidden = !done;
+        [card setBackgroundImage:panelImage(done ? @"panel_done" : @"panel", 3) forState:UIControlStateNormal];
     }
-    // dress the menu as the next game (all done: stays as the last one)
-    NSString *theme = @(kSunkyGames[firstOpen < 0 ? kSunkyGameCount - 1 : firstOpen].file);
-    if (![theme isEqualToString:self.theme]) {
-        self.theme = theme;
-        self.themeBg.image = controlImage([NSString stringWithFormat:@"theme_%@_bg", theme]);
-        self.logo.image = controlImage([NSString stringWithFormat:@"theme_%@_logo", theme]);
-        self.selected = -1; // and point at the new game
-        self.wantsScrollToPick = YES;
+    if ([self singleGame]) {
+        self.countText.hidden = YES;
+    } else {
+        int n = SunkyFinishedCount();
+        NSString *t = n == kSunkyGameCount ? [NSString stringWithFormat:@"ALL %d FINISHED!", n]
+                                           : [NSString stringWithFormat:@"%d OF %d FINISHED", n, kSunkyGameCount];
+        setPixelText(self.countText, t, YES, 3);
     }
-    if (self.cards.count) [self pick:self.cards[self.selected < 0 ? MAX(0, firstOpen) : self.selected]];
-    int n = SunkyFinishedCount();
-    NSString *t = n == kSunkyGameCount ? [NSString stringWithFormat:@"ALL %d FINISHED!", n]
-                                       : [NSString stringWithFormat:@"%d OF %d FINISHED", n, kSunkyGameCount];
-    setPixelText(self.countText, t, NO, 2.2);
     [self.view setNeedsLayout];
 }
 
+- (void)toggleWide {
+    SunkySetWidescreen(!SunkyWidescreen());
+    self.wideToggle.image = controlImage(SunkyWidescreen() ? @"toggle_on" : @"toggle_off");
+}
 
 // Test hook for the Simulator run (ci/sim.sh): -sunkyAutoplay <game> starts that game straight away.
 - (void)viewDidAppear:(BOOL)animated {
@@ -253,7 +226,6 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
 }
 
 - (void)play:(UIButton *)sender {
-    if (![self singleGame]) [self pick:sender];
     const SunkyGame *g = &kSunkyGames[sender.tag];
     if (g->engine == 1) { // GameMaker Studio: Games/<file>/data.win, saves in Documents/<file>
         NSString *dataWin = [NSBundle.mainBundle pathForResource:@"data" ofType:@"win" inDirectory:[@"Games" stringByAppendingPathComponent:@(g->file)]];
