@@ -1,6 +1,7 @@
 // Pick a game, in the same pixel-art style as the controls (art drawn by ci/menu_art.py).
 // Each game gets its own save folder: Documents/<game>/ (visible in the Files app).
 #import "MenuViewController.h"
+#import <GameController/GameController.h>
 #import "GameViewController.h"
 #import "Sunky.h"
 
@@ -58,9 +59,17 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
     return [scaled resizableImageWithCapInsets:UIEdgeInsetsMake(cap, cap, cap, cap) resizingMode:UIImageResizingModeStretch];
 }
 
+/// Lets a drag that starts on a game card scroll the row instead of being held by the card.
+@interface CardScroll : UIScrollView
+@end
+@implementation CardScroll
+- (BOOL)touchesShouldCancelInContentView:(UIView *)view { return YES; }
+@end
+
 @interface MenuViewController ()
 @property (nonatomic, strong) UIImageView *background, *logo, *subtitle, *countText, *wideText, *wideToggle;
-@property (nonatomic, strong) UIScrollView *scroll;
+@property (nonatomic, strong) CardScroll *scroll;
+@property (nonatomic) NSInteger focus; // card picked with a game controller, -1 = none
 @property (nonatomic, strong) NSMutableArray<UIButton *> *cards;
 @end
 
@@ -99,11 +108,14 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
     self.wideToggle = pixelView(controlImage(SunkyWidescreen() ? @"toggle_on" : @"toggle_off"), 3.5);
     for (UIView *v in @[self.logo, self.subtitle, self.countText]) [self.view addSubview:v];
 
-    self.scroll = [UIScrollView new];
+    self.scroll = [CardScroll new];
+    self.scroll.canCancelContentTouches = YES;
+    self.scroll.delaysContentTouches = NO;
     self.scroll.showsHorizontalScrollIndicator = NO;
     self.scroll.clipsToBounds = NO;
     [self.view addSubview:self.scroll];
     self.cards = [NSMutableArray array];
+    self.focus = -1;
 
     NSString *only = [NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"];
     for (int i = 0; i < kSunkyGameCount; i++) {
@@ -184,6 +196,56 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self refreshFinished];
+    [self hookControllers];
+}
+
+// ---- Game controllers: left/right (D-pad or stick) picks a game, A or Menu plays it ----
+
+- (void)hookControllers {
+    if ([self singleGame] || self.navigationController.topViewController != self) return;
+    static BOOL observing;
+    if (!observing) {
+        observing = YES;
+        [NSNotificationCenter.defaultCenter addObserverForName:GCControllerDidConnectNotification object:nil queue:NSOperationQueue.mainQueue
+                                                    usingBlock:^(NSNotification *n) { [self hookControllers]; }];
+    }
+    __weak MenuViewController *weakSelf = self;
+    for (GCController *c in GCController.controllers) {
+        GCExtendedGamepad *pad = c.extendedGamepad;
+        if (!pad) continue;
+        __block int lastDir = 0;
+        GCControllerDirectionPadValueChangedHandler dir = ^(GCControllerDirectionPad *d, float x, float y) {
+            int now = x > 0.5 ? 1 : x < -0.5 ? -1 : 0;
+            if (now && now != lastDir) [weakSelf moveFocus:now];
+            lastDir = now;
+        };
+        pad.dpad.valueChangedHandler = dir;
+        pad.leftThumbstick.valueChangedHandler = dir;
+        GCControllerButtonValueChangedHandler go = ^(GCControllerButtonInput *b, float v, BOOL pressed) {
+            MenuViewController *me = weakSelf;
+            if (!pressed || !me || me.navigationController.topViewController != me) return;
+            if (me.focus < 0) { [me moveFocus:0]; return; }
+            [me play:me.cards[me.focus]];
+        };
+        pad.buttonA.valueChangedHandler = go;
+        pad.buttonMenu.valueChangedHandler = go;
+        pad.buttonB.valueChangedHandler = nil;
+        pad.buttonX.valueChangedHandler = nil;
+        pad.buttonY.valueChangedHandler = nil;
+        if (pad.buttonOptions) pad.buttonOptions.valueChangedHandler = nil;
+    }
+}
+
+- (void)moveFocus:(int)step {
+    if (self.navigationController.topViewController != self || !self.cards.count) return;
+    NSInteger n = (NSInteger)self.cards.count;
+    self.focus = self.focus < 0 ? 0 : MAX(0, MIN(n - 1, self.focus + step));
+    for (UIButton *card in self.cards) {
+        BOOL on = card == self.cards[self.focus];
+        [card setBackgroundImage:on ? panelImage(@"panel_on", 3) : panelImage(SunkyIsFinished(&kSunkyGames[card.tag]) ? @"panel_done" : @"panel", 3)
+                        forState:UIControlStateNormal];
+    }
+    [self.scroll scrollRectToVisible:CGRectInset(self.cards[self.focus].frame, -30, 0) animated:YES];
 }
 
 - (void)refreshFinished {
@@ -191,7 +253,8 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
     for (UIButton *card in self.cards) {
         BOOL done = SunkyIsFinished(&kSunkyGames[card.tag]);
         [card viewWithTag:13].hidden = !done;
-        [card setBackgroundImage:panelImage(done ? @"panel_done" : @"panel", 3) forState:UIControlStateNormal];
+        BOOL focused = self.focus >= 0 && card == self.cards[self.focus];
+        [card setBackgroundImage:panelImage(focused ? @"panel_on" : done ? @"panel_done" : @"panel", 3) forState:UIControlStateNormal];
     }
     if ([self singleGame]) {
         self.countText.hidden = YES;

@@ -19,6 +19,8 @@
 @property (nonatomic) const SunkyGame *game;
 @property (nonatomic, strong) UIImageView *stickKnob;
 @property (nonatomic, strong) NSTimer *endWatch;
+@property (nonatomic) int32_t firstRoom; // the warning screen with the PLAY button (-1 until known)
+@property (nonatomic) BOOL padMode;      // a controller is in use: on-screen controls hidden
 @end
 
 typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart, RoleGame, RoleClose, RoleRun };
@@ -71,8 +73,11 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     self.closeButton.hidden = [[NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"] length] > 0;
     for (UIView *v in @[self.dpad, self.jump, self.start, self.closeButton, self.run]) [self.view addSubview:v];
 
+    self.firstRoom = -1;
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(controllerConnected:)
                                                name:GCControllerDidConnectNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(controllerDisconnected:)
+                                               name:GCControllerDidDisconnectNotification object:nil];
     for (GCController *c in GCController.controllers) [self setUpController:c];
 }
 
@@ -124,7 +129,7 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
         self.start.center = CGPointMake(self.jump.center.x - 30, self.jump.center.y - jr - 34);
     }
     // In widescreen the game fills the screen, so the controls get a little more see-through
-    CGFloat alpha = SunkyWidescreen() ? 0.7 : 0.9;
+    CGFloat alpha = self.padMode ? 0 : SunkyWidescreen() ? 0.7 : 0.9;
     for (UIView *v in @[self.dpad, self.jump, self.start, self.run]) v.alpha = alpha;
     if (!_dpadTouch) self.stickKnob.center = CGPointMake(self.dpad.bounds.size.width / 2, self.dpad.bounds.size.height / 2);
 
@@ -202,8 +207,10 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
 }
 
 - (void)checkEnding {
-    if (!self.game || SunkyIsFinished(self.game)) return;
+    if (!self.game) return;
     int32_t room = [self isBS] ? sunky_bs_current_room() : sunky_current_room();
+    if (self.firstRoom < 0 && room >= 0) self.firstRoom = room;
+    if (SunkyIsFinished(self.game)) return;
     for (int i = 0; i < 4 && self.game->endRooms[i] >= 0; i++) {
         if (room == self.game->endRooms[i]) {
             SunkySetFinished(self.game);
@@ -348,6 +355,7 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
 
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if (self.padMode) [self setPadMode:NO]; // back to touch: show the controls again
     for (UITouch *t in touches) {
         CGPoint p = [t locationInView:self.view];
         TouchRole role = [self roleForPoint:p];
@@ -424,10 +432,56 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
 
 - (void)controllerConnected:(NSNotification *)n { [self setUpController:n.object]; }
 
+- (void)controllerDisconnected:(NSNotification *)n {
+    BOOL any = NO;
+    for (GCController *c in GCController.controllers) if (c != n.object && c.extendedGamepad) any = YES;
+    if (!any) [self setPadMode:NO];
+}
+
+// With a controller in use the on-screen joystick and buttons get out of the way; touching the
+// screen brings them back.
+- (void)setPadMode:(BOOL)on {
+    _padMode = on;
+    BOOL single = [[NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"] length] > 0;
+    [UIView animateWithDuration:0.2 animations:^{
+        for (UIView *v in @[self.dpad, self.jump, self.start, self.run]) v.alpha = on ? 0 : SunkyWidescreen() ? 0.7 : 0.9;
+        self.closeButton.alpha = on || single ? 0 : 0.9;
+    }];
+}
+
+/// The spot of each game's PLAY button on its warning screen, in game pixels (GameMaker 8 games),
+/// or as screen fractions for Sunky the Game 2. A controller can't click, so A/Menu presses it.
+- (BOOL)tapPlayButton {
+    if (!self.game || self.firstRoom < 0) return NO;
+    int32_t room = [self isBS] ? sunky_bs_current_room() : sunky_current_room();
+    if (room != self.firstRoom) return NO;
+    const char *f = self.game->file;
+    CGPoint gp = CGPointZero;
+    if (!strcmp(f, "p1")) gp = CGPointMake(320, 432);
+    else if (!strcmp(f, "p2") || !strcmp(f, "p3")) gp = CGPointMake(528, 393);
+    else if (!strcmp(f, "tiff")) gp = CGPointMake(448, 352);
+    CGPoint pt;
+    if ([self isBS]) {
+        pt = CGPointMake(0.5 * self.view.bounds.size.width, 0.72 * self.view.bounds.size.height);
+    } else if (gp.x > 0) {
+        CGRect r = [self gameRect];
+        uint32_t packed = ramen_ios_game_size();
+        pt = CGPointMake(r.origin.x + gp.x / MAX(1, packed >> 16) * r.size.width, r.origin.y + gp.y / MAX(1, packed & 0xFFFF) * r.size.height);
+    } else {
+        return NO; // this game starts with a key press instead
+    }
+    SunkyLog(@"controller: pressing PLAY at %.0f,%.0f", pt.x, pt.y);
+    [self sendMouse:pt];
+    [self mouseButton:YES];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{ [self mouseButton:NO]; });
+    return YES;
+}
+
 - (void)setUpController:(GCController *)c {
     GCExtendedGamepad *pad = c.extendedGamepad;
     if (!pad) return;
     SunkyLog(@"controller connected: %@", c.vendorName);
+    [self setPadMode:YES];
     __weak GameViewController *weakSelf = self;
     GCControllerDirectionPadValueChangedHandler dir = ^(GCControllerDirectionPad *d, float x, float y) {
         [weakSelf setPadDir:0 down:x < -0.5];
@@ -437,13 +491,35 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     };
     pad.dpad.valueChangedHandler = dir;
     pad.leftThumbstick.valueChangedHandler = dir;
-    pad.buttonA.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) { [weakSelf key:[weakSelf jumpKey] down:pressed]; };
-    pad.buttonB.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) {
+    // A and X jump; B and Y run (or jump, in games without a run button)
+    GCControllerButtonValueChangedHandler jump = ^(GCControllerButtonInput *b, float v, BOOL pressed) {
+        GameViewController *me = weakSelf;
+        if (!me.padMode) [me setPadMode:YES];
+        if (pressed && [me tapPlayButton]) return;
+        [me key:[me jumpKey] down:pressed];
+    };
+    GCControllerButtonValueChangedHandler run = ^(GCControllerButtonInput *b, float v, BOOL pressed) {
         GameViewController *me = weakSelf;
         uint32_t k = (me.game && me.game->runKey) ? (uint32_t)me.game->runKey : [me jumpKey];
         [me key:k down:pressed];
     };
-    pad.buttonMenu.pressedChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) { [weakSelf key:VK_RETURN down:pressed]; };
+    pad.buttonA.valueChangedHandler = jump;
+    pad.buttonX.valueChangedHandler = jump;
+    pad.buttonB.valueChangedHandler = run;
+    pad.buttonY.valueChangedHandler = run;
+    pad.leftShoulder.valueChangedHandler = run;
+    pad.rightShoulder.valueChangedHandler = run;
+    // Menu / Start: the game's START (Enter), or PLAY on the warning screen
+    pad.buttonMenu.valueChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) {
+        GameViewController *me = weakSelf;
+        if (pressed && [me tapPlayButton]) return;
+        [me key:VK_RETURN down:pressed];
+    };
+    // Options / Select / View: back to the game list (all-in-one app only)
+    if (pad.buttonOptions) pad.buttonOptions.valueChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) {
+        GameViewController *me = weakSelf;
+        if (pressed && [[NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"] length] == 0) [me askToClose];
+    };
 }
 
 // ---- Hardware keyboards ----
