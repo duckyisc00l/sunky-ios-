@@ -482,9 +482,10 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     GCExtendedGamepad *pad = c.extendedGamepad;
     if (!pad) return;
     SunkyLog(@"controller connected: %@", c.vendorName);
-    [self setPadMode:YES];
+    // the on-screen controls hide once the controller is actually used, not just because one is paired
     __weak GameViewController *weakSelf = self;
     GCControllerDirectionPadValueChangedHandler dir = ^(GCControllerDirectionPad *d, float x, float y) {
+        if ((fabsf(x) > 0.5f || fabsf(y) > 0.5f) && !weakSelf.padMode) [weakSelf setPadMode:YES];
         [weakSelf setPadDir:0 down:x < -0.5];
         [weakSelf setPadDir:2 down:x > 0.5];
         [weakSelf setPadDir:1 down:y > 0.5];
@@ -495,12 +496,13 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     // A and X jump; B and Y run (or jump, in games without a run button)
     GCControllerButtonValueChangedHandler jump = ^(GCControllerButtonInput *b, float v, BOOL pressed) {
         GameViewController *me = weakSelf;
-        if (!me.padMode) [me setPadMode:YES];
+        if (pressed && !me.padMode) [me setPadMode:YES];
         if (pressed && [me tapPlayButton]) return;
         [me key:[me jumpKey] down:pressed];
     };
     GCControllerButtonValueChangedHandler run = ^(GCControllerButtonInput *b, float v, BOOL pressed) {
         GameViewController *me = weakSelf;
+        if (pressed && !me.padMode) [me setPadMode:YES];
         uint32_t k = (me.game && me.game->runKey) ? (uint32_t)me.game->runKey : [me jumpKey];
         [me key:k down:pressed];
     };
@@ -513,6 +515,7 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     // Menu / Start: the game's START (Enter), or PLAY on the warning screen
     pad.buttonMenu.valueChangedHandler = ^(GCControllerButtonInput *b, float v, BOOL pressed) {
         GameViewController *me = weakSelf;
+        if (pressed && !me.padMode) [me setPadMode:YES];
         if (pressed && [me tapPlayButton]) return;
         [me key:VK_RETURN down:pressed];
     };

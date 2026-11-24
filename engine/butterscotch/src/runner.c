@@ -1328,7 +1328,7 @@ static void expandViewAxis(int32_t pos, int32_t size, int32_t surfaceSize, int32
 // The widescreen hack/free camera are applied in clip space, AFTER the camera's own matrices, so custom view/projection matrices (perspective, rotation) keep working
 // Widening a view symmetrically about its center is a clip-space scale of base/surface, the free camera zoom is a scale and its pan a translation in screen terms
 // viewportW/H is the view's REAL pixel size on the render target, used to keep world pixels on pixel boundaries
-static void beginDrawViewClipAdjustment(Runner* runner, GMLCamera* camera, int32_t gameW, int32_t gameH, int32_t widescreenBaseW, int32_t widescreenBaseH, int32_t viewportW, int32_t viewportH) {
+static void beginDrawViewClipAdjustment(Runner* runner, GMLCamera* camera, int32_t gameW, int32_t gameH, int32_t widescreenBaseW, int32_t widescreenBaseH, int32_t viewportW, int32_t viewportH, float edgeShiftX) {
     runner->drawViewCamera = nullptr;
     if (camera == nullptr)
         return;
@@ -1339,7 +1339,7 @@ static void beginDrawViewClipAdjustment(Runner* runner, GMLCamera* camera, int32
     float panX = runner->freeCamPanX;
     float panY = runner->freeCamPanY;
 
-    bool isClipAdjustmentNeeded = widescreenScaleX != 1.0f || widescreenScaleY != 1.0f || zoom != 1.0f || panX != 0.0f || panY != 0.0f;
+    bool isClipAdjustmentNeeded = widescreenScaleX != 1.0f || widescreenScaleY != 1.0f || zoom != 1.0f || panX != 0.0f || panY != 0.0f || edgeShiftX != 0.0f;
     if (!isClipAdjustmentNeeded)
         return;
 
@@ -1361,6 +1361,8 @@ static void beginDrawViewClipAdjustment(Runner* runner, GMLCamera* camera, int32
     Matrix4f_scale(&runner->drawViewClipAdjustment, zoom, zoom, 1.0f);
     Matrix4f_translate(&runner->drawViewClipAdjustment, -2.0f * panX, 2.0f * panY, 0.0f);
     Matrix4f_translate(&runner->drawViewClipAdjustment, viewportW > 0 ? -2.0f * alignPixelsX / (float) viewportW : 0.0f, viewportH > 0 ? 2.0f * alignPixelsY / (float) viewportH : 0.0f, 0.0f);
+    // SUNKY-IOS: edgeShiftX is a fraction of the widened view's width: the picture moves left by it
+    Matrix4f_translate(&runner->drawViewClipAdjustment, -2.0f * edgeShiftX, 0.0f, 0.0f);
     Matrix4f_scale(&runner->drawViewClipAdjustment, widescreenScaleX, widescreenScaleY, 1.0f);
     runner->drawViewCamera = camera;
 }
@@ -1445,6 +1447,16 @@ void Runner_drawViews(Runner* runner, int32_t gameW, int32_t gameH, bool debugSh
             int32_t viewX, viewY, viewW, viewH;
             expandViewAxis(camera->viewX, camera->viewWidth, gameW, widescreenBaseW, &viewX, &viewW);
             expandViewAxis(camera->viewY, camera->viewHeight, gameH, widescreenBaseH, &viewY, &viewH);
+            // SUNKY-IOS: keep the widened view inside the room, like the game's own camera does, so the
+            // extra width never shows what's past the level's edge (Sunky the Game 2's grey sides)
+            float edgeShiftX = 0.0f;
+            if (viewW > camera->viewWidth && runner->currentRoom != nullptr && viewW <= (int32_t) runner->currentRoom->width) {
+                int32_t roomW = (int32_t) runner->currentRoom->width, shift = 0;
+                if (viewX < 0 && camera->viewX >= 0) shift = -viewX;
+                else if (viewX + viewW > roomW && camera->viewX + camera->viewWidth <= roomW) shift = roomW - (viewX + viewW);
+                viewX += shift;
+                edgeShiftX = (float) shift / (float) viewW;
+            }
             applyFreeCamera(runner, &viewX, &viewY, &viewW, &viewH);
             int32_t portX = (int32_t) ((float) view->portX * runner->displayScaleX + 0.5f);
             int32_t portY = (int32_t) ((float) view->portY * runner->displayScaleY + 0.5f);
@@ -1454,7 +1466,7 @@ void Runner_drawViews(Runner* runner, int32_t gameW, int32_t gameH, bool debugSh
 
             runner->viewCurrent = (int32_t) vi;
             runner->renderer->cameraCurrent = runner->views[runner->viewCurrent].cameraId;
-            beginDrawViewClipAdjustment(runner, camera, gameW, gameH, widescreenBaseW, widescreenBaseH, portW, portH);
+            beginDrawViewClipAdjustment(runner, camera, gameW, gameH, widescreenBaseW, widescreenBaseH, portW, portH, edgeShiftX);
             renderer->vtable->beginView(renderer, viewX, viewY, viewW, viewH, portX, portY, portW, portH, viewAngle);
 
             Runner_draw(runner);
@@ -1488,7 +1500,7 @@ void Runner_drawViews(Runner* runner, int32_t gameW, int32_t gameH, bool debugSh
             Runner_updateCameraViewSimple(camera);
         }
 
-        beginDrawViewClipAdjustment(runner, camera, gameW, gameH, widescreenBaseW, widescreenBaseH, gameW, gameH);
+        beginDrawViewClipAdjustment(runner, camera, gameW, gameH, widescreenBaseW, widescreenBaseH, gameW, gameH, 0.0f);
         renderer->vtable->beginView(renderer, viewX, viewY, viewW, viewH, 0, 0, gameW, gameH, 0);
 
         Runner_draw(runner);

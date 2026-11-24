@@ -305,7 +305,17 @@ int32_t bs_ios_step(int32_t winW, int32_t winH, float deltaTime) {
 
     runner->widescreenExtraWidth = 0;
     runner->widescreenExtraHeight = 0;
-    if (gWidescreenAspect > 0 && runner->usingAppSurface && gameW > 0 && gameH > 0) {
+    // SUNKY-IOS: a level too narrow to fill the wider picture (Sunky the Game 2's tall areas) stays
+    // at its normal shape, with bars, instead of showing grey past its edges
+    bool roomTooNarrow = false;
+    if (gWidescreenAspect > 0 && runner->currentRoom != nullptr && runner->viewsEnabled && gameW > 0 && gameH > 0) {
+        GMLCamera* cam = Runner_getCameraForView(runner, 0);
+        if (cam != nullptr && cam->viewWidth > 0) {
+            float wideW = (float) cam->viewWidth * gWidescreenAspect / ((float) gameW / (float) gameH);
+            if ((float) runner->currentRoom->width < wideW) roomTooNarrow = true;
+        }
+    }
+    if (gWidescreenAspect > 0 && runner->usingAppSurface && gameW > 0 && gameH > 0 && !roomTooNarrow) {
         float nativeAspect = (float) gameW / (float) gameH;
         if (gWidescreenAspect > nativeAspect) {
             int32_t targetW = (int32_t) ((float) gameH * gWidescreenAspect + 0.5f);
