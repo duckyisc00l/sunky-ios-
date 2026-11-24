@@ -928,6 +928,51 @@ void Runner_drawInstance(Runner* runner, Instance* inst) {
     }
 }
 
+// ---- SUNKY-IOS: GameMaker's built-in rain (ef_rain), which Sunky the Game 2's storm level uses ----
+// Like GameMaker's: thin slanted streaks falling across the view, a few more each call.
+typedef struct { float x, y; uint32_t colour; } SunkyDrop;
+static SunkyDrop sunkyDrops[600];
+static int32_t sunkyDropCount;
+static int32_t sunkyRainRoom = -1;
+static uint32_t sunkyRainSeed = 12345;
+static float sunkyRand(void) { sunkyRainSeed = sunkyRainSeed * 1103515245u + 12345u; return (float) ((sunkyRainSeed >> 8) & 0xFFFF) / 65536.0f; }
+
+void Runner_sunkyAddRain(Runner* runner, int32_t size, uint32_t colour) {
+    if (sunkyRainRoom != runner->currentRoomIndex) { sunkyDropCount = 0; sunkyRainRoom = runner->currentRoomIndex; }
+    GMLCamera* cam = runner->viewsEnabled ? Runner_getCameraForView(runner, 0) : nullptr;
+    float vx = cam ? (float) cam->viewX : 0.0f, vy = cam ? (float) cam->viewY : 0.0f;
+    float vw = cam ? (float) cam->viewWidth : (float) runner->currentRoom->width;
+    int32_t n = size <= 0 ? 2 : size == 1 ? 5 : 9;
+    float spread = vw + 2.0f * runner->sunkyWideLeft + 200.0f; // cover the widescreen sides too
+    for (int32_t i = 0; i < n && sunkyDropCount < (int32_t) (sizeof(sunkyDrops) / sizeof(sunkyDrops[0])); i++) {
+        SunkyDrop* d = &sunkyDrops[sunkyDropCount++];
+        d->x = vx - runner->sunkyWideLeft - 40.0f + sunkyRand() * spread;
+        d->y = vy - 20.0f - sunkyRand() * 30.0f;
+        d->colour = colour;
+    }
+}
+
+static void sunkyDrawRain(Runner* runner) {
+    if (sunkyDropCount == 0 || runner->renderer == nullptr || runner->renderer->vtable->drawLine == nullptr) return;
+    if (sunkyRainRoom != runner->currentRoomIndex) { sunkyDropCount = 0; return; }
+    GMLCamera* cam = runner->viewsEnabled ? Runner_getCameraForView(runner, 0) : nullptr;
+    float bottom = (cam ? (float) (cam->viewY + cam->viewHeight) : (float) runner->currentRoom->height) + 20.0f;
+    // move once per frame (only on the first view drawn)
+    static int lastFrame = -1;
+    bool advance = lastFrame != runner->frameCount;
+    lastFrame = runner->frameCount;
+    const float dx = -1.4f, dy = 7.9f; // direction 260 degrees, speed 8
+    int32_t kept = 0;
+    for (int32_t i = 0; i < sunkyDropCount; i++) {
+        SunkyDrop d = sunkyDrops[i];
+        if (advance) { d.x += dx; d.y += dy; }
+        if (d.y > bottom) continue;
+        runner->renderer->vtable->drawLine(runner->renderer, d.x, d.y, d.x - dx * 1.6f, d.y - dy * 1.6f, 1.0f, d.colour, 0.45f);
+        sunkyDrops[kept++] = d;
+    }
+    sunkyDropCount = kept;
+}
+
 void Runner_draw(Runner* runner) {
     Room* room = runner->currentRoom;
 
@@ -1217,6 +1262,8 @@ void Runner_draw(Runner* runner) {
 
     // Draw foreground backgrounds (in front of instances, behind GUI)
     drawGMS1Backgrounds(runner, true);
+
+    sunkyDrawRain(runner); // SUNKY-IOS
 }
 
 // Open a GUI-space draw pass and remember its parameters so surface_reset_target can restore the GUI target + projection when the surface stack pops back to empty mid-pass.
@@ -1457,6 +1504,7 @@ void Runner_drawViews(Runner* runner, int32_t gameW, int32_t gameH, bool debugSh
                 viewX += shift;
                 edgeShiftX = (float) shift / (float) viewW;
             }
+            if (vi == 0 || !runner->views[0].enabled) runner->sunkyWideLeft = (float) (camera->viewX - viewX);
             applyFreeCamera(runner, &viewX, &viewY, &viewW, &viewH);
             int32_t portX = (int32_t) ((float) view->portX * runner->displayScaleX + 0.5f);
             int32_t portY = (int32_t) ((float) view->portY * runner->displayScaleY + 0.5f);

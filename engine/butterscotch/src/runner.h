@@ -748,6 +748,9 @@ struct Runner {
     int32_t oldApplicationHeight;
     int32_t widescreenExtraWidth;
     int32_t widescreenExtraHeight;
+    // SUNKY-IOS: room pixels the widened view adds to the LEFT of the game's own view (last frame),
+    // so a snapshot of the screen lines up with where the game draws it
+    float sunkyWideLeft;
     // Camera of the on-screen view being drawn while the widescreen hack/free camera is active (nullptr otherwise); its projection gets drawViewClipAdjustment
     GMLCamera* drawViewCamera;
     Matrix4f drawViewClipAdjustment;
@@ -967,6 +970,8 @@ void Runner_getMouseRoomPosition(Runner* runner, GMLReal* outX, GMLReal* outY);
 GMLCamera* Runner_getCameraById(Runner* runner, int32_t id);
 // Resolves the camera assigned to a view, or nullptr if the view index is invalid or has no allocated camera.
 GMLCamera* Runner_getCameraForView(Runner* runner, int32_t viewIndex);
+// SUNKY-IOS: GameMaker's built-in rain effect (effect_create_above/below with ef_rain)
+void Runner_sunkyAddRain(Runner* runner, int32_t size, uint32_t colour);
 void Runner_scrollBackgrounds(Runner* runner);
 void Runner_drawTileLayer(Runner* runner, RoomLayerTilesData* data, float layerOffsetX, float layerOffsetY);
 // Allocates a fresh GML struct and registers it in instancesById and structInstances.

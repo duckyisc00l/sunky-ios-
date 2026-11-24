@@ -12533,13 +12533,15 @@ static RValue builtin_draw_text_color_ext_transformed(VMContext* ctx, RValue* ar
     return RValue_makeUndefined();
 }
 
+static float sunkyDynamicBackgroundShift(DataWin* dw, int32_t bg); // SUNKY-IOS
+
 static RValue builtin_draw_background(VMContext* ctx, RValue* args, MAYBE_UNUSED int32_t argCount) {
     Runner* runner = ctx->runner;
     REQUIRE_ARGC_AT_LEAST("draw_background", 3, RValue_makeUndefined());
     if (runner->renderer == nullptr) return RValue_makeUndefined();
 
     int32_t bgIndex = RValue_toInt32(args[0]);
-    float x = (float) RValue_toReal(args[1]);
+    float x = (float) RValue_toReal(args[1]) - sunkyDynamicBackgroundShift(runner->dataWin, RValue_toInt32(args[0])); // SUNKY-IOS
     float y = (float) RValue_toReal(args[2]);
 
     int32_t tpagIndex = Renderer_resolveBackgroundTPAGIndex(runner->dataWin, bgIndex);
@@ -13636,6 +13638,93 @@ static RValue builtin_sprite_set_offset(VMContext* ctx, RValue* args, MAYBE_UNUS
     ctx->dataWin->sprt.sprites[spriteIndex].originX = (int32_t) RValue_toReal(args[1]);
     ctx->dataWin->sprt.sprites[spriteIndex].originY = (int32_t) RValue_toReal(args[2]);
     return RValue_makeReal(0.0);
+}
+
+// SUNKY-IOS: place_snapped(hsnap, vsnap): is the instance lined up on that grid? (Sunky the Game 2's
+// fire bars, Boo circles, cannons and net Koopas check it when they're made)
+static RValue builtin_place_snapped(VMContext* ctx, RValue* args, MAYBE_UNUSED int32_t argCount) {
+    REQUIRE_ARGC_AT_LEAST("place_snapped", 2, RValue_makeBool(false));
+    Instance* self = ctx->currentCallFrame->self;
+    if (self == nullptr) return RValue_makeBool(false);
+    GMLReal hs = RValue_toReal(args[0]), vs = RValue_toReal(args[1]);
+    bool ok = true;
+    if (hs > 0) { GMLReal r = fmod(self->x, hs); if (r < 0) r += hs; ok = ok && (r < 0.0001 || hs - r < 0.0001); }
+    if (vs > 0) { GMLReal r = fmod(self->y, vs); if (r < 0) r += vs; ok = ok && (r < 0.0001 || vs - r < 0.0001); }
+    return RValue_makeBool(ok);
+}
+
+// SUNKY-IOS: effect_create_above/below(kind, x, y, size, colour). Only ef_rain (10) is used by
+// Sunky the Game 2 (its storm); the other built-in effects are left out.
+static RValue builtin_effect_create(VMContext* ctx, RValue* args, MAYBE_UNUSED int32_t argCount) {
+    REQUIRE_ARGC_AT_LEAST("effect_create_above", 5, RValue_makeUndefined());
+    int32_t kind = RValue_toInt32(args[0]);
+    if (kind == 10) Runner_sunkyAddRain(ctx->runner, RValue_toInt32(args[3]), RValue_toColour(args[4]));
+    return RValue_makeUndefined();
+}
+
+// SUNKY-IOS: background_create_from_surface(surface, x, y, w, h, removeback, smooth). Sunky the Game 2
+// freezes the screen with it behind message boxes and between rooms. In widescreen the snapshot
+// takes the whole wider screen and is drawn shifted back by the extra on the left.
+static float *sunkyBgShift; static int32_t sunkyBgShiftCount; static int32_t sunkyBgFirstDynamic = -1;
+static float sunkyDynamicBackgroundShift(DataWin* dw, int32_t bg) {
+    if (sunkyBgFirstDynamic < 0 || bg < sunkyBgFirstDynamic || bg - sunkyBgFirstDynamic >= sunkyBgShiftCount || (uint32_t) bg >= dw->bgnd.count) return 0.0f;
+    return sunkyBgShift[bg - sunkyBgFirstDynamic];
+}
+static RValue builtin_background_create_from_surface(VMContext* ctx, RValue* args, MAYBE_UNUSED int32_t argCount) {
+    Runner* runner = ctx->runner;
+    REQUIRE_ARGC_AT_LEAST("background_create_from_surface", 7, RValue_makeReal(-1));
+    if (runner->renderer == nullptr || runner->renderer->vtable->createSpriteFromSurface == nullptr) return RValue_makeReal(-1);
+    int32_t surfaceId = RValue_toInt32(args[0]);
+    int32_t x = RValue_toInt32(args[1]), y = RValue_toInt32(args[2]);
+    int32_t w = RValue_toInt32(args[3]), h = RValue_toInt32(args[4]);
+    float shift = 0.0f;
+    if (surfaceId == runner->applicationSurfaceId && runner->widescreenExtraWidth > 0 && x == 0) {
+        w += runner->widescreenExtraWidth;
+        shift = runner->sunkyWideLeft;
+    }
+    int32_t spr = runner->renderer->vtable->createSpriteFromSurface(runner->renderer, surfaceId, x, y, w, h, RValue_toBool(args[5]), RValue_toBool(args[6]), 0, 0);
+    if (spr < 0) return RValue_makeReal(-1);
+    DataWin* dw = runner->dataWin;
+    if (sunkyBgFirstDynamic < 0) sunkyBgFirstDynamic = (int32_t) dw->bgnd.count;
+    uint32_t idx = dw->bgnd.count;
+    for (uint32_t i = (uint32_t) sunkyBgFirstDynamic; i < dw->bgnd.count; i++) if (dw->bgnd.backgrounds[i].tpagIndex < 0) { idx = i; break; }
+    if (idx == dw->bgnd.count) {
+        dw->bgnd.count++;
+        dw->bgnd.backgrounds = (Background *)safeRealloc(dw->bgnd.backgrounds, dw->bgnd.count * sizeof(Background));
+    }
+    Background* bg = &dw->bgnd.backgrounds[idx];
+    memset(bg, 0, sizeof(Background));
+    bg->present = true;
+    bg->name = "__newbackground";
+    bg->tpagIndex = Renderer_resolveSpriteTPAGIndex(dw, spr);
+    bg->gms2ExportedSpriteIndex = spr;
+    int32_t slot = (int32_t) idx - sunkyBgFirstDynamic;
+    if (slot >= sunkyBgShiftCount) {
+        sunkyBgShift = (float *)safeRealloc(sunkyBgShift, (size_t) (slot + 1) * sizeof(float));
+        for (int32_t i = sunkyBgShiftCount; i <= slot; i++) sunkyBgShift[i] = 0.0f;
+        sunkyBgShiftCount = slot + 1;
+    }
+    sunkyBgShift[slot] = shift;
+    return RValue_makeReal((GMLReal) idx);
+}
+static RValue builtin_background_exists_sunky(VMContext* ctx, RValue* args, MAYBE_UNUSED int32_t argCount) {
+    if (args[0].type == RVALUE_UNDEFINED) return RValue_makeBool(false);
+    int32_t bg = RValue_toInt32(args[0]);
+    if (0 > bg || (uint32_t) bg >= ctx->dataWin->bgnd.count) return RValue_makeBool(false);
+    return RValue_makeBool(ctx->dataWin->bgnd.backgrounds[bg].tpagIndex >= 0);
+}
+static RValue builtin_background_delete_sunky(VMContext* ctx, RValue* args, MAYBE_UNUSED int32_t argCount) {
+    if (args[0].type == RVALUE_UNDEFINED) return RValue_makeUndefined();
+    DataWin* dw = ctx->dataWin;
+    int32_t bg = RValue_toInt32(args[0]);
+    // only backgrounds made at run time can be deleted (never the game's own)
+    if (sunkyBgFirstDynamic < 0 || bg < sunkyBgFirstDynamic || (uint32_t) bg >= dw->bgnd.count) return RValue_makeUndefined();
+    Background* b = &dw->bgnd.backgrounds[bg];
+    if (b->tpagIndex >= 0 && ctx->runner->renderer && ctx->runner->renderer->vtable->deleteSprite)
+        ctx->runner->renderer->vtable->deleteSprite(ctx->runner->renderer, b->gms2ExportedSpriteIndex);
+    b->tpagIndex = -1;
+    b->present = false;
+    return RValue_makeUndefined();
 }
 
 // sprite_create_from_surface(surface_id, x, y, w, h, removeback, smooth, xorig, yorig)
@@ -25377,8 +25466,9 @@ void VMBuiltins_registerAll(VMContext* ctx) {
         VM_registerBuiltin(ctx, "background_get_width", builtin_background_get_width);
         VM_registerBuiltin(ctx, "background_get_texture", builtin_background_get_texture);
         VM_registerBuiltin(ctx, "background_get_height", builtin_background_get_height);
-        VM_registerBuiltin(ctx, "background_delete", builtin_sprite_delete);
-        VM_registerBuiltin(ctx, "background_exists", builtin_sprite_exists);
+        VM_registerBuiltin(ctx, "background_delete", builtin_background_delete_sunky);   // SUNKY-IOS (was sprite_delete)
+        VM_registerBuiltin(ctx, "background_exists", builtin_background_exists_sunky);   // SUNKY-IOS (was sprite_exists)
+        VM_registerBuiltin(ctx, "background_create_from_surface", builtin_background_create_from_surface); // SUNKY-IOS
         VM_registerBuiltin(ctx, "background_get_name", builtin_sprite_get_name);
         VM_registerBuiltin(ctx, "background_name", builtin_sprite_get_name);
     }
@@ -25463,6 +25553,9 @@ void VMBuiltins_registerAll(VMContext* ctx) {
     VM_registerBuiltin(ctx, "sprite_set_bbox", builtin_sprite_set_bbox);
     VM_registerBuiltin(ctx, "sprite_set_offset", builtin_sprite_set_offset);
     VM_registerBuiltin(ctx, "sprite_create_from_surface", builtin_sprite_create_from_surface);
+    VM_registerBuiltin(ctx, "place_snapped", builtin_place_snapped);           // SUNKY-IOS
+    VM_registerBuiltin(ctx, "effect_create_above", builtin_effect_create);     // SUNKY-IOS
+    VM_registerBuiltin(ctx, "effect_create_below", builtin_effect_create);     // SUNKY-IOS
     VM_registerBuiltin(ctx, "sprite_delete", builtin_sprite_delete);
 
     // Text measurement
