@@ -27,8 +27,9 @@ jobs:
         timeout-minutes: 8
         run: |
           sudo rm -f /var/lib/man-db/auto-update
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq xvfb xdotool imagemagick libx11-dev libxcb1-dev libxcb-shape0-dev libxcb-xfixes0-dev libxrandr-dev libxi-dev libgl1-mesa-dev libgl1-mesa-dri libasound2-dev libpulse-dev libjack-jackd2-dev libegl-dev libgles-dev libxcb-xinput0 libxkbcommon0 libxkbcommon-x11-0 libx11-xcb1 pulseaudio >/dev/null
+          A="-o Acquire::http::Timeout=20 -o Acquire::Retries=5 -o DPkg::Lock::Timeout=60"
+          echo "updating package lists"; sudo timeout 150 apt-get $A update -q || echo "update gave up; installing from the image's lists"
+          echo "installing"; sudo DEBIAN_FRONTEND=noninteractive timeout 330 apt-get $A install -y -q --no-install-recommends xvfb xdotool imagemagick libx11-dev libxcb1-dev libxcb-shape0-dev libxcb-xfixes0-dev libxrandr-dev libxi-dev libgl1-mesa-dev libgl1-mesa-dri libasound2-dev libpulse-dev libjack-jackd2-dev libegl-dev libgles-dev libxcb-xinput0 libxkbcommon0 libxkbcommon-x11-0 libx11-xcb1 pulseaudio | tail -3
       - name: Cargo cache
         uses: actions/cache@v4
         with:
