@@ -249,12 +249,13 @@ pub mod edges {
             for x in cols.clone() {
                 let p = &data[(y * w + x) * 4..(y * w + x) * 4 + 4];
                 let d: i32 = (0..4).map(|c| (p[c] as i32 - avg[c]).abs()).sum();
-                if d <= 40 {
+                if d <= 30 {
                     close += 1;
                 }
             }
         }
-        close * 100 >= n * 97
+        // nearly every pixel must match: a starry edge is not plain (it streaks when stretched)
+        close * 1000 >= n * 997
     }
 
     /// Look at a picture's outer columns (RGBA bytes, w x h) before it's handed to the GPU.
