@@ -1816,6 +1816,34 @@ impl RendererTrait for RendererImpl {
                 .push_vertex(rotate(right, bottom), [tex_right, tex_bottom], split_colour(col3, alpha), normal)
                 .push_vertex(rotate(left, bottom), [tex_left, tex_bottom], split_colour(col4, alpha), normal),
         );
+
+        // SUNKY-IOS: widescreen: make more of a full-screen picture for the sides, by continuing it
+        // outwards as a mirror image of its own edge (plain edges stay plain; static stays static;
+        // scenery carries on). See game::wide::cover::extend.
+        if angle == 0.0 && xscale > 0.0 && yscale > 0.0 {
+            let (ls, rs) = crate::game::wide::cover::extend(x + left + 0.5, y + top + 0.5, x + right + 0.5, y + bottom + 0.5);
+            let pw = (right - left).max(1.0);
+            let tw = tex_right - tex_left;
+            let (y0, y1) = ((y + top) as f32, (y + bottom) as f32);
+            let mut strip = |x0: f64, x1: f64, u0: f32, u1: f32| {
+                let (x0, x1) = ((x0 - 0.5) as f32, (x1 - 0.5) as f32);
+                self.push_primitive(
+                    PrimitiveBuilder::new(atlas_ref, PrimitiveType::TriFan, true)
+                        .push_vertex([x0, y0, depth], [u0, tex_top], split_colour(col1, alpha), normal)
+                        .push_vertex([x1, y0, depth], [u1, tex_top], split_colour(col2, alpha), normal)
+                        .push_vertex([x1, y1, depth], [u1, tex_bottom], split_colour(col3, alpha), normal)
+                        .push_vertex([x0, y1, depth], [u0, tex_bottom], split_colour(col4, alpha), normal),
+                );
+            };
+            if let Some((x0, x1)) = ls {
+                let f = ((x1 - x0) / pw).min(1.0) as f32;
+                strip(x0, x1, tex_left + f * tw, tex_left);
+            }
+            if let Some((x0, x1)) = rs {
+                let f = ((x1 - x0) / pw).min(1.0) as f32;
+                strip(x0, x1, tex_right, tex_right - f * tw);
+            }
+        }
     }
 
     fn draw_sprite_pos(
@@ -1867,6 +1895,14 @@ impl RendererTrait for RendererImpl {
 
     fn draw_rectangle(&mut self, x1: f64, y1: f64, x2: f64, y2: f64, colour: i32, alpha: f64) {
         crate::game::wide::cover::note(x1, y1, x2, y2, alpha); // SUNKY-IOS
+        // SUNKY-IOS: a full-screen rectangle (black card, fade) reaches the widescreen sides too
+        let (x1, x2) = match crate::game::wide::cover::extend(x1, y1, x2, y2) {
+            (None, None) => (x1, x2),
+            (l, r) => {
+                let (a, b) = if x2 < x1 { (x2, x1) } else { (x1, x2) };
+                (l.map_or(a, |s| s.0), r.map_or(b, |s| s.1))
+            },
+        };
         let (x1, x2) = if x2 < x1 { (x2, x1) } else { (x1, x2) };
         let (y1, y2) = if y2 < y1 { (y2, y1) } else { (y1, y2) };
         let x2 = if x2 == x2.floor() { x2 + 0.01 } else { x2 };

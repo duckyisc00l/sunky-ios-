@@ -187,7 +187,7 @@ impl Game {
             self.unscaled_width,
             self.unscaled_height,
         )
-        .filter(|_| !super::wide::cover::last());
+        ;
         // watch this frame's draws against the real view (see wide::cover)
         match (self.room.views_enabled, self.room.views.iter().position(|v| v.visible)) {
             (true, Some(i)) => {
@@ -196,15 +196,21 @@ impl Game {
                     Some(p) if p.view == i => (p.src_x, p.src_w),
                     _ => (v.source_x, v.source_w),
                 };
-                super::wide::cover::begin(x as f64, v.source_y as f64, w as f64, v.source_h as f64, v.source_w as f64, v.source_h as f64)
+                super::wide::cover::begin(x as f64, v.source_y as f64, w as f64, v.source_h as f64, v.source_w as f64, v.source_h as f64, self.room.width as f64)
             },
-            _ => super::wide::cover::begin(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+            _ => {
+                let (x, w) = match wide_plan.as_ref() {
+                    Some(p) if p.view == super::wide::NO_VIEW => (p.src_x, p.src_w),
+                    _ => (0, self.room.width),
+                };
+                super::wide::cover::begin(x as f64, 0.0, w as f64, self.room.height as f64, self.room.width as f64, self.room.height as f64, self.room.width as f64)
+            },
         }
         let fb_w = wide_plan.as_ref().map(|p| p.port_w).unwrap_or(self.unscaled_width);
         if super::wide::needs_fb(fb_w, self.unscaled_height) {
             self.renderer.resize_framebuffer(fb_w, self.unscaled_height, false);
         }
-        let wide_saved = wide_plan.as_ref().map(|p| {
+        let wide_saved = wide_plan.as_ref().filter(|p| p.view != super::wide::NO_VIEW).map(|p| {
             let v = &mut self.room.views[p.view];
             let saved = (v.source_x, v.source_w, v.port_w);
             v.source_x = p.src_x;
@@ -236,11 +242,25 @@ impl Game {
             }
             self.view_current = 0;
         } else {
-            self.draw_view(0, 0, self.room.width, self.room.height, 0, 0, self.room.width, self.room.height, 0.0)?;
+            match wide_plan.as_ref() {
+                // SUNKY-IOS: a room without views, widened around the room
+                Some(p) if p.view == super::wide::NO_VIEW => self.draw_view(
+                    p.src_x,
+                    0,
+                    p.src_w,
+                    self.room.height,
+                    0,
+                    0,
+                    p.port_w as i32,
+                    self.room.height,
+                    0.0,
+                )?,
+                _ => self.draw_view(0, 0, self.room.width, self.room.height, 0, 0, self.room.width, self.room.height, 0.0)?,
+            }
         }
 
         // SUNKY-IOS: put the real view back, so game logic never sees the wide one
-        if let (Some(p), Some((x, w, pw))) = (wide_plan.as_ref(), wide_saved) {
+        if let (Some(p), Some((x, w, pw))) = (wide_plan.as_ref().filter(|p| p.view != super::wide::NO_VIEW), wide_saved) {
             let v = &mut self.room.views[p.view];
             v.source_x = x;
             v.source_w = w;

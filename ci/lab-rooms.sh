@@ -10,7 +10,8 @@ emu=$(realpath "${EMU:-engine/ogmk/target-gles/release/gm8emulator}")
 mkdir -p "$out"
 for g in $games; do
   exe=$PWD/games/$g.exe; [ -f "$exe" ] || continue
-  if [ -n "${ALL_ROOMS:-}" ]; then rooms=$(grep -E "^ROOM [0-9]+ " "$info/$g/summary.txt" | awk '{print $2}')
+  if [ -n "${ROOM_LIST:-}" ]; then rooms=$(echo "$ROOM_LIST" | tr ' ,' '\n\n' | sed -n "s/^$g://p")
+  elif [ -n "${ALL_ROOMS:-}" ]; then rooms=$(grep -E "^ROOM [0-9]+ " "$info/$g/summary.txt" | awk '{print $2}')
   else rooms=$(grep -E "^ROOM [0-9]+ .* views true" "$info/$g/summary.txt" | awk '{print $2}'); fi
   for r in $rooms; do
     run=$(mktemp -d); cp "$exe" "$run/game.exe"
