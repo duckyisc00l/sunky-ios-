@@ -2108,7 +2108,17 @@ impl Game {
                                 self.input.mouse_move_to((x, y));
                             }
                         },
-                        Event::MouseDown(button) => self.input.mouse_press(input::ramen2mb(button), true),
+                        Event::MouseDown(button) => {
+                            {
+                                let (rx, ry) = self.get_mouse_in_room();
+                                eprintln!(
+                                    "mouse down at window {},{} = room {},{} (room {} {}x{} views {})",
+                                    self.input.mouse_x(), self.input.mouse_y(), rx, ry, self.room.id,
+                                    self.room.width, self.room.height, self.room.views_enabled
+                                );
+                            }
+                            self.input.mouse_press(input::ramen2mb(button), true)
+                        },
                         Event::MouseUp(button) => self.input.mouse_release(input::ramen2mb(button), true),
                         Event::ScrollUp => self.input.mouse_scroll_up(),
                         Event::ScrollDown => self.input.mouse_scroll_down(),
