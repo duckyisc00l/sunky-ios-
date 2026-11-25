@@ -610,7 +610,7 @@ impl Game {
             .builder()
             .class_name("OpenGMK")
             .visible(false)
-            .size((width as _, height as _))
+            .size((lab_phone_width(width, height) as _, height as _))
             .borderless(!window_border && play_type != PlayType::Record)
             .title(room1_caption.to_owned())
             .resizable(match play_type {
@@ -1405,7 +1405,7 @@ impl Game {
             // lazy state
             window_caption: room1_caption.clone(),
             window_cursor_gml: gml::mappings::constants::CR_DEFAULT as _,
-            window_inner_size: (width, height),
+            window_inner_size: (lab_phone_width(width, height), height),
             window_is_logical_dpi: false,
             window_offset_spoof: (0, 0),
             window_sizeable: settings.allow_resize,
@@ -1544,6 +1544,7 @@ impl Game {
                 Scaling::Fixed(scale) => ((f64::from(width) * scale) as u32, (f64::from(height) * scale) as u32),
                 _ => (width, height),
             };
+            let width = lab_phone_width(width, height); // SUNKY-IOS lab
             if self.play_type != PlayType::Record {
                 self.window_inner_size = (width, height);
                 self.window.set_size((width as _, height as _));
@@ -3092,4 +3093,15 @@ impl<T> GetAsset<T> for Vec<Option<T>> {
     fn get_asset_mut(&mut self, index: ID) -> Option<&mut T> {
         self.get_mut(usize::try_from(index).ok()?)?.as_mut()
     }
+}
+
+/// SUNKY-IOS lab: with SUNKY_WIDE set, the window is phone-shaped, so screenshots show exactly
+/// what the phone shows.
+fn lab_phone_width(width: u32, height: u32) -> u32 {
+    #[cfg(not(target_os = "ios"))]
+    if let Some(a) = std::env::var("SUNKY_WIDE").ok().and_then(|v| v.parse::<f64>().ok()) {
+        return ((height as f64 * a).round() as u32).max(width)
+    }
+    let _ = height;
+    width
 }
