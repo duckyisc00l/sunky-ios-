@@ -1851,7 +1851,9 @@ impl RendererTrait for RendererImpl {
             let (lp, rp) = crate::game::wide::edges::plain(texture.0);
             // a picture whose edges match (stripes, a marquee) carries on as more copies of itself,
             // so its writing is never mirrored
-            let wrap = crate::game::wide::edges::is_seamless(texture.0);
+            // (copies showed bits of writing from the far side, so the thin mirrored band is used for
+            // these too)
+            let wrap = false && crate::game::wide::edges::is_seamless(texture.0);
             let half = 0.5 / f64::from(atlas_ref.w) as f32;
             // busy edges that don't repeat are mirrored back and forth from a thin band at the very
             // edge (5% of the picture), so writing further in is never shown backwards
