@@ -596,6 +596,56 @@ static void renderBackgroundElement(Runner* runner, RuntimeBackgroundElement* bg
     drawBackground(runner, tpagIndex, bg->stretch, roomW, roomH, bg->hTiled, bg->vTiled, bg->xOffset, bg->yOffset, layerOffsetX, layerOffsetY, bg->xScale, bg->yScale, bg->blend, bg->alpha);
 }
 
+// SUNKY-IOS: draws columns [left, left + width) of a background picture (bounding-box coordinates)
+// at x, full height, mirrored when xscale is -1 (it then extends to the left of x).
+static void sunkyBgColumns(Runner* runner, int32_t tpagIndex, float left, float width, float x, float xscale, float y, float yscale, float alpha) {
+    TexturePageItem* tpag = &runner->dataWin->tpag.items[tpagIndex];
+    float top = 0.0f, height = (float) tpag->boundingHeight;
+    if (tpag->targetX > left) { float off = tpag->targetX - left; x += off * xscale; width -= off; left = 0; } else left -= tpag->targetX;
+    if (tpag->targetY > top) { float off = tpag->targetY - top; y += off * yscale; height -= off; top = 0; } else top -= tpag->targetY;
+    if (width > tpag->sourceWidth - left) width = tpag->sourceWidth - left;
+    if (height > tpag->sourceHeight - top) height = tpag->sourceHeight - top;
+    if (0 >= width || 0 >= height) return;
+    runner->renderer->vtable->drawSpritePart(runner->renderer, tpagIndex, left, top, width, height, x, y, xscale, yscale, 0.0f, 0.0f, 0.0f, 0xFFFFFF, alpha);
+}
+
+// SUNKY-IOS: a screen-sized picture in a room that doesn't scroll sideways (title, menus, cards) is
+// drawn once, centred, and its sides continue as a thin band at its edge mirrored back and forth,
+// instead of repeating (which showed cut-off copies of the picture). Returns false if it doesn't apply.
+static bool sunkyWideBackground(Runner* runner, RuntimeBackground* bg, int32_t tpagIndex) {
+    if (runner->widescreenExtraWidth <= 0 || !bg->tileX || bg->stretch || bg->speedX != 0.0f || 0 > tpagIndex) return false;
+    GMLCamera* cam = Runner_getCameraForView(runner, runner->viewCurrent);
+    if (cam == nullptr || runner->currentRoom == nullptr) return false;
+    TexturePageItem* tpag = &runner->dataWin->tpag.items[tpagIndex];
+    float sx = bg->xScale, sy = bg->yScale;
+    float w = (float) tpag->boundingWidth * sx, h = (float) tpag->boundingHeight * sy;
+    if (w < (float) cam->viewWidth - 2.0f || (float) runner->currentRoom->width > (float) cam->viewWidth + 1.0f) return false;
+    if (bg->tileY && h < (float) cam->viewHeight - 2.0f) return false;
+    float viewL = (float) cam->viewX - runner->sunkyWideLeft;
+    float viewR = viewL + (float) cam->viewWidth + (float) runner->widescreenExtraWidth;
+    float x0 = bg->x, y0 = bg->y;
+    sunkyBgColumns(runner, tpagIndex, 0.0f, (float) tpag->boundingWidth, x0, sx, y0, sy, bg->alpha);
+    float bandSrc = fmaxf(8.0f, (float) tpag->boundingWidth * 0.05f); // in picture pixels
+    float band = bandSrc * sx;
+    // left side, from the picture's edge outwards
+    float inner = x0; bool flip = true;
+    while (inner > viewL + 0.01f) {
+        float seg = fminf(band, inner - viewL), segSrc = seg / sx;
+        if (flip) sunkyBgColumns(runner, tpagIndex, 0.0f, segSrc, inner, -sx, y0, sy, bg->alpha);
+        else sunkyBgColumns(runner, tpagIndex, bandSrc - segSrc, segSrc, inner - seg, sx, y0, sy, bg->alpha);
+        inner -= seg; flip = !flip;
+    }
+    float pw = (float) tpag->boundingWidth;
+    inner = x0 + w; flip = true;
+    while (inner < viewR - 0.01f) {
+        float seg = fminf(band, viewR - inner), segSrc = seg / sx;
+        if (flip) sunkyBgColumns(runner, tpagIndex, pw - segSrc, segSrc, inner + seg, -sx, y0, sy, bg->alpha);
+        else sunkyBgColumns(runner, tpagIndex, pw - bandSrc, segSrc, inner, sx, y0, sy, bg->alpha);
+        inner += seg; flip = !flip;
+    }
+    return true;
+}
+
 // Legacy GameMaker: Studio 1.x backgrounds
 static void drawGMS1Backgrounds(Runner* runner, bool foreground) {
     if (runner->renderer == nullptr) return;
@@ -609,6 +659,7 @@ static void drawGMS1Backgrounds(Runner* runner, bool foreground) {
         if (0 > bg->backgroundIndex) continue;
 
         int32_t tpagIndex = Renderer_resolveBackgroundTPAGIndex(dataWin, bg->backgroundIndex);
+        if (sunkyWideBackground(runner, bg, tpagIndex)) continue; // SUNKY-IOS
 
         drawBackground(
             runner,

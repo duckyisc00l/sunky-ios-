@@ -315,7 +315,8 @@ int32_t bs_ios_step(int32_t winW, int32_t winH, float deltaTime) {
             if ((float) runner->currentRoom->width < wideW) roomTooNarrow = true;
         }
     }
-    if (gWidescreenAspect > 0 && runner->usingAppSurface && gameW > 0 && gameH > 0 && !roomTooNarrow) {
+    (void) roomTooNarrow; // SUNKY-IOS: narrow levels are widened too now; their sky continues past the edges
+    if (gWidescreenAspect > 0 && runner->usingAppSurface && gameW > 0 && gameH > 0) {
         float nativeAspect = (float) gameW / (float) gameH;
         if (gWidescreenAspect > nativeAspect) {
             int32_t targetW = (int32_t) ((float) gameH * gWidescreenAspect + 0.5f);

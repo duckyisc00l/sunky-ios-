@@ -1540,6 +1540,10 @@ static void drawTiled(
         startX = fmodf(gridX, tileW);
         if (startX > 0) startX -= tileW;
         endX = roomW;
+        // SUNKY-IOS: tile past the room's edges too (like GameMaker does), so a widescreen view
+        // wider than a narrow level shows its sky, not grey; the clip below skips what isn't seen
+        startX -= ceilf(1024.0f / tileW) * tileW;
+        endX += 1024.0f;
     } else {
         startX = gridX;
         endX = startX + tileW;
@@ -1548,6 +1552,8 @@ static void drawTiled(
         startY = fmodf(gridY, tileH);
         if (startY > 0) startY -= tileH;
         endY = roomH;
+        startY -= ceilf(1024.0f / tileH) * tileH; // SUNKY-IOS: as above
+        endY += 1024.0f;
     } else {
         startY = gridY;
         endY = startY + tileH;
