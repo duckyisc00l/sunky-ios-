@@ -679,6 +679,9 @@ impl Game {
         // SUNKY-IOS: always fit the game to the phone's screen, keeping its shape
         #[cfg(target_os = "ios")]
         let scaling = { let _ = scaling; Scaling::Aspect(-1.0) };
+        // lab: SUNKY_WIDE tests the phone, so fit the same way the phone does
+        #[cfg(not(target_os = "ios"))]
+        let scaling = if std::env::var_os("SUNKY_WIDE").is_some() { Scaling::Aspect(-1.0) } else { scaling };
 
         println!("GPU Max Texture Size: {}", renderer.max_texture_size());
 

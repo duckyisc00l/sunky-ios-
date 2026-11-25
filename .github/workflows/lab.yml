@@ -11,7 +11,7 @@ concurrency: { group: lab, cancel-in-progress: false }
 jobs:
   lab:
     runs-on: ubuntu-24.04
-    timeout-minutes: 100
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - name: Games cache
@@ -94,7 +94,7 @@ jobs:
           export SUNKY_OVERRIDES=$PWD/ios/App/Art SUNKY_MAX_TEXTURE=4096 SUNKY_WIDE=2.16
           if [ "${{ inputs.all_rooms }}" = yes ]; then export ALL_ROOMS=1 PLAY=1; fi
           export ROOM_LIST="${{ inputs.room_list }}"
-          timeout 2400 xvfb-run -a -s "-screen 0 1600x960x24" ci/lab-rooms.sh out/info out/rooms ${{ inputs.games || 'p1 p2 p3 mpeg tiff' }} || echo "sweep stopped early"
+          timeout 4200 xvfb-run -a -s "-screen 0 1600x960x24" ci/lab-rooms.sh out/info out/rooms ${{ inputs.games || 'p1 p2 p3 mpeg tiff' }} || echo "sweep stopped early"
           python3 ci/sheets.py out/rooms
       - name: Publish results to branch r-lab
         if: always()
