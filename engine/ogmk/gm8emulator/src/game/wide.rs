@@ -71,7 +71,9 @@ pub fn plan(views_enabled: bool, views: &[View], room_w: i32, win_w: u32, win_h:
     // Centre the extra space on the real view; keep it inside the room when the room is wide
     // enough, otherwise it reaches past the room's edges (filled in by cover::extend).
     let mut src_x = sx - (src_w - sw) / 2;
-    if src_w <= room_w {
+    // While a cutscene, title card or overlay fills the screen (see cover), keep it centred with the
+    // extra split evenly, even at a room's edge; otherwise stay inside the room.
+    if src_w <= room_w && !cover::last() {
         src_x = src_x.max(0).min(room_w - src_w);
     }
     let offset = ((sx - src_x) as i64 * pw as i64 / sw as i64) as u32;

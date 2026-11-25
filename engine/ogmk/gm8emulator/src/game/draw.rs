@@ -463,9 +463,11 @@ impl Game {
                         // SUNKY-IOS: in widescreen, a background that is already a whole screen-sized
                         // picture (a warning screen, a card) is drawn once and its edges carried on
                         // (wide::cover::extend), rather than repeated beside itself
+                        // (only plain-edged pictures: scenery with busy edges keeps repeating, as the
+                        // game meant it to, which carries on naturally)
                         (background.tile_horizontal && !super::wide::cover::widened().map_or(false, |(nw, nh)| {
                             let (w, h) = (bg_asset.width as f64 * f64::from(background.xscale), bg_asset.height as f64 * f64::from(background.yscale));
-                            w >= nw - 2.0 && h >= nh - 2.0
+                            w >= nw - 2.0 && h >= nh - 2.0 && super::wide::edges::plain(atlas_ref.0) == (true, true)
                         }))
                         .then_some(tile_end_x),
                         background.tile_vertical.then_some(tile_end_y),
@@ -543,9 +545,11 @@ impl Game {
                         // SUNKY-IOS: in widescreen, a background that is already a whole screen-sized
                         // picture (a warning screen, a card) is drawn once and its edges carried on
                         // (wide::cover::extend), rather than repeated beside itself
+                        // (only plain-edged pictures: scenery with busy edges keeps repeating, as the
+                        // game meant it to, which carries on naturally)
                         (background.tile_horizontal && !super::wide::cover::widened().map_or(false, |(nw, nh)| {
                             let (w, h) = (bg_asset.width as f64 * f64::from(background.xscale), bg_asset.height as f64 * f64::from(background.yscale));
-                            w >= nw - 2.0 && h >= nh - 2.0
+                            w >= nw - 2.0 && h >= nh - 2.0 && super::wide::edges::plain(atlas_ref.0) == (true, true)
                         }))
                         .then_some(tile_end_x),
                         background.tile_vertical.then_some(tile_end_y),

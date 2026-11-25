@@ -15,9 +15,9 @@ for g in $games; do
   else rooms=$(grep -E "^ROOM [0-9]+ .* views true" "$info/$g/summary.txt" | awk '{print $2}'); fi
   for r in $rooms; do
     run=$(mktemp -d); cp "$exe" "$run/game.exe"
-    ( cd "$run" && SUNKY_START_ROOM=$r exec timeout -s KILL 13 "$emu" game.exe > "$out/$g-$r.log" 2>&1 ) &
+    ( cd "$run" && SUNKY_START_ROOM=$r exec timeout -s KILL 17 "$emu" game.exe > "$out/$g-$r.log" 2>&1 ) &
     start=$(date +%s)
-    wid=$(timeout 6 xdotool search --sync --class OpenGMK 2>/dev/null | head -1)
+    wid=$(timeout 10 xdotool search --sync --class OpenGMK 2>/dev/null | head -1)
     # PLAY=1: also play the room (hold right, jump now and then, press Enter once)
     if [ -n "${PLAY:-}" ] && [ -n "$wid" ]; then
       ( sleep 1.5; timeout 2 xdotool key --window "$wid" Return; sleep 0.5
