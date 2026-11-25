@@ -1853,13 +1853,36 @@ impl RendererTrait for RendererImpl {
             // so its writing is never mirrored
             let wrap = crate::game::wide::edges::is_seamless(texture.0);
             let half = 0.5 / f64::from(atlas_ref.w) as f32;
+            // busy edges that don't repeat are mirrored back and forth from a thin band at the very
+            // edge (5% of the picture), so writing further in is never shown backwards
+            let band = (pw * 0.05).max(8.0);
+            let fb = (band / pw).min(1.0) as f32;
             if let Some((x0, x1)) = ls {
                 let f = ((x1 - x0) / pw).min(1.0) as f32;
-                if lp { strip(x0, x1, tex_left + half, tex_left + half) } else if wrap { strip(x0, x1, tex_right - f * tw, tex_right) } else { strip(x0, x1, tex_left + f * tw, tex_left) }
+                if lp { strip(x0, x1, tex_left + half, tex_left + half) } else if wrap { strip(x0, x1, tex_right - f * tw, tex_right) } else {
+                    // from the picture's edge outwards
+                    let (mut inner, mut flip) = (x1, true);
+                    while inner > x0 + 0.01 {
+                        let outer = (inner - band).max(x0);
+                        let g = fb * ((inner - outer) / band) as f32;
+                        if flip { strip(outer, inner, tex_left + g * tw, tex_left) } else { strip(outer, inner, tex_left + fb * tw - g * tw, tex_left + fb * tw) }
+                        inner = outer;
+                        flip = !flip;
+                    }
+                }
             }
             if let Some((x0, x1)) = rs {
                 let f = ((x1 - x0) / pw).min(1.0) as f32;
-                if rp { strip(x0, x1, tex_right - half, tex_right - half) } else if wrap { strip(x0, x1, tex_left, tex_left + f * tw) } else { strip(x0, x1, tex_right, tex_right - f * tw) }
+                if rp { strip(x0, x1, tex_right - half, tex_right - half) } else if wrap { strip(x0, x1, tex_left, tex_left + f * tw) } else {
+                    let (mut inner, mut flip) = (x0, true);
+                    while inner < x1 - 0.01 {
+                        let outer = (inner + band).min(x1);
+                        let g = fb * ((outer - inner) / band) as f32;
+                        if flip { strip(inner, outer, tex_right, tex_right - g * tw) } else { strip(inner, outer, tex_right - fb * tw, tex_right - fb * tw + g * tw) }
+                        inner = outer;
+                        flip = !flip;
+                    }
+                }
             }
         }
     }
