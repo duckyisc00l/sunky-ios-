@@ -1896,6 +1896,19 @@ impl Game {
     /// Runs a frame loop and draws the screen. Exits immediately, without waiting for any FPS limitation.
     pub fn frame(&mut self) -> gml::Result<()> {
         self.sunky_tick_sound_fades(); // SUNKY-IOS: sound_fade
+        {
+            // SUNKY-IOS test log: frames per second, every 5 seconds
+            use std::sync::Mutex;
+            static FPS: Mutex<Option<(std::time::Instant, u32)>> = Mutex::new(None);
+            let mut f = FPS.lock().unwrap_or_else(|e| e.into_inner());
+            let (t, n) = f.get_or_insert((std::time::Instant::now(), 0));
+            *n += 1;
+            let secs = t.elapsed().as_secs_f64();
+            if secs >= 5.0 {
+                eprintln!("fps {:.1} in room {}", f64::from(*n) / secs, self.room.id);
+                *f = Some((std::time::Instant::now(), 0));
+            }
+        }
         if self.esc_close_game && self.input.keyboard_lastkey() == input::Button::Escape as u8 {
             self.scene_change = Some(SceneChange::End);
             return Ok(());
