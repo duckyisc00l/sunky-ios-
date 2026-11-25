@@ -261,7 +261,9 @@ pub mod edges {
     /// Look at a picture's outer columns (RGBA bytes, w x h) before it's handed to the GPU.
     pub fn measure(w: u32, h: u32, data: &[u8]) -> (bool, bool) {
         let (w, h) = (w as usize, h as usize);
-        let k = w.min(3);
+        // look a little way in (4% of the width), so a thin border round a photo doesn't count as a
+        // plain edge to be stretched out
+        let k = w.min((w / 25).max(3));
         (column_plain(w, h, data, 0..k), column_plain(w, h, data, w - k..w))
     }
 
@@ -278,7 +280,8 @@ pub mod edges {
             let b = &data[(y * w + w - 1) * 4..(y * w + w - 1) * 4 + 4];
             total += (0..4).map(|c| (a[c] as i32 - b[c] as i32).unsigned_abs() as u64).sum::<u64>();
         }
-        total / h as u64 <= 24
+        // edges that match because they're one flat colour (a border) don't make a pattern
+        total / h as u64 <= 24 && !column_plain(w, h, data, 0..1)
     }
 
     static SEAMLESS: Mutex<Option<HashMap<i32, bool>>> = Mutex::new(None);

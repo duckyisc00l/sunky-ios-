@@ -1823,7 +1823,7 @@ impl RendererTrait for RendererImpl {
         #[cfg(not(target_os = "ios"))]
         if std::env::var_os("SUNKY_LAB_TRACE").is_some() && (right - left).abs() >= 400.0 {
             static N: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU32::new(0);
-            if N.fetch_add(1, std::sync::atomic::Ordering::Relaxed) < 40 {
+            if { let n = N.fetch_add(1, std::sync::atomic::Ordering::Relaxed); n < 20 || (n % 97 == 0 && n < 20000) } {
                 eprintln!(
                     "TRACE big draw tex {} at {:.0},{:.0} box {:.0}..{:.0} x {:.0}..{:.0} angle {} scale {}x{} extend {:?}",
                     texture.0, x, y, left, right, top, bottom, angle, xscale, yscale,
