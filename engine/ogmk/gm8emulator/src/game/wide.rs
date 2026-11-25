@@ -211,3 +211,59 @@ pub mod cover {
         (left, right)
     }
 }
+
+
+/// SUNKY-IOS: for each picture, whether its left and right edges are plain (one colour, like a
+/// black card or a blue screen). Plain edges continue into the widescreen sides as that colour;
+/// busy ones (static, scenery) continue as a mirror image. Worked out when pictures load.
+pub mod edges {
+    use std::{collections::HashMap, sync::Mutex};
+    static PLAIN: Mutex<Option<HashMap<i32, (bool, bool)>>> = Mutex::new(None);
+
+    fn column_plain(w: usize, h: usize, data: &[u8], cols: std::ops::Range<usize>) -> bool {
+        if w == 0 || h == 0 || data.len() < w * h * 4 {
+            return true
+        }
+        let mut sum = [0u64; 4];
+        let mut n = 0u64;
+        for y in 0..h {
+            for x in cols.clone() {
+                let p = &data[(y * w + x) * 4..(y * w + x) * 4 + 4];
+                for c in 0..4 {
+                    sum[c] += p[c] as u64;
+                }
+                n += 1;
+            }
+        }
+        let avg: Vec<i32> = sum.iter().map(|v| (*v / n.max(1)) as i32).collect();
+        let mut close = 0u64;
+        for y in 0..h {
+            for x in cols.clone() {
+                let p = &data[(y * w + x) * 4..(y * w + x) * 4 + 4];
+                let d: i32 = (0..4).map(|c| (p[c] as i32 - avg[c]).abs()).sum();
+                if d <= 40 {
+                    close += 1;
+                }
+            }
+        }
+        close * 100 >= n * 97
+    }
+
+    /// Look at a picture's outer columns (RGBA bytes, w x h) before it's handed to the GPU.
+    pub fn measure(w: u32, h: u32, data: &[u8]) -> (bool, bool) {
+        let (w, h) = (w as usize, h as usize);
+        let k = w.min(3);
+        (column_plain(w, h, data, 0..k), column_plain(w, h, data, w - k..w))
+    }
+
+    pub fn note(atlas: i32, plain: (bool, bool)) {
+        let mut m = PLAIN.lock().unwrap_or_else(|e| e.into_inner());
+        m.get_or_insert_with(HashMap::new).insert(atlas, plain);
+    }
+
+    /// (left plain, right plain); unknown pictures count as plain.
+    pub fn plain(atlas: i32) -> (bool, bool) {
+        let m = PLAIN.lock().unwrap_or_else(|e| e.into_inner());
+        m.as_ref().and_then(|m| m.get(&atlas).copied()).unwrap_or((true, true))
+    }
+}

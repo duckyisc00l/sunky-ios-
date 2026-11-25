@@ -879,14 +879,12 @@ impl Game {
                                 let px = f.data.len() / 4;
                                 let solid = f.data.chunks_exact(4).filter(|p| p[3] >= 250).count();
                                 let opaque = px > 0 && solid * 100 >= px * 97;
-                                Ok(Frame {
-                                    width: f.width,
-                                    height: f.height,
-                                    opaque,
-                                    atlas_ref: atlases
-                                        .texture(f.width as _, f.height as _, origin_x, origin_y, f.data)
-                                        .ok_or(())?,
-                                })
+                                let edges = wide::edges::measure(f.width, f.height, &f.data); // SUNKY-IOS
+                                let atlas_ref = atlases
+                                    .texture(f.width as _, f.height as _, origin_x, origin_y, f.data)
+                                    .ok_or(())?;
+                                wide::edges::note(atlas_ref.0, edges);
+                                Ok(Frame { width: f.width, height: f.height, opaque, atlas_ref })
                             })
                             .collect::<Result<_, ()>>()?,
                         colliders: b
@@ -929,7 +927,12 @@ impl Game {
                         width,
                         height,
                         atlas_ref: match b.data {
-                            Some(data) => Some(atlases.texture(width as _, height as _, 0, 0, data).ok_or(())?),
+                            Some(data) => {
+                                let edges = wide::edges::measure(width, height, &data); // SUNKY-IOS
+                                let r = atlases.texture(width as _, height as _, 0, 0, data).ok_or(())?;
+                                wide::edges::note(r.0, edges);
+                                Some(r)
+                            },
                             None => None,
                         },
                     }))

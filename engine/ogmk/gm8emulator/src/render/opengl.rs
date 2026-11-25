@@ -1835,13 +1835,17 @@ impl RendererTrait for RendererImpl {
                         .push_vertex([x0, y1, depth], [u0, tex_bottom], split_colour(col4, alpha), normal),
                 );
             };
+            // a plain edge (black card, blue screen) carries on as that plain colour; a busy one
+            // (static, scenery) as a mirror image of itself
+            let (lp, rp) = crate::game::wide::edges::plain(texture.0);
+            let half = 0.5 / f64::from(atlas_ref.w) as f32;
             if let Some((x0, x1)) = ls {
                 let f = ((x1 - x0) / pw).min(1.0) as f32;
-                strip(x0, x1, tex_left + f * tw, tex_left);
+                if lp { strip(x0, x1, tex_left + half, tex_left + half) } else { strip(x0, x1, tex_left + f * tw, tex_left) }
             }
             if let Some((x0, x1)) = rs {
                 let f = ((x1 - x0) / pw).min(1.0) as f32;
-                strip(x0, x1, tex_right, tex_right - f * tw);
+                if rp { strip(x0, x1, tex_right - half, tex_right - half) } else { strip(x0, x1, tex_right, tex_right - f * tw) }
             }
         }
     }
