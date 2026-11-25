@@ -1820,6 +1820,17 @@ impl RendererTrait for RendererImpl {
         // SUNKY-IOS: widescreen: make more of a full-screen picture for the sides, by continuing it
         // outwards as a mirror image of its own edge (plain edges stay plain; static stays static;
         // scenery carries on). See game::wide::cover::extend.
+        #[cfg(not(target_os = "ios"))]
+        if std::env::var_os("SUNKY_LAB_TRACE").is_some() && (right - left).abs() >= 400.0 {
+            static N: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU32::new(0);
+            if N.fetch_add(1, std::sync::atomic::Ordering::Relaxed) < 40 {
+                eprintln!(
+                    "TRACE big draw tex {} at {:.0},{:.0} box {:.0}..{:.0} x {:.0}..{:.0} angle {} scale {}x{} extend {:?}",
+                    texture.0, x, y, left, right, top, bottom, angle, xscale, yscale,
+                    crate::game::wide::cover::extend(x + left + 0.5, y + top + 0.5, x + right + 0.5, y + bottom + 0.5)
+                );
+            }
+        }
         if angle == 0.0 && xscale > 0.0 && yscale > 0.0 {
             let (ls, rs) = crate::game::wide::cover::extend(x + left + 0.5, y + top + 0.5, x + right + 0.5, y + bottom + 0.5);
             let pw = (right - left).max(1.0);
