@@ -44,6 +44,12 @@ pub fn set_display(w: u32, h: u32, offset: u32) {
     MOUSE_OFFSET.store(offset, Ordering::Relaxed);
 }
 
+/// Where the game's own window starts inside the picture (for the app's test taps).
+#[no_mangle]
+pub extern "C" fn ramen_ios_mouse_offset() -> u32 {
+    MOUSE_OFFSET.load(Ordering::Relaxed)
+}
+
 fn push(e: Event) {
     if let Ok(mut q) = QUEUE.lock() {
         q.push(e);

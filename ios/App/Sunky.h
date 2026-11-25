@@ -13,6 +13,7 @@ void ramen_ios_mouse_button(uint32_t button, bool down);
 void ramen_ios_resize(uint32_t w, uint32_t h);
 void ramen_ios_request_close(void);
 uint32_t ramen_ios_game_size(void);
+uint32_t ramen_ios_mouse_offset(void);
 
 void udon_ios_set_sample_rate(uint32_t rate);
 void udon_ios_render(float *out, uint32_t frames);

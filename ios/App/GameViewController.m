@@ -185,7 +185,8 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
                 if ([kind isEqualToString:@"gtap"]) {
                     CGRect r = [self gameRect];
                     uint32_t packed = ramen_ios_game_size();
-                    pt = CGPointMake(r.origin.x + a / MAX(1, packed >> 16) * r.size.width, r.origin.y + b2 / MAX(1, packed & 0xFFFF) * r.size.height);
+                    CGFloat gx = a + ramen_ios_mouse_offset(); // game-window pixels -> picture pixels (widescreen)
+                    pt = CGPointMake(r.origin.x + gx / MAX(1, packed >> 16) * r.size.width, r.origin.y + b2 / MAX(1, packed & 0xFFFF) * r.size.height);
                 } else {
                     pt = CGPointMake(a * self.view.bounds.size.width, b2 * self.view.bounds.size.height);
                 }
