@@ -30,6 +30,8 @@ for g in $games; do
       [ -n "$wid" ] && timeout 4 import -window "$wid" "$out/$g-$r-$t.png" 2>/dev/null
     done
     pkill -KILL -f gm8emulator 2>/dev/null; wait 2>/dev/null; rm -rf "$run"
+    # wait for the old window to be gone, or the next room finds it and gets no shots
+    for k in $(seq 1 25); do [ -z "$(xdotool search --class OpenGMK 2>/dev/null)" ] && break; sleep 0.2; done
     echo "$g room $r: $(ls "$out"/$g-$r-*.png 2>/dev/null | wc -l) shots; $(grep -m1 -iE 'panic|error' "$out/$g-$r.log" | cut -c1-120)"
   done
 done
