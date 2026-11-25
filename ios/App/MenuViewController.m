@@ -52,6 +52,13 @@ static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scal
 }
 
 /// A 9-slice pixel panel, each pixel `scale` points.
+/// The 2016-style menu art (ci/menu2016.py) is drawn at 3x.
+static UIImage *art3(NSString *name) {
+    UIImage *img = controlImage(name);
+    return img ? [UIImage imageWithCGImage:img.CGImage scale:3 orientation:UIImageOrientationUp] : nil;
+}
+static const CGFloat kTilt[] = {-2.5, 2, -1.5, 2.5, -2, 1.5}; // degrees: hand-placed wonkiness
+
 static UIImage *panelImage(NSString *name, CGFloat scale) {
     UIImage *base = controlImage(name);
     UIImage *scaled = [UIImage imageWithCGImage:base.CGImage scale:1.0 / scale orientation:UIImageOrientationUp];
@@ -68,6 +75,7 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
 
 @interface MenuViewController ()
 @property (nonatomic, strong) UIImageView *background, *logo, *subtitle, *countText, *wideText, *wideToggle;
+@property (nonatomic, strong) UIImageView *sunky, *bubble;
 @property (nonatomic, strong) CardScroll *scroll;
 @property (nonatomic) NSInteger focus; // card picked with a game controller, -1 = none
 @property (nonatomic, strong) NSMutableArray<UIButton *> *cards;
@@ -95,102 +103,93 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
         return;
     }
 
-    self.background = [[UIImageView alloc] initWithImage:controlImage(@"menu_bg")];
+    // "SUNKY COLECTION!!!": a 2016 fangame / MS Paint style menu (art from ci/menu2016.py)
+    self.background = [[UIImageView alloc] initWithImage:art3(@"m16_bg")];
     self.background.contentMode = UIViewContentModeScaleAspectFill;
-    self.background.layer.magnificationFilter = kCAFilterNearest;
     self.background.clipsToBounds = YES;
     [self.view addSubview:self.background];
+    self.logo = [[UIImageView alloc] initWithImage:art3(@"m16_title")];
+    self.subtitle = [[UIImageView alloc] initWithImage:art3(@"m16_sub")];
+    self.sunky = [[UIImageView alloc] initWithImage:controlImage(@"m16_sunky")];
+    self.sunky.layer.magnificationFilter = kCAFilterNearest;
+    self.bubble = [[UIImageView alloc] initWithImage:art3(@"m16_bubble")];
+    for (UIView *v in @[self.logo, self.subtitle, self.sunky, self.bubble]) [self.view addSubview:v];
 
-    self.logo = pixelView(pixelText(@"SUNKY", YES), 9);
-    self.subtitle = pixelView(pixelText([self singleGame] ? @"TAP TO PLAY" : @"PICK A GAME", NO), 3);
-    self.countText = pixelView(pixelText(@" ", YES), 3);
-    self.wideText = pixelView(pixelText(@"WIDESCREEN", NO), 2.5);
-    self.wideToggle = pixelView(controlImage(SunkyWidescreen() ? @"toggle_on" : @"toggle_off"), 3.5);
-    for (UIView *v in @[self.logo, self.subtitle, self.countText]) [self.view addSubview:v];
-
-    self.scroll = [CardScroll new];
-    self.scroll.canCancelContentTouches = YES;
-    self.scroll.delaysContentTouches = NO;
-    self.scroll.showsHorizontalScrollIndicator = NO;
-    self.scroll.clipsToBounds = NO;
-    [self.view addSubview:self.scroll];
     self.cards = [NSMutableArray array];
     self.focus = -1;
-
-    NSString *only = [NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"];
     for (int i = 0; i < kSunkyGameCount; i++) {
-        if (only.length && ![only isEqualToString:@(kSunkyGames[i].file)]) continue;
         const SunkyGame *g = &kSunkyGames[i];
         UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
         b.tag = i;
-        [b setBackgroundImage:panelImage(@"panel", 3) forState:UIControlStateNormal];
-        [b setBackgroundImage:panelImage(@"panel_on", 3) forState:UIControlStateHighlighted];
         b.adjustsImageWhenHighlighted = NO;
+        [b setImage:art3([@"m16_btn_" stringByAppendingString:@(g->file)]) forState:UIControlStateNormal];
         [b addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
-
-        NSString *iconPath = [NSBundle.mainBundle pathForResource:@(g->file) ofType:@"png" inDirectory:@"Games"];
-        UIImageView *icon = [[UIImageView alloc] initWithImage:iconPath ? [UIImage imageWithContentsOfFile:iconPath] : nil];
-        icon.contentMode = UIViewContentModeScaleAspectFit;
-        icon.layer.magnificationFilter = kCAFilterNearest;
-        icon.tag = 10;
-        icon.userInteractionEnabled = NO;
-        [b addSubview:icon];
-
-        // "SUNKY THE GAME" + "PART 1", or the game's name + a short line
-        BOOL part = strncmp(g->subtitle, "Part", 4) == 0;
-        NSString *line1 = part ? @"SUNKY THE GAME" : @(g->title);
-        NSString *line2 = part ? @(g->subtitle) : @(g->subtitle);
-        UIImageView *t1 = pixelView(pixelText(line1, NO), 2), *t2 = pixelView(pixelText(line2, YES), 2);
-        t1.tag = 11; t2.tag = 12;
-        [b addSubview:t1];
-        [b addSubview:t2];
-
-        UIImageView *star = pixelView(controlImage(@"star"), 3);
-        star.tag = 13;
-        [b addSubview:star];
-        [self.scroll addSubview:b];
+        [b addTarget:self action:@selector(squash:) forControlEvents:UIControlEventTouchDown | UIControlEventTouchDragEnter];
+        [b addTarget:self action:@selector(unsquash:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventTouchCancel | UIControlEventTouchDragExit];
+        UIImageView *done = [[UIImageView alloc] initWithImage:art3(@"m16_done")];
+        done.tag = 13;
+        done.userInteractionEnabled = NO;
+        [b addSubview:done];
+        [self.view addSubview:b];
         [self.cards addObject:b];
     }
+    [self.view bringSubviewToFront:self.bubble];
 }
+
+- (void)squash:(UIButton *)b {
+    [UIView animateWithDuration:0.08 animations:^{ b.transform = CGAffineTransformScale([self tiltFor:b], 0.92, 0.92); }];
+}
+- (void)unsquash:(UIButton *)b {
+    [UIView animateWithDuration:0.12 animations:^{ b.transform = [self tiltFor:b]; }];
+}
+- (CGAffineTransform)tiltFor:(UIButton *)b { return CGAffineTransformMakeRotation(kTilt[b.tag % 6] * M_PI / 180.0); }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     if ([self singleGame]) return;
     UIEdgeInsets safe = self.view.safeAreaInsets;
-    CGSize b = self.view.bounds.size;
-    CGFloat left = MAX(safe.left, 24), right = MAX(safe.right, 24), top = MAX(safe.top, 14);
+    CGSize sz = self.view.bounds.size;
+    CGFloat left = MAX(safe.left, 16) + 8, right = MAX(safe.right, 16) + 8;
     self.background.frame = self.view.bounds;
+    CGFloat grass = sz.height * 0.82;  // where the grass starts in m16_bg (aspect-fill keeps the height)
 
-    CGRect f = self.logo.frame;
-    f.origin = CGPointMake(left, top);
-    self.logo.frame = f;
-    f = self.subtitle.frame;
-    f.origin = CGPointMake(left + 4, CGRectGetMaxY(self.logo.frame) + 6);
-    self.subtitle.frame = f;
-    f = self.countText.frame;
-    f.origin = CGPointMake(CGRectGetMaxX(self.subtitle.frame) + 18, self.subtitle.frame.origin.y);
-    self.countText.frame = f;
+    // title across the top
+    CGSize ts = self.logo.image.size;
+    CGFloat tw = MIN(ts.width, (sz.width - left - right) * 0.78), th = ts.height * tw / ts.width;
+    self.logo.frame = CGRectMake((sz.width - tw) / 2, MAX(4, safe.top), tw, th);
+    CGSize ss = self.subtitle.image.size;
+    CGFloat sk = tw / ts.width;
+    self.subtitle.frame = CGRectMake(CGRectGetMaxX(self.logo.frame) - ss.width * sk * 1.1, CGRectGetMaxY(self.logo.frame) - ss.height * sk * 0.35, ss.width * sk, ss.height * sk);
 
-    CGFloat y = CGRectGetMaxY(self.subtitle.frame) + 16;
-    CGFloat h = b.height - y - MAX(safe.bottom, 14);
-    self.scroll.frame = CGRectMake(0, y, b.width, h);
-    CGFloat cardW = MIN(200, h * 0.85), gap = 18, x = left;
-    if ([self singleGame]) x = (b.width - cardW) / 2;
-    for (UIButton *card in self.cards) {
-        card.frame = CGRectMake(x, 0, cardW, h);
-        UIView *icon = [card viewWithTag:10], *t1 = [card viewWithTag:11], *t2 = [card viewWithTag:12], *star = [card viewWithTag:13];
-        icon.frame = CGRectMake(20, 20, cardW - 40, h - 86);
-        // shrink the title to fit the card if needed
-        for (UIImageView *t in @[(UIImageView *)t1, (UIImageView *)t2]) {
-            CGFloat s = MIN(2, (cardW - 24) / t.image.size.width);
-            t.bounds = CGRectMake(0, 0, t.image.size.width * s, t.image.size.height * s);
-        }
-        t1.center = CGPointMake(cardW / 2, h - 52);
-        t2.center = CGPointMake(cardW / 2, h - 30);
-        star.center = CGPointMake(cardW - 22, 22);
-        x += cardW + gap;
+    // Sunky standing on the grass, bottom right, with his speech bubble
+    CGFloat sunkyH = MIN(104, sz.height * 0.27);
+    self.sunky.frame = CGRectMake(sz.width - right - sunkyH * 0.8, grass - sunkyH + sunkyH * 0.06, sunkyH, sunkyH);
+    CGSize bs = self.bubble.image.size;
+    CGFloat bk = MIN(1, (sunkyH * 1.5) / bs.width);
+    self.bubble.frame = CGRectMake(sz.width - right - bs.width * bk + 6, CGRectGetMinY(self.sunky.frame) - bs.height * bk + 6, bs.width * bk, bs.height * bk);
+
+    // 3 x 2 grid of buttons between the title and the grass, leaving room for Sunky
+    CGFloat gridLeft = left, gridRight = sz.width - right - sunkyH * 0.85;
+    CGFloat top = CGRectGetMaxY(self.logo.frame) + 6, bottom = grass + 8;
+    CGFloat gapX = 18, gapY = 14;
+    CGSize nat = [self.cards.firstObject imageForState:UIControlStateNormal].size;
+    // as big as fits both across and down (and no bigger than 1.15x the drawing)
+    CGFloat byWidth = (gridRight - gridLeft - 2 * gapX) / 3;
+    CGFloat byHeight = (bottom - top - gapY) / 2 * nat.width / nat.height;
+    CGFloat bw = MIN(nat.width * 1.15, MIN(byWidth, byHeight));
+    CGFloat bh = bw * nat.height / nat.width;
+    CGFloat gx = gridLeft + ((gridRight - gridLeft) - (3 * bw + 2 * gapX)) / 2;
+    CGFloat gy = top + ((bottom - top) - (2 * bh + gapY)) / 2;
+    for (UIButton *b in self.cards) {
+        NSInteger i = b.tag;
+        b.transform = CGAffineTransformIdentity;
+        b.frame = CGRectMake(gx + (i % 3) * (bw + gapX), gy + (i / 3) * (bh + gapY), bw, bh);
+        b.transform = [self tiltFor:b];
+        UIView *done = [b viewWithTag:13];
+        CGSize dsz = ((UIImageView *)done).image.size;
+        CGFloat dk = bw / nat.width;
+        done.frame = CGRectMake(bw - dsz.width * dk * 0.8, -dsz.height * dk * 0.45, dsz.width * dk, dsz.height * dk);
     }
-    self.scroll.contentSize = CGSizeMake(MAX(x - gap + right, b.width), h);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -215,7 +214,7 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
         if (!pad) continue;
         __block int lastDir = 0;
         GCControllerDirectionPadValueChangedHandler dir = ^(GCControllerDirectionPad *d, float x, float y) {
-            int now = x > 0.5 ? 1 : x < -0.5 ? -1 : 0;
+            int now = x > 0.5 ? 1 : x < -0.5 ? -1 : y < -0.5 ? 3 : y > 0.5 ? -3 : 0; // grid of 3 across
             if (now && now != lastDir) [weakSelf moveFocus:now];
             lastDir = now;
         };
@@ -239,37 +238,21 @@ static UIImage *panelImage(NSString *name, CGFloat scale) {
 - (void)moveFocus:(int)step {
     if (self.navigationController.topViewController != self || !self.cards.count) return;
     NSInteger n = (NSInteger)self.cards.count;
-    self.focus = self.focus < 0 ? 0 : MAX(0, MIN(n - 1, self.focus + step));
-    for (UIButton *card in self.cards) {
-        BOOL on = card == self.cards[self.focus];
-        [card setBackgroundImage:on ? panelImage(@"panel_on", 3) : panelImage(SunkyIsFinished(&kSunkyGames[card.tag]) ? @"panel_done" : @"panel", 3)
-                        forState:UIControlStateNormal];
-    }
-    [self.scroll scrollRectToVisible:CGRectInset(self.cards[self.focus].frame, -30, 0) animated:YES];
+    NSInteger next = self.focus < 0 ? 0 : self.focus + step;
+    if (next >= 0 && next < n) self.focus = next;
+    [self refreshFinished];
 }
 
 - (void)refreshFinished {
     if ([self singleGame]) return;
-    for (UIButton *card in self.cards) {
-        BOOL done = SunkyIsFinished(&kSunkyGames[card.tag]);
-        [card viewWithTag:13].hidden = !done;
-        BOOL focused = self.focus >= 0 && card == self.cards[self.focus];
-        [card setBackgroundImage:panelImage(focused ? @"panel_on" : done ? @"panel_done" : @"panel", 3) forState:UIControlStateNormal];
+    for (UIButton *b in self.cards) {
+        const SunkyGame *g = &kSunkyGames[b.tag];
+        [b viewWithTag:13].hidden = !SunkyIsFinished(g);
+        BOOL focused = self.focus >= 0 && b.tag == self.cards[self.focus].tag;
+        [b setImage:art3([NSString stringWithFormat:@"m16_btn_%s%@", g->file, focused ? @"_focus" : @""]) forState:UIControlStateNormal];
     }
-    if ([self singleGame]) {
-        self.countText.hidden = YES;
-    } else {
-        int n = SunkyFinishedCount();
-        NSString *t = n == kSunkyGameCount ? [NSString stringWithFormat:@"ALL %d FINISHED!", n]
-                                           : [NSString stringWithFormat:@"%d OF %d FINISHED", n, kSunkyGameCount];
-        setPixelText(self.countText, t, YES, 3);
-    }
+    self.bubble.image = art3(SunkyFinishedCount() == kSunkyGameCount ? @"m16_bubble_all" : @"m16_bubble");
     [self.view setNeedsLayout];
-}
-
-- (void)toggleWide {
-    SunkySetWidescreen(!SunkyWidescreen());
-    self.wideToggle.image = controlImage(SunkyWidescreen() ? @"toggle_on" : @"toggle_off");
 }
 
 // Test hook for the Simulator run (ci/sim.sh): -sunkyAutoplay <game> starts that game straight away.
