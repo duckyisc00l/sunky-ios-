@@ -228,9 +228,10 @@ pub mod edges {
     use std::{collections::HashMap, sync::Mutex};
     static PLAIN: Mutex<Option<HashMap<i32, (bool, bool)>>> = Mutex::new(None);
 
-    fn column_plain(w: usize, h: usize, data: &[u8], cols: std::ops::Range<usize>) -> bool {
-        if w == 0 || h == 0 || data.len() < w * h * 4 {
-            return true
+    /// Share of pixels in the columns that are close to their average colour.
+    fn plain_share(w: usize, h: usize, data: &[u8], cols: std::ops::Range<usize>) -> f64 {
+        if w == 0 || h == 0 || data.len() < w * h * 4 || cols.is_empty() {
+            return 1.0
         }
         let mut sum = [0u64; 4];
         let mut n = 0u64;
@@ -254,16 +255,19 @@ pub mod edges {
                 }
             }
         }
-        // nearly every pixel must match: a starry edge is not plain (it streaks when stretched)
-        close * 1000 >= n * 997
+        close as f64 / n.max(1) as f64
+    }
+
+    /// An edge is plain when its outer 3 columns are one colour (nearly every pixel: a starry edge
+    /// streaks when stretched). Only the very edge is looked at: cards often have writing close to it.
+    fn column_plain(w: usize, h: usize, data: &[u8], outer: std::ops::Range<usize>) -> bool {
+        plain_share(w, h, data, outer) >= 0.997
     }
 
     /// Look at a picture's outer columns (RGBA bytes, w x h) before it's handed to the GPU.
     pub fn measure(w: u32, h: u32, data: &[u8]) -> (bool, bool) {
         let (w, h) = (w as usize, h as usize);
-        // look a little way in (4% of the width), so a thin border round a photo doesn't count as a
-        // plain edge to be stretched out
-        let k = w.min((w / 25).max(3));
+        let k = w.min(3);
         (column_plain(w, h, data, 0..k), column_plain(w, h, data, w - k..w))
     }
 
@@ -281,7 +285,7 @@ pub mod edges {
             total += (0..4).map(|c| (a[c] as i32 - b[c] as i32).unsigned_abs() as u64).sum::<u64>();
         }
         // edges that match because they're one flat colour (a border) don't make a pattern
-        total / h as u64 <= 24 && !column_plain(w, h, data, 0..1)
+        total / h as u64 <= 24 && plain_share(w, h, data, 0..1) < 0.997
     }
 
     static SEAMLESS: Mutex<Option<HashMap<i32, bool>>> = Mutex::new(None);
