@@ -875,9 +875,14 @@ impl Game {
                             .frames
                             .into_iter()
                             .map(|f| {
+                                // SUNKY-IOS: note whether the picture is solid (see draw.rs, widescreen)
+                                let px = f.data.len() / 4;
+                                let solid = f.data.chunks_exact(4).filter(|p| p[3] >= 250).count();
+                                let opaque = px > 0 && solid * 100 >= px * 97;
                                 Ok(Frame {
                                     width: f.width,
                                     height: f.height,
+                                    opaque,
                                     atlas_ref: atlases
                                         .texture(f.width as _, f.height as _, origin_x, origin_y, f.data)
                                         .ok_or(())?,

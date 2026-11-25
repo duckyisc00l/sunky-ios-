@@ -8349,6 +8349,7 @@ impl Game {
                 .renderer
                 .upload_sprite(image.into_raw().into_boxed_slice(), width, height, origin_x, origin_y)
                 .map_err(|e| gml::Error::FunctionError("sprite_create_from_screen".into(), e.into()))?,
+            opaque: false,
         }];
         let sprite_id = self.assets.sprites.len();
         self.assets.sprites.push(Some(Box::new(asset::Sprite {
@@ -8400,6 +8401,7 @@ impl Game {
             // upload frame
             let image = images.pop().unwrap();
             sprite.frames.push(asset::sprite::Frame {
+                opaque: false,
                 width: sprite.width as _,
                 height: sprite.height as _,
                 atlas_ref: self
@@ -8443,6 +8445,7 @@ impl Game {
             }
             let colliders = asset::sprite::make_colliders_precise(std::slice::from_ref(&image), 0, false);
             let frames = vec![asset::sprite::Frame {
+                opaque: false,
                 width: width as _,
                 height: height as _,
                 atlas_ref: self
@@ -8507,6 +8510,7 @@ impl Game {
                 // upload frame
                 let image = images.pop().unwrap();
                 sprite.frames.push(asset::sprite::Frame {
+                opaque: false,
                     width: sprite.width as _,
                     height: sprite.height as _,
                     atlas_ref: self
@@ -8555,6 +8559,7 @@ impl Game {
             .drain(..)
             .map(|i| {
                 Ok(asset::sprite::Frame {
+                opaque: false,
                     width,
                     height,
                     atlas_ref: self
@@ -8609,6 +8614,7 @@ impl Game {
                 .drain(..)
                 .map(|i| {
                     Ok(asset::sprite::Frame {
+                opaque: false,
                         width,
                         height,
                         atlas_ref: renderer
@@ -8679,6 +8685,7 @@ impl Game {
                     .iter()
                     .map(|f| {
                         Ok(asset::sprite::Frame {
+                opaque: false,
                             atlas_ref: self
                                 .renderer
                                 .duplicate_sprite(f.atlas_ref)

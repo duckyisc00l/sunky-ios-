@@ -282,6 +282,12 @@ impl Game {
             if xs <= 0.0 || ys <= 0.0 || angle != 0.0 || alpha <= 0.0 {
                 continue
             }
+            // only a solid picture counts: a big see-through overlay (Sunky.MPEG's dancing Sunky when
+            // you stand still) mustn't switch widescreen off
+            let frame_no = (inst.image_index.get().floor().into_inner() as i64).rem_euclid(sprite.frames.len().max(1) as i64) as usize;
+            if !sprite.frames.get(frame_no).map_or(false, |f| f.opaque) {
+                continue
+            }
             let (w, h) = (sprite.width as f64 * xs, sprite.height as f64 * ys);
             if w + 2.0 < vw || h + 2.0 < vh {
                 continue
@@ -291,10 +297,35 @@ impl Game {
             let left = x - sprite.origin_x as f64 * xs;
             let top = y - sprite.origin_y as f64 * ys;
             if left <= vx + 2.0 && top <= vy + 2.0 && left + w >= vx + vw - 2.0 && top + h >= vy + vh - 2.0 {
-                return true
+                // ... and it's drawn in front of everything else in view. A solid picture behind the
+                // player is a backdrop (Sunky.MPEG's red Layer 1), not a cutscene.
+                if self.sunky_nothing_in_front(idx, inst.depth.get().into(), vx, vy, vw, vh) {
+                    return true
+                }
             }
         }
         false
+    }
+
+    /// SUNKY-IOS: no other visible instance with a sprite, inside the view, is drawn in front of `depth`.
+    fn sunky_nothing_in_front(&self, me: usize, depth: f64, vx: f64, vy: f64, vw: f64, vh: f64) -> bool {
+        let mut it = self.room.instance_list.iter_by_drawing();
+        while let Some(idx) = it.next(&self.room.instance_list) {
+            if idx == me {
+                continue
+            }
+            let inst = self.room.instance_list.get(idx);
+            if !inst.visible.get() || self.assets.sprites.get_asset(inst.sprite_index.get()).is_none() {
+                continue
+            }
+            let d: f64 = inst.depth.get().into();
+            let x: f64 = inst.x.get().into();
+            let y: f64 = inst.y.get().into();
+            if d < depth && x >= vx - 64.0 && x <= vx + vw + 64.0 && y >= vy - 64.0 && y <= vy + vh + 64.0 {
+                return false
+            }
+        }
+        true
     }
 
     pub fn draw_instance_default(&mut self, idx: usize) -> gml::Result<()> {

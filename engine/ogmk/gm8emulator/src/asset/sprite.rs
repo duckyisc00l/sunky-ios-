@@ -23,6 +23,9 @@ pub struct Frame {
     pub width: u32,
     pub height: u32,
     pub atlas_ref: AtlasRef,
+    /// SUNKY-IOS: almost every pixel is solid (a cutscene picture), not a big see-through overlay
+    #[serde(default)]
+    pub opaque: bool,
 }
 
 #[derive(Clone, Copy, Serialize, Deserialize)]
