@@ -15,6 +15,7 @@
 @property (nonatomic, copy) NSString *title_;
 @property (nonatomic, strong) GameView *gameView;
 @property (nonatomic, strong) UIView *dpad, *jump, *start, *closeButton, *run;
+@property (nonatomic) BOOL runOn; // RUN is a toggle: tap once to run (and grab/carry), tap again to stop (and throw)
 @property (nonatomic) BOOL running;
 @property (nonatomic) const SunkyGame *game;
 @property (nonatomic, strong) UIImageView *stickKnob;
@@ -381,7 +382,11 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
                 [self updateDpadWithPoint:[t locationInView:self.dpad]];
                 break;
             case RoleJump: [self key:[self jumpKey] down:YES]; [self showPressed:self.jump name:@"jump" on:YES]; break;
-            case RoleRun: [self key:(uint32_t)self.game->runKey down:YES]; [self showPressed:self.run name:@"run" on:YES]; break;
+            case RoleRun:
+                self.runOn = !self.runOn;
+                [self key:(uint32_t)self.game->runKey down:self.runOn];
+                [self showPressed:self.run name:@"run" on:self.runOn];
+                break;
             case RoleStart: [self key:VK_RETURN down:YES]; [self showPressed:self.start name:@"start" on:YES]; break;
             case RoleGame:
                 if (_mouseTouch) { role = RoleNone; break; }
@@ -420,7 +425,7 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
                 break;
             }
             case RoleJump: [self key:[self jumpKey] down:NO]; [self showPressed:self.jump name:@"jump" on:NO]; break;
-            case RoleRun: [self key:(uint32_t)self.game->runKey down:NO]; [self showPressed:self.run name:@"run" on:NO]; break;
+            case RoleRun: break; // stays on until tapped again
             case RoleStart: [self key:VK_RETURN down:NO]; [self showPressed:self.start name:@"start" on:NO]; break;
             case RoleGame: {
                 // Some buttons only react while the mouse is held, so keep every tap down for a few frames.
