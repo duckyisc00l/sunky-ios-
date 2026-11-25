@@ -59,15 +59,15 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     self.gameView.userInteractionEnabled = NO; // touches are handled by this controller's view
     [self.view addSubview:self.gameView];
 
-    // Retro pixel-art controls (drawn by ci/controls.py), scaled up with hard pixels
-    self.dpad = [self pixelImage:@"stick_base" scale:3.6];
-    self.stickKnob = [self pixelImage:@"stick_knob" scale:3.6];
+    // Minimal outline controls (style D, drawn at 3x by ci/controls_minimal.py)
+    self.dpad = [self smoothImage:@"stick_base"];
+    self.stickKnob = [self smoothImage:@"stick_knob"];
     self.stickKnob.alpha = 1;
     [self.dpad addSubview:self.stickKnob];
-    self.jump = [self pixelImage:@"jump" scale:3.2];
-    self.start = [self pixelImage:@"start" scale:3];
+    self.jump = [self smoothImage:@"jump"];
+    self.start = [self smoothImage:@"start"];
     self.closeButton = [self pixelImage:@"close" scale:3];
-    self.run = [self pixelImage:@"run" scale:3];
+    self.run = [self smoothImage:@"run"];
     self.run.hidden = !(self.game && self.game->runKey);
     // single-game apps have no menu to go back to, so no quit button
     self.closeButton.hidden = [[NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"] length] > 0;
@@ -92,6 +92,16 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     v.frame = CGRectMake(0, 0, img.size.width * scale, img.size.height * scale);
     v.layer.magnificationFilter = kCAFilterNearest;
     v.alpha = 0.9;
+    v.userInteractionEnabled = NO;
+    return v;
+}
+
+/// A control drawn at 3 pixels per point, shown at its size in points with smooth scaling.
+- (UIImageView *)smoothImage:(NSString *)name {
+    UIImage *img = [self controlImage:name];
+    UIImageView *v = [[UIImageView alloc] initWithImage:img];
+    v.frame = CGRectMake(0, 0, img.size.width / 3, img.size.height / 3);
+    v.alpha = 1;
     v.userInteractionEnabled = NO;
     return v;
 }
@@ -132,7 +142,7 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
         self.start.center = CGPointMake(self.jump.center.x - 30, self.jump.center.y - jr - 34);
     }
     // In widescreen the game fills the screen, so the controls get a little more see-through
-    CGFloat alpha = self.padMode ? 0 : SunkyWidescreen() ? 0.7 : 0.9;
+    CGFloat alpha = self.padMode ? 0 : 1; // the outlines are see-through already
     for (UIView *v in @[self.dpad, self.jump, self.start, self.run]) v.alpha = alpha;
     if (!_dpadTouch) self.stickKnob.center = CGPointMake(self.dpad.bounds.size.width / 2, self.dpad.bounds.size.height / 2);
 
@@ -449,7 +459,7 @@ static const uint32_t kDirVK[4] = { VK_LEFT, VK_UP, VK_RIGHT, VK_DOWN };
     _padMode = on;
     BOOL single = [[NSBundle.mainBundle objectForInfoDictionaryKey:@"SunkyOnly"] length] > 0;
     [UIView animateWithDuration:0.2 animations:^{
-        for (UIView *v in @[self.dpad, self.jump, self.start, self.run]) v.alpha = on ? 0 : SunkyWidescreen() ? 0.7 : 0.9;
+        for (UIView *v in @[self.dpad, self.jump, self.start, self.run]) v.alpha = on ? 0 : 1;
         self.closeButton.alpha = on || single ? 0 : 0.9;
     }];
 }
