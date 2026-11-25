@@ -1896,19 +1896,6 @@ impl Game {
     /// Runs a frame loop and draws the screen. Exits immediately, without waiting for any FPS limitation.
     pub fn frame(&mut self) -> gml::Result<()> {
         self.sunky_tick_sound_fades(); // SUNKY-IOS: sound_fade
-        {
-            // SUNKY-IOS test log: frames per second, every 5 seconds
-            use std::sync::Mutex;
-            static FPS: Mutex<Option<(std::time::Instant, u32)>> = Mutex::new(None);
-            let mut f = FPS.lock().unwrap_or_else(|e| e.into_inner());
-            let (t, n) = f.get_or_insert((std::time::Instant::now(), 0));
-            *n += 1;
-            let secs = t.elapsed().as_secs_f64();
-            if secs >= 5.0 {
-                eprintln!("fps {:.1} in room {}", f64::from(*n) / secs, self.room.id);
-                *f = Some((std::time::Instant::now(), 0));
-            }
-        }
         if self.esc_close_game && self.input.keyboard_lastkey() == input::Button::Escape as u8 {
             self.scene_change = Some(SceneChange::End);
             return Ok(());
@@ -2110,8 +2097,13 @@ impl Game {
     pub fn process_window_events(&mut self) {
         self.input.mouse_step();
         self.window.poll_events();
+        static DEFERRED_RELEASE: std::sync::Mutex<Vec<ramen::input::MouseButton>> = std::sync::Mutex::new(Vec::new());
+        let mut pressed_now: Vec<ramen::input::MouseButton> = Vec::new();
         match self.play_type {
             PlayType::Normal => {
+                for button in std::mem::take(&mut *DEFERRED_RELEASE.lock().unwrap_or_else(|e| e.into_inner())) {
+                    self.input.mouse_release(input::ramen2mb(button), true);
+                }
                 for event in self.window.events().into_iter().copied() {
                     match event {
                         Event::KeyboardDown(key) => self.input.button_press(input::ramen2vk(key), true),
@@ -2122,15 +2114,13 @@ impl Game {
                             }
                         },
                         Event::MouseDown(button) => {
-                            {
-                                let (rx, ry) = self.get_mouse_in_room();
-                                eprintln!(
-                                    "mouse down at window {},{} = room {},{} (room {} {}x{} views {})",
-                                    self.input.mouse_x(), self.input.mouse_y(), rx, ry, self.room.id,
-                                    self.room.width, self.room.height, self.room.views_enabled
-                                );
-                            }
+                            pressed_now.push(button);
                             self.input.mouse_press(input::ramen2mb(button), true)
+                        },
+                        // SUNKY-IOS: a tap that starts and ends between two frames still counts as
+                        // held for one frame (games check "button held"), so its release waits a frame
+                        Event::MouseUp(button) if pressed_now.contains(&button) => {
+                            DEFERRED_RELEASE.lock().unwrap_or_else(|e| e.into_inner()).push(button)
                         },
                         Event::MouseUp(button) => self.input.mouse_release(input::ramen2mb(button), true),
                         Event::ScrollUp => self.input.mouse_scroll_up(),
