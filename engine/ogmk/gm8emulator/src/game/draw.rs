@@ -187,7 +187,19 @@ impl Game {
             self.unscaled_width,
             self.unscaled_height,
         )
-        .filter(|p| !self.sunky_view_covered(p.view));
+        .filter(|_| !super::wide::cover::last());
+        // watch this frame's draws against the real view (see wide::cover)
+        match (self.room.views_enabled, self.room.views.iter().position(|v| v.visible)) {
+            (true, Some(i)) => {
+                let v = &self.room.views[i];
+                let (x, w) = match wide_plan.as_ref() {
+                    Some(p) if p.view == i => (p.src_x, p.src_w),
+                    _ => (v.source_x, v.source_w),
+                };
+                super::wide::cover::begin(x as f64, v.source_y as f64, w as f64, v.source_h as f64, v.source_w as f64, v.source_h as f64)
+            },
+            _ => super::wide::cover::begin(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+        }
         let fb_w = wide_plan.as_ref().map(|p| p.port_w).unwrap_or(self.unscaled_width);
         if super::wide::needs_fb(fb_w, self.unscaled_height) {
             self.renderer.resize_framebuffer(fb_w, self.unscaled_height, false);
@@ -234,6 +246,7 @@ impl Game {
             v.source_w = w;
             v.port_w = pw;
         }
+        super::wide::cover::end();
         super::wide::publish(fb_w, self.unscaled_height, wide_plan.as_ref().map(|p| p.offset).unwrap_or(0));
 
         // Reset viewport

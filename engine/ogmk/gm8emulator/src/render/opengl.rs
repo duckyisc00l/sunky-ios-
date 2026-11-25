@@ -1785,6 +1785,11 @@ impl RendererTrait for RendererImpl {
         };
         let right: f64 = left + width;
         let bottom: f64 = top + height;
+        if angle == 0.0 {
+            crate::game::wide::cover::note(x + left + 0.5, y + top + 0.5, x + right + 0.5, y + bottom + 0.5, alpha); // SUNKY-IOS
+        } else {
+            crate::game::wide::cover::note(x, y, x, y, alpha); // something drawn on top, size unknown
+        }
 
         // get texture corners
         let tex_left = f64::from(part_x) / f64::from(atlas_ref.w);
@@ -1861,6 +1866,7 @@ impl RendererTrait for RendererImpl {
     }
 
     fn draw_rectangle(&mut self, x1: f64, y1: f64, x2: f64, y2: f64, colour: i32, alpha: f64) {
+        crate::game::wide::cover::note(x1, y1, x2, y2, alpha); // SUNKY-IOS
         let (x1, x2) = if x2 < x1 { (x2, x1) } else { (x1, x2) };
         let (y1, y2) = if y2 < y1 { (y2, y1) } else { (y1, y2) };
         let x2 = if x2 == x2.floor() { x2 + 0.01 } else { x2 };
@@ -1903,6 +1909,9 @@ impl RendererTrait for RendererImpl {
         alpha: f64,
         outline: bool,
     ) {
+        if !outline {
+            crate::game::wide::cover::note(x1, y1, x2, y2, alpha); // SUNKY-IOS
+        }
         let (x1, x2) = if x2 < x1 { (x2, x1) } else { (x1, x2) };
         let (y1, y2) = if y2 < y1 { (y2, y1) } else { (y1, y2) };
         let x2 = if x2 == x2.floor() { x2 + 0.01 } else { x2 };
@@ -2492,7 +2501,13 @@ impl RendererTrait for RendererImpl {
                 Scaling::Aspect(_) => {
                     if fb_width > 0 && fb_height > 0 {
                         let fixed_width = window_height * fb_width / fb_height;
-                        if fixed_width < window_width {
+                        if fixed_width < window_width && window_width * 100 <= fixed_width * 123 {
+                            // SUNKY-IOS: nearly the screen's shape already (Silly.TIFF's 16:9 screens on a
+                            // 2.16:1 phone): zoom to fill the width, trimming a little off top and bottom,
+                            // instead of black bars. Same rule in GameViewController.m's gameRect.
+                            let h = window_width * fb_height / fb_width;
+                            (0, (window_height - h) / 2, window_width, h)
+                        } else if fixed_width < window_width {
                             // window is too wide
                             ((window_width - fixed_width) / 2, 0, fixed_width, window_height)
                         } else {

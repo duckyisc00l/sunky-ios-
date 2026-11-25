@@ -89,3 +89,80 @@ pub fn publish(w: u32, h: u32, offset: u32) {
     #[cfg(not(target_os = "ios"))]
     let _ = (w, h, offset);
 }
+
+
+/// SUNKY-IOS: is something covering the whole view, like a cutscene, a title card or a darkness
+/// overlay? Every draw is checked against the real (unwidened) view. A covering draw counts only if
+/// little gets drawn on top of it afterwards in the same frame; a backdrop has the level drawn over
+/// it. The answer is used for the next frame (one frame late, which can't be seen).
+pub mod cover {
+    use std::sync::Mutex;
+
+    struct State {
+        active: bool,
+        base: (f64, f64, f64, f64), // x, y, w, h of the view as drawn (maybe widened), room coordinates
+        need: (f64, f64),           // the real view's size: a covering draw fills at least this much
+        covered: bool,
+        after_area: f64, // view area drawn over the covering draw since it happened
+        after_count: u32,
+        last: bool,
+    }
+    static STATE: Mutex<State> =
+        Mutex::new(State { active: false, base: (0.0, 0.0, 0.0, 0.0), need: (0.0, 0.0), covered: false, after_area: 0.0, after_count: 0, last: false });
+
+    fn st() -> std::sync::MutexGuard<'static, State> {
+        STATE.lock().unwrap_or_else(|e| e.into_inner())
+    }
+
+    /// Start watching a frame's draws: the view as it will be drawn, and the real view's size.
+    pub fn begin(x: f64, y: f64, w: f64, h: f64, need_w: f64, need_h: f64) {
+        let mut s = st();
+        s.active = w > 0.0 && h > 0.0;
+        s.base = (x, y, w, h);
+        s.need = (need_w, need_h);
+        s.covered = false;
+        s.after_area = 0.0;
+        s.after_count = 0;
+    }
+
+    /// Finish the frame: remember whether it ended with the view covered.
+    pub fn end() {
+        let mut s = st();
+        if s.active {
+            let (w, h) = s.need;
+            s.last = s.covered && s.after_area < 0.25 * w * h && s.after_count < 60;
+        } else {
+            s.last = false;
+        }
+        s.active = false;
+    }
+
+    /// Whether last frame's view was covered.
+    pub fn last() -> bool {
+        st().last
+    }
+
+    /// A filled axis-aligned rectangle (sprite or shape) was drawn.
+    pub fn note(l: f64, t: f64, r: f64, b: f64, alpha: f64) {
+        let mut s = st();
+        if !s.active || alpha <= 0.02 {
+            return
+        }
+        let (vx, vy, vw, vh) = s.base;
+        let (l, r) = if l <= r { (l, r) } else { (r, l) };
+        let (t, b) = if t <= b { (t, b) } else { (b, t) };
+        let iw = (r.min(vx + vw) - l.max(vx)).max(0.0);
+        let ih = (b.min(vy + vh) - t.max(vy)).max(0.0);
+        // fills a whole screen's worth of what's drawn (the game may place it by the widened view)
+        if iw >= s.need.0 - 4.0 && ih >= s.need.1 - 4.0 {
+            s.covered = true;
+            s.after_area = 0.0;
+            s.after_count = 0;
+        } else if s.covered {
+            if iw > 0.0 && ih > 0.0 {
+                s.after_area += iw * ih;
+                s.after_count += 1;
+            }
+        }
+    }
+}

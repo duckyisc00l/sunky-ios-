@@ -106,6 +106,9 @@ typedef NS_ENUM(NSInteger, TouchRole) { RoleNone, RoleDpad, RoleJump, RoleStart,
     CGFloat gw = MAX(1, packed >> 16), gh = MAX(1, packed & 0xFFFF);
     CGSize b = self.view.bounds.size;
     CGFloat scale = MIN(b.width / gw, b.height / gh);
+    // nearly the screen's shape already (Silly.TIFF's 16:9 screens): the engine zooms to fill the
+    // width and trims top and bottom (same rule as render/opengl.rs), so taps must match
+    if (b.width / b.height > gw / gh && (b.width / b.height) / (gw / gh) <= 1.23) scale = b.width / gw;
     CGFloat w = gw * scale, h = gh * scale;
     return CGRectMake((b.width - w) / 2, (b.height - h) / 2, w, h);
 }
