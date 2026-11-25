@@ -4,6 +4,7 @@ on:
     inputs:
       games: { description: "games to run (blank = all)", required: false, default: "" }
       rooms: { description: "screenshot every room in widescreen (yes/no)", required: false, default: "no" }
+      all_rooms: { description: "sweep every room, not just ones with a camera, and play each (yes/no)", required: false, default: "no" }
 permissions: { contents: write }
 concurrency: { group: lab, cancel-in-progress: false }
 jobs:
@@ -90,6 +91,7 @@ jobs:
         env: { LIBGL_ALWAYS_SOFTWARE: "1" }
         run: |
           export SUNKY_OVERRIDES=$PWD/ios/App/Art SUNKY_MAX_TEXTURE=4096 SUNKY_WIDE=2.16
+          if [ "${{ inputs.all_rooms }}" = yes ]; then export ALL_ROOMS=1 PLAY=1; fi
           timeout 2400 xvfb-run -a -s "-screen 0 1600x960x24" ci/lab-rooms.sh out/info out/rooms ${{ inputs.games || 'p1 p2 p3 mpeg tiff' }} || echo "sweep stopped early"
           python3 ci/sheets.py out/rooms
       - name: Publish results to branch r-lab

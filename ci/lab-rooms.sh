@@ -10,12 +10,20 @@ emu=$(realpath "${EMU:-engine/ogmk/target-gles/release/gm8emulator}")
 mkdir -p "$out"
 for g in $games; do
   exe=$PWD/games/$g.exe; [ -f "$exe" ] || continue
-  rooms=$(grep -E "^ROOM [0-9]+ .* views true" "$info/$g/summary.txt" | awk '{print $2}')
+  if [ -n "${ALL_ROOMS:-}" ]; then rooms=$(grep -E "^ROOM [0-9]+ " "$info/$g/summary.txt" | awk '{print $2}')
+  else rooms=$(grep -E "^ROOM [0-9]+ .* views true" "$info/$g/summary.txt" | awk '{print $2}'); fi
   for r in $rooms; do
     run=$(mktemp -d); cp "$exe" "$run/game.exe"
     ( cd "$run" && SUNKY_START_ROOM=$r exec timeout -s KILL 13 "$emu" game.exe > "$out/$g-$r.log" 2>&1 ) &
     start=$(date +%s)
     wid=$(timeout 6 xdotool search --sync --class OpenGMK 2>/dev/null | head -1)
+    # PLAY=1: also play the room (hold right, jump now and then, press Enter once)
+    if [ -n "${PLAY:-}" ] && [ -n "$wid" ]; then
+      ( sleep 1.5; timeout 2 xdotool key --window "$wid" Return; sleep 0.5
+        timeout 2 xdotool keydown --window "$wid" Right
+        for j in 1 2 3 4 5 6; do sleep 1; timeout 2 xdotool key --window "$wid" space; done
+        timeout 2 xdotool keyup --window "$wid" Right ) &
+    fi
     for t in 1 3 6 10; do
       while [ $(( $(date +%s) - start )) -lt $t ]; do sleep 0.2; done
       [ -n "$wid" ] && timeout 4 import -window "$wid" "$out/$g-$r-$t.png" 2>/dev/null
