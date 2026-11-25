@@ -282,12 +282,6 @@ impl Game {
             if xs <= 0.0 || ys <= 0.0 || angle != 0.0 || alpha <= 0.0 {
                 continue
             }
-            // only a solid picture counts: a big see-through overlay (Sunky.MPEG's dancing Sunky when
-            // you stand still) mustn't switch widescreen off
-            let frame_no = (inst.image_index.get().floor().into_inner() as i64).rem_euclid(sprite.frames.len().max(1) as i64) as usize;
-            if !sprite.frames.get(frame_no).map_or(false, |f| f.opaque) {
-                continue
-            }
             let (w, h) = (sprite.width as f64 * xs, sprite.height as f64 * ys);
             if w + 2.0 < vw || h + 2.0 < vh {
                 continue
