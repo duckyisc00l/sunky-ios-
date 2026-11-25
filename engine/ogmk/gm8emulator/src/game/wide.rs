@@ -265,6 +265,34 @@ pub mod edges {
         (column_plain(w, h, data, 0..k), column_plain(w, h, data, w - k..w))
     }
 
+    /// Whether a picture's left and right edges match, so it can repeat side by side without a
+    /// seam (a marquee, stripes): such pictures continue as copies of themselves, not mirrored.
+    pub fn seamless(w: u32, h: u32, data: &[u8]) -> bool {
+        let (w, h) = (w as usize, h as usize);
+        if w < 2 || h == 0 || data.len() < w * h * 4 {
+            return false
+        }
+        let mut total = 0u64;
+        for y in 0..h {
+            let a = &data[(y * w) * 4..(y * w) * 4 + 4];
+            let b = &data[(y * w + w - 1) * 4..(y * w + w - 1) * 4 + 4];
+            total += (0..4).map(|c| (a[c] as i32 - b[c] as i32).unsigned_abs() as u64).sum::<u64>();
+        }
+        total / h as u64 <= 24
+    }
+
+    static SEAMLESS: Mutex<Option<HashMap<i32, bool>>> = Mutex::new(None);
+
+    pub fn note_seamless(atlas: i32, yes: bool) {
+        let mut m = SEAMLESS.lock().unwrap_or_else(|e| e.into_inner());
+        m.get_or_insert_with(HashMap::new).insert(atlas, yes);
+    }
+
+    pub fn is_seamless(atlas: i32) -> bool {
+        let m = SEAMLESS.lock().unwrap_or_else(|e| e.into_inner());
+        m.as_ref().and_then(|m| m.get(&atlas).copied()).unwrap_or(false)
+    }
+
     pub fn note(atlas: i32, plain: (bool, bool)) {
         let mut m = PLAIN.lock().unwrap_or_else(|e| e.into_inner());
         m.get_or_insert_with(HashMap::new).insert(atlas, plain);

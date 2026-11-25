@@ -883,10 +883,12 @@ impl Game {
                                 let solid = f.data.chunks_exact(4).filter(|p| p[3] >= 250).count();
                                 let opaque = px > 0 && solid * 100 >= px * 97;
                                 let edges = wide::edges::measure(f.width, f.height, &f.data); // SUNKY-IOS
+                                let seamless = wide::edges::seamless(f.width, f.height, &f.data);
                                 let atlas_ref = atlases
                                     .texture(f.width as _, f.height as _, origin_x, origin_y, f.data)
                                     .ok_or(())?;
                                 wide::edges::note(atlas_ref.0, edges);
+                                wide::edges::note_seamless(atlas_ref.0, seamless);
                                 Ok(Frame { width: f.width, height: f.height, opaque, atlas_ref })
                             })
                             .collect::<Result<_, ()>>()?,
@@ -932,8 +934,10 @@ impl Game {
                         atlas_ref: match b.data {
                             Some(data) => {
                                 let edges = wide::edges::measure(width, height, &data); // SUNKY-IOS
+                                let seamless = wide::edges::seamless(width, height, &data);
                                 let r = atlases.texture(width as _, height as _, 0, 0, data).ok_or(())?;
                                 wide::edges::note(r.0, edges);
+                                wide::edges::note_seamless(r.0, seamless);
                                 Some(r)
                             },
                             None => None,
