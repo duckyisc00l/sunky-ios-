@@ -25,7 +25,8 @@ xcrun simctl io "$udid" screenshot "$out/menu-finished.png" >/dev/null 2>&1
 # steps: <seconds>:<vk>:<hold seconds>  (13 enter, 32 space, 16 shift, 37 left, 38 up, 39 right, 40 down)
 #        <seconds>:gtap:<x>:<y>  tap a game pixel      <seconds>:tap:<fx>:<fy>  tap a fraction of the screen
 # The Simulator is slow to start a game, so each tap/key is repeated until the screen it's for has
-# surely come up. Then: through the title screens, and running and jumping for a good while.
+# surely come up (the Simulator is slow and its speed varies a lot, so every step is retried
+# over a wide window). Then: through the title screens, and running and jumping for a good while.
 rep() { # rep <from> <to> <every> <what>  ->  "<t>:<what>,..." for t = from, from+every, ... to
   local t=$1 out=""; while [ "$t" -le "$2" ]; do out="$out$t:$4,"; t=$((t + $3)); done; echo "${out%,}"
 }
@@ -35,11 +36,11 @@ play_ogmk() { # run right and jump, over and over, from <start>
 }
 steps_for() {
   case $1 in
-    p1)   echo "$(rep 6 21 3 gtap:320:432),$(rep 30 90 3 13:0.3),$(play_ogmk 94)" ;;
-    p2)   echo "$(rep 6 15 3 gtap:528:393),$(rep 18 30 4 gtap:320:224),$(rep 36 56 4 13:0.2),$(play_ogmk)" ;;
-    p3)   echo "$(rep 6 15 3 gtap:528:393),$(rep 18 30 4 gtap:320:224),$(rep 36 56 4 13:0.2),$(play_ogmk)" ;;
-    mpeg) echo "$(rep 6 12 3 13:0.2),$(rep 15 30 3 gtap:113:249),$(rep 36 56 4 13:0.2),$(play_ogmk)" ;;
-    tiff) echo "$(rep 6 21 3 gtap:448:352),$(rep 30 56 4 13:0.2),$(play_ogmk)" ;;
+    p1)   echo "$(rep 6 60 3 gtap:320:432),$(rep 30 96 3 13:0.3),$(play_ogmk 100)" ;;
+    p2)   echo "$(rep 6 48 3 gtap:528:393),$(rep 10 60 4 gtap:320:224),$(rep 40 76 4 13:0.2),$(play_ogmk 80)" ;;
+    p3)   echo "$(rep 6 48 3 gtap:528:393),$(rep 10 60 4 gtap:320:224),$(rep 40 76 4 13:0.2),$(play_ogmk 80)" ;;
+    mpeg) echo "$(rep 6 21 3 13:0.2),$(rep 15 51 3 gtap:113:249),$(rep 40 70 4 13:0.2),$(play_ogmk 74)" ;;
+    tiff) echo "$(rep 6 45 3 gtap:448:352),$(rep 30 70 4 13:0.2),$(play_ogmk 74)" ;;
     g2)   echo "$(rep 8 32 3 tap:0.5:0.72),$(rep 36 56 4 13:0.2),$(rep 60 140 8 39:5),$(rep 62 140 8 16:0.3),$(rep 65 140 8 16:0.3)" ;;
   esac
 }
