@@ -149,6 +149,12 @@ pub mod cover {
         s.active = false;
     }
 
+    /// While drawing widened: the real view's size (else None).
+    pub fn widened() -> Option<(f64, f64)> {
+        let s = st();
+        if s.active && s.base.2 > s.need.0 + 1.0 { Some(s.need) } else { None }
+    }
+
     /// Whether last frame's view was covered.
     pub fn last() -> bool {
         st().last
