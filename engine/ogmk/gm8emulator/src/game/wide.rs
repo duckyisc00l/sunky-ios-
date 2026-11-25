@@ -157,6 +157,12 @@ pub mod cover {
         if s.active && s.base.2 > s.need.0 + 1.0 { Some(s.need) } else { None }
     }
 
+    /// While drawing widened: the left edge of the drawn view, in room coordinates.
+    pub fn left() -> Option<f64> {
+        let s = st();
+        if s.active && s.base.2 > s.need.0 + 1.0 { Some(s.base.0) } else { None }
+    }
+
     /// Whether last frame's view was covered.
     pub fn last() -> bool {
         st().last

@@ -448,6 +448,8 @@ impl Game {
         let tile_end_y = f64::from(src_y + src_h + src_w / 2);
     
         // draw backgrounds
+        // SUNKY-IOS: a room without views is a card or cutscene: its screen-sized pictures are never repeated
+        let no_view_card = !self.room.views_enabled;
         self.renderer.set_depth(12000.0);
         for background in self.room.backgrounds.iter().filter(|x| x.visible && !x.is_foreground) {
             if let Some(bg_asset) = self.assets.backgrounds.get_asset(background.background_id) {
@@ -467,7 +469,7 @@ impl Game {
                         // game meant it to, which carries on naturally)
                         (background.tile_horizontal && !super::wide::cover::widened().map_or(false, |(nw, nh)| {
                             let (w, h) = (bg_asset.width as f64 * f64::from(background.xscale), bg_asset.height as f64 * f64::from(background.yscale));
-                            w >= nw - 2.0 && h >= nh - 2.0 && super::wide::edges::plain(atlas_ref.0) == (true, true)
+                            w >= nw - 2.0 && h >= nh - 2.0 && f64::from(background.hspeed) == 0.0 && f64::from(background.x_offset).abs() < 1.0 && (super::wide::edges::plain(atlas_ref.0) == (true, true) || !super::wide::edges::is_seamless(atlas_ref.0) || no_view_card)
                         }))
                         .then_some(tile_end_x),
                         background.tile_vertical.then_some(tile_end_y),
@@ -549,7 +551,7 @@ impl Game {
                         // game meant it to, which carries on naturally)
                         (background.tile_horizontal && !super::wide::cover::widened().map_or(false, |(nw, nh)| {
                             let (w, h) = (bg_asset.width as f64 * f64::from(background.xscale), bg_asset.height as f64 * f64::from(background.yscale));
-                            w >= nw - 2.0 && h >= nh - 2.0 && super::wide::edges::plain(atlas_ref.0) == (true, true)
+                            w >= nw - 2.0 && h >= nh - 2.0 && f64::from(background.hspeed) == 0.0 && f64::from(background.x_offset).abs() < 1.0 && (super::wide::edges::plain(atlas_ref.0) == (true, true) || !super::wide::edges::is_seamless(atlas_ref.0) || no_view_card)
                         }))
                         .then_some(tile_end_x),
                         background.tile_vertical.then_some(tile_end_y),

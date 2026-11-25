@@ -414,6 +414,14 @@ pub trait RendererTrait {
             if x > 0.0 {
                 x -= width;
             }
+            // SUNKY-IOS: widescreen shows a little left of the room, so start the tiles from there too
+            if let Some(l) = crate::game::wide::cover::left() {
+                if width > 0.0 {
+                    while x > l {
+                        x -= width;
+                    }
+                }
+            }
         }
         if tile_end_y.is_some() {
             y = y.rem_euclid(height);
