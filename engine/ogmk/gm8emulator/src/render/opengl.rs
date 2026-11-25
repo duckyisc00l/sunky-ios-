@@ -1786,7 +1786,9 @@ impl RendererTrait for RendererImpl {
         let right: f64 = left + width;
         let bottom: f64 = top + height;
         if angle == 0.0 {
-            crate::game::wide::cover::note(x + left + 0.5, y + top + 0.5, x + right + 0.5, y + bottom + 0.5, alpha); // SUNKY-IOS
+            // SUNKY-IOS: a see-through picture never counts as covering the screen
+            let a = if crate::game::wide::edges::is_solid(texture.0) { alpha } else { alpha.min(0.5) };
+            crate::game::wide::cover::note(x + left + 0.5, y + top + 0.5, x + right + 0.5, y + bottom + 0.5, a);
         } else {
             crate::game::wide::cover::note(x, y, x, y, alpha); // something drawn on top, size unknown
         }

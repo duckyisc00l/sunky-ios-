@@ -884,11 +884,13 @@ impl Game {
                                 let opaque = px > 0 && solid * 100 >= px * 97;
                                 let edges = wide::edges::measure(f.width, f.height, &f.data); // SUNKY-IOS
                                 let seamless = wide::edges::seamless(f.width, f.height, &f.data);
+                                let solid = wide::edges::solid(f.width, f.height, &f.data);
                                 let atlas_ref = atlases
                                     .texture(f.width as _, f.height as _, origin_x, origin_y, f.data)
                                     .ok_or(())?;
                                 wide::edges::note(atlas_ref.0, edges);
                                 wide::edges::note_seamless(atlas_ref.0, seamless);
+                                wide::edges::note_solid(atlas_ref.0, solid);
                                 Ok(Frame { width: f.width, height: f.height, opaque, atlas_ref })
                             })
                             .collect::<Result<_, ()>>()?,
@@ -935,9 +937,11 @@ impl Game {
                             Some(data) => {
                                 let edges = wide::edges::measure(width, height, &data); // SUNKY-IOS
                                 let seamless = wide::edges::seamless(width, height, &data);
+                                let solid = wide::edges::solid(width, height, &data);
                                 let r = atlases.texture(width as _, height as _, 0, 0, data).ok_or(())?;
                                 wide::edges::note(r.0, edges);
                                 wide::edges::note_seamless(r.0, seamless);
+                                wide::edges::note_solid(r.0, solid);
                                 Some(r)
                             },
                             None => None,

@@ -180,7 +180,8 @@ pub mod cover {
         let iw = (r.min(vx + vw) - l.max(vx)).max(0.0);
         let ih = (b.min(vy + vh) - t.max(vy)).max(0.0);
         // fills a whole screen's worth of what's drawn (the game may place it by the widened view)
-        if iw >= s.need.0 - 4.0 && ih >= s.need.1 - 4.0 {
+        // and only if it's solid: a fade or a see-through picture leaves the level showing
+        if iw >= s.need.0 - 4.0 && ih >= s.need.1 - 4.0 && alpha >= 0.9 {
             s.covered = true;
             s.after_area = 0.0;
             s.after_count = 0;
@@ -295,6 +296,28 @@ pub mod edges {
     }
 
     static SEAMLESS: Mutex<Option<HashMap<i32, bool>>> = Mutex::new(None);
+
+    /// Whether a picture is solid (nearly every pixel fully opaque).
+    pub fn solid(w: u32, h: u32, data: &[u8]) -> bool {
+        let n = (w as usize) * (h as usize);
+        if n == 0 || data.len() < n * 4 {
+            return false
+        }
+        let opaque = data.chunks_exact(4).take(n).filter(|p| p[3] >= 250).count();
+        opaque * 100 >= n * 97
+    }
+
+    static SOLID: Mutex<Option<HashMap<i32, bool>>> = Mutex::new(None);
+
+    pub fn note_solid(atlas: i32, yes: bool) {
+        let mut m = SOLID.lock().unwrap_or_else(|e| e.into_inner());
+        m.get_or_insert_with(HashMap::new).insert(atlas, yes);
+    }
+
+    pub fn is_solid(atlas: i32) -> bool {
+        let m = SOLID.lock().unwrap_or_else(|e| e.into_inner());
+        m.as_ref().and_then(|m| m.get(&atlas).copied()).unwrap_or(true)
+    }
 
     pub fn note_seamless(atlas: i32, yes: bool) {
         let mut m = SEAMLESS.lock().unwrap_or_else(|e| e.into_inner());
