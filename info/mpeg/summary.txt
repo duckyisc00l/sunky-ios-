@@ -1,0 +1,479 @@
+version GameMaker8_1 fullscreen false scaling -1 interpolate false cursor true esc_close true f4 true f5f6 false freeze_on_lose_focus false
+counts sprites 85 sounds 25 backgrounds 29 scripts 0 fonts 0 timelines 0 objects 125 rooms 31 included 0 extensions 0
+SOUND 0 We Are Framily ext .wav kind 1 bytes 2964524 vol 1
+SOUND 1 Spongeboob ext .wav kind 0 bytes 135212 vol 1
+SOUND 2 Swipe ext .wav kind 0 bytes 28250 vol 1
+SOUND 3 Dash ext .wav kind 0 bytes 139228 vol 1
+SOUND 4 Turn ext .wav kind 0 bytes 203538 vol 1
+SOUND 5 Jump ext .wav kind 0 bytes 79210 vol 1
+SOUND 6 Goof Troop ext .wav kind 1 bytes 10532908 vol 1
+SOUND 7 Static ext .wav kind 0 bytes 2646044 vol 1
+SOUND 8 Warp ext .wav kind 0 bytes 329772 vol 1
+SOUND 9 BodyRolls ext .wav kind 1 bytes 1184044 vol 1
+SOUND 10 MyDogYou'reOnBlast ext .wav kind 1 bytes 694316 vol 1
+SOUND 11 Cutscene ext .wav kind 0 bytes 1259160 vol 1
+SOUND 12 The most mature of songs ext .wav kind 1 bytes 1519660 vol 0.83
+SOUND 13 Squawk ext .wav kind 0 bytes 104492 vol 1
+SOUND 14 Title ext .wav kind 1 bytes 4790834 vol 1
+SOUND 15 Pbbt ext .wav kind 0 bytes 43052 vol 1
+SOUND 16 SignpostSpin ext .wav kind 3 bytes 174012 vol 1
+SOUND 17 BigStatic ext .wav kind 0 bytes 26124 vol 1
+SOUND 18 WHATAGHOST ext .wav kind 0 bytes 369196 vol 1
+SOUND 19 Appear ext .wav kind 0 bytes 217132 vol 1
+SOUND 20 Smexeroonies ext .wav kind 1 bytes 6121636 vol 1
+SOUND 21 The_Sanctuary ext .wav kind 1 bytes 18122808 vol 1
+SOUND 22 LongStatic ext .wav kind 0 bytes 317754 vol 1
+SOUND 23 CREEPERS ext .wav kind 0 bytes 308844 vol 1
+SOUND 41 HOW2DANCEPARTY ext .wav kind 1 bytes 3452664 vol 1
+ROOM ORDER 6 14 7 15 16 17 18 19 20 21 22 23 25 26 27 28 29 30 31 33 34 35 36 37 38 39 40 42 41 43 44
+ROOM 6 Title 640x480 speed 30 views true [640x480@640x480] inst 3
+  INST room 6 obj 38 Title at 170,-30
+  INST room 6 obj 40 Press Enter at 220,372
+  INST room 6 obj 110 Level Select at 478,446
+ROOM 7 Level The Green One 5050x544 speed 18 views true [640x480@640x480] inst 23
+  INST room 7 obj 52 Flower 3 at 768,192
+  INST room 7 obj 51 Flower 2 at 640,192
+  INST room 7 obj 50 Flower at 896,128
+  INST room 7 obj 50 Flower at 256,128
+  INST room 7 obj 50 Flower at 128,160
+  INST room 7 obj 50 Flower at 1344,128
+  INST room 7 obj 51 Flower 2 at 1472,192
+  INST room 7 obj 50 Flower at 1600,128
+  INST room 7 obj 50 Flower at 2176,192
+  INST room 7 obj 52 Flower 3 at 1856,192
+  INST room 7 obj 50 Flower at 2304,128
+  INST room 7 obj 173 Sunkers at 4928,260
+  INST room 7 obj 0 Sunky at 128,258
+  INST room 7 obj 19 BackgroundScroll at 0,2
+  INST room 7 obj 1 Solid at 1664,384
+  INST room 7 obj 1 Solid at 1664,448
+  INST room 7 obj 1 Solid at 1664,512
+  INST room 7 obj 1 Solid at -56,320
+  INST room 7 obj 1 Solid at -56,256
+  INST room 7 obj 1 Solid at 3456,452
+  INST room 7 obj 1 Solid at 3520,452
+  INST room 7 obj 174 Cutscene at 4800,324
+  INST room 7 obj 43 Level The Green One at 0,32
+ROOM 14 Character Secelt 640x480 speed 30 views false [] inst 10
+  INST room 14 obj 163 Static at 20,40
+  INST room 14 obj 163 Static at 224,40
+  INST room 14 obj 163 Static at 428,40
+  INST room 14 obj 162 Tlels at 16,32
+  INST room 14 obj 167 Knicknacks 2 at 220,32
+  INST room 14 obj 170 Dr. Robotnik 2 at 424,32
+  INST room 14 obj 169 Locked at 220,32
+  INST room 14 obj 169 Locked at 424,32
+  INST room 14 obj 169 Locked at 418,688
+  INST room 14 obj 172 Black at 0,0
+ROOM 15   640x480 speed 30 views false [] inst 1
+  INST room 15 obj 180 Wait at 160,192
+ROOM 16 Gotta Go Fest 640x480 speed 30 views false [] inst 2
+  INST room 16 obj 180 Wait at 0,0
+  INST room 16 obj 183 Warp at 32,0
+ROOM 17   640x480 speed 30 views false [] inst 1
+  INST room 17 obj 182 Next at 0,0
+ROOM 18 Pattycake 5050x480 speed 18 views true [640x480@640x480] inst 26
+  INST room 18 obj 185 Layer 2 at 64,192
+  INST room 18 obj 185 Layer 2 at 512,192
+  INST room 18 obj 185 Layer 2 at 960,192
+  INST room 18 obj 185 Layer 2 at 1408,192
+  INST room 18 obj 185 Layer 2 at 1856,192
+  INST room 18 obj 185 Layer 2 at 2304,192
+  INST room 18 obj 185 Layer 2 at 2752,192
+  INST room 18 obj 185 Layer 2 at 3200,192
+  INST room 18 obj 185 Layer 2 at 3648,192
+  INST room 18 obj 185 Layer 2 at 4096,192
+  INST room 18 obj 185 Layer 2 at 4544,192
+  INST room 18 obj 185 Layer 2 at 4992,192
+  INST room 18 obj 184 Layer 1 at 0,0
+  INST room 18 obj 184 Layer 1 at 1280,0
+  INST room 18 obj 184 Layer 1 at 640,0
+  INST room 18 obj 184 Layer 1 at 1920,0
+  INST room 18 obj 184 Layer 1 at 2560,0
+  INST room 18 obj 184 Layer 1 at 3200,0
+  INST room 18 obj 184 Layer 1 at 3840,0
+  INST room 18 obj 184 Layer 1 at 4480,0
+  INST room 18 obj 0 Sunky at 128,194
+  INST room 18 obj 1 Solid at -56,256
+  INST room 18 obj 1 Solid at -56,192
+  INST room 18 obj 189 Cutscene 2 at 1260,256
+  INST room 18 obj 192 Cutscene 3 at 1890,256
+  INST room 18 obj 186 Level Pattycake at 0,128
+ROOM 19   640x480 speed 30 views false [] inst 1
+  INST room 19 obj 180 Wait at 160,192
+ROOM 20 Aw YEH 640x480 speed 30 views false [] inst 2
+  INST room 20 obj 180 Wait at 0,0
+  INST room 20 obj 183 Warp at 32,0
+ROOM 21   640x480 speed 30 views false [] inst 1
+  INST room 21 obj 182 Next at 0,0
+ROOM 22 Character Secelt 2 640x480 speed 30 views false [] inst 10
+  INST room 22 obj 163 Static at 20,40
+  INST room 22 obj 163 Static at 224,40
+  INST room 22 obj 163 Static at 428,40
+  INST room 22 obj 170 Dr. Robotnik 2 at 424,32
+  INST room 22 obj 169 Locked at 424,32
+  INST room 22 obj 169 Locked at 418,688
+  INST room 22 obj 169 Locked at 16,32
+  INST room 22 obj 164 Knicknacks at 220,32
+  INST room 22 obj 197 Party at 28,40
+  INST room 22 obj 172 Black at 0,0
+ROOM 23 YOU MIGHT NOT BE ABLE TO RUN, BUT I MAY NEED TO DOUBLE CHECK THAT 5050x480 speed 18 views true [640x480@640x480] inst 101
+  INST room 23 obj 201 Knicknacks at 128,192
+  INST room 23 obj 1 Solid at 0,320
+  INST room 23 obj 1 Solid at 64,320
+  INST room 23 obj 1 Solid at 128,320
+  INST room 23 obj 1 Solid at 192,320
+  INST room 23 obj 1 Solid at 256,320
+  INST room 23 obj 1 Solid at 320,320
+  INST room 23 obj 1 Solid at 384,320
+  INST room 23 obj 1 Solid at 448,320
+  INST room 23 obj 1 Solid at 512,320
+  INST room 23 obj 1 Solid at 576,320
+  INST room 23 obj 1 Solid at 640,320
+  INST room 23 obj 1 Solid at 704,320
+  INST room 23 obj 1 Solid at 768,320
+  INST room 23 obj 1 Solid at 832,320
+  INST room 23 obj 1 Solid at 896,320
+  INST room 23 obj 1 Solid at 960,320
+  INST room 23 obj 1 Solid at 1024,320
+  INST room 23 obj 1 Solid at 1088,320
+  INST room 23 obj 1 Solid at 1152,320
+  INST room 23 obj 1 Solid at 1216,320
+  INST room 23 obj 1 Solid at 1280,320
+  INST room 23 obj 1 Solid at 1344,320
+  INST room 23 obj 1 Solid at 1408,320
+  INST room 23 obj 1 Solid at 1472,320
+  INST room 23 obj 1 Solid at 1536,320
+  INST room 23 obj 1 Solid at 1600,320
+  INST room 23 obj 1 Solid at 1664,320
+  INST room 23 obj 1 Solid at 1728,320
+  INST room 23 obj 1 Solid at 1792,320
+  INST room 23 obj 1 Solid at 1856,320
+  INST room 23 obj 1 Solid at 1920,320
+  INST room 23 obj 1 Solid at 1984,320
+  INST room 23 obj 1 Solid at 2048,320
+  INST room 23 obj 1 Solid at 2112,320
+  INST room 23 obj 1 Solid at 2176,320
+  INST room 23 obj 1 Solid at 2240,320
+  INST room 23 obj 1 Solid at 2304,320
+  INST room 23 obj 1 Solid at 2368,320
+  INST room 23 obj 1 Solid at 2432,320
+  INST room 23 obj 1 Solid at 2496,320
+  INST room 23 obj 1 Solid at 2560,320
+  INST room 23 obj 1 Solid at 2624,320
+  INST room 23 obj 1 Solid at 2688,320
+  INST room 23 obj 1 Solid at 2752,320
+  INST room 23 obj 1 Solid at 2816,320
+  INST room 23 obj 1 Solid at 2880,320
+  INST room 23 obj 1 Solid at 2944,320
+  INST room 23 obj 1 Solid at 3136,320
+  INST room 23 obj 1 Solid at 3072,320
+  INST room 23 obj 1 Solid at 3008,320
+  INST room 23 obj 1 Solid at 3200,320
+  INST room 23 obj 1 Solid at 3264,320
+  INST room 23 obj 1 Solid at 3328,320
+  INST room 23 obj 1 Solid at 3392,320
+  INST room 23 obj 1 Solid at 3456,320
+  INST room 23 obj 1 Solid at 3520,320
+  INST room 23 obj 1 Solid at 3584,320
+  INST room 23 obj 1 Solid at 3648,320
+  INST room 23 obj 1 Solid at 3712,320
+  INST room 23 obj 1 Solid at 3776,320
+  INST room 23 obj 1 Solid at 3840,320
+  INST room 23 obj 1 Solid at 3904,320
+  INST room 23 obj 1 Solid at 3968,320
+  INST room 23 obj 1 Solid at 4032,320
+  INST room 23 obj 1 Solid at 4096,320
+  INST room 23 obj 1 Solid at 4160,320
+  INST room 23 obj 1 Solid at 4224,320
+  INST room 23 obj 1 Solid at 4288,320
+  INST room 23 obj 1 Solid at 4352,320
+  INST room 23 obj 1 Solid at 4416,320
+  INST room 23 obj 1 Solid at 4480,320
+  INST room 23 obj 1 Solid at 4544,320
+  INST room 23 obj 1 Solid at 4608,320
+  INST room 23 obj 1 Solid at 4672,320
+  INST room 23 obj 1 Solid at 4736,320
+  INST room 23 obj 1 Solid at 4800,320
+  INST room 23 obj 1 Solid at 4864,320
+  INST room 23 obj 1 Solid at 4928,320
+  INST room 23 obj 1 Solid at 4992,320
+  INST room 23 obj 1 Solid at 4992,192
+  INST room 23 obj 1 Solid at 4992,256
+  INST room 23 obj 1 Solid at 4992,0
+  INST room 23 obj 1 Solid at 4992,64
+  INST room 23 obj 1 Solid at 4992,128
+  INST room 23 obj 205 Big Static Generator at 1152,256
+  INST room 23 obj 205 Big Static Generator at 704,256
+  INST room 23 obj 205 Big Static Generator at 960,256
+  INST room 23 obj 207 LaughGenerator at 1216,256
+  INST room 23 obj 205 Big Static Generator at 1088,256
+  INST room 23 obj 211 SpooksGenerator at 2880,256
+  INST room 23 obj 1 Solid at 2688,0
+  INST room 23 obj 1 Solid at 2752,0
+  INST room 23 obj 1 Solid at 2816,0
+  INST room 23 obj 1 Solid at 2880,0
+  INST room 23 obj 1 Solid at 2944,0
+  INST room 23 obj 1 Solid at 2944,64
+  INST room 23 obj 1 Solid at 2944,128
+  INST room 23 obj 1 Solid at 2944,192
+  INST room 23 obj 1 Solid at 2944,256
+  INST room 23 obj 198 YOU MIGHT NOT BE ABLE TO RUN, BUT I MAY NEED TO DOUBLE CHECK THAT at 0,64
+ROOM 25 Insert Sonic quote that has became an outdated meme here 640x480 speed 30 views false [] inst 2
+  INST room 25 obj 212 Insert Sonic quote that has became an outdated meme here at 0,0
+  INST room 25 obj 203 BigStatic at 0,0
+ROOM 26 BossBattle4Buttz 640x480 speed 18 views true [640x480@640x480] inst 40
+  INST room 26 obj 213 Wall at -64,-64
+  INST room 26 obj 213 Wall at 0,-64
+  INST room 26 obj 213 Wall at 64,-64
+  INST room 26 obj 213 Wall at 128,-64
+  INST room 26 obj 213 Wall at 192,-64
+  INST room 26 obj 213 Wall at 320,-64
+  INST room 26 obj 213 Wall at 256,-64
+  INST room 26 obj 213 Wall at 384,-64
+  INST room 26 obj 213 Wall at 448,-64
+  INST room 26 obj 213 Wall at 512,-64
+  INST room 26 obj 213 Wall at 576,-64
+  INST room 26 obj 213 Wall at 640,-64
+  INST room 26 obj 1 Solid at 0,320
+  INST room 26 obj 1 Solid at 64,320
+  INST room 26 obj 1 Solid at 192,320
+  INST room 26 obj 1 Solid at 128,320
+  INST room 26 obj 1 Solid at 256,320
+  INST room 26 obj 1 Solid at 320,320
+  INST room 26 obj 1 Solid at 384,320
+  INST room 26 obj 1 Solid at 448,320
+  INST room 26 obj 1 Solid at 512,320
+  INST room 26 obj 1 Solid at 576,320
+  INST room 26 obj 201 Knicknacks at 256,192
+  INST room 26 obj 213 Wall at -128,-64
+  INST room 26 obj 213 Wall at 704,-64
+  INST room 26 obj 1 Solid at -64,320
+  INST room 26 obj 1 Solid at 640,320
+  INST room 26 obj 213 Wall at -80,256
+  INST room 26 obj 213 Wall at -80,192
+  INST room 26 obj 213 Wall at -80,128
+  INST room 26 obj 213 Wall at -80,64
+  INST room 26 obj 213 Wall at -80,0
+  INST room 26 obj 213 Wall at 656,192
+  INST room 26 obj 213 Wall at 656,128
+  INST room 26 obj 213 Wall at 656,0
+  INST room 26 obj 213 Wall at 656,64
+  INST room 26 obj 213 Wall at 656,256
+  INST room 26 obj 1 Solid at 704,320
+  INST room 26 obj 214 ShmohkeMake at 0,0
+  INST room 26 obj 225 Smexeroonies at 32,0
+ROOM 27   640x480 speed 30 views false [] inst 1
+  INST room 27 obj 180 Wait at 160,192
+ROOM 28 Dances 640x480 speed 30 views false [] inst 2
+  INST room 28 obj 180 Wait at 0,0
+  INST room 28 obj 183 Warp at 32,0
+ROOM 29   640x480 speed 30 views false [] inst 1
+  INST room 29 obj 182 Next at 0,0
+ROOM 30 Character Secelt 3 640x480 speed 30 views false [] inst 10
+  INST room 30 obj 163 Static at 20,40
+  INST room 30 obj 163 Static at 224,40
+  INST room 30 obj 163 Static at 428,40
+  INST room 30 obj 169 Locked at 418,688
+  INST room 30 obj 169 Locked at 16,32
+  INST room 30 obj 197 Party at 28,40
+  INST room 30 obj 169 Locked at 220,32
+  INST room 30 obj 234 P a r t y at 220,40
+  INST room 30 obj 165 Dr. Robotnik at 424,32
+  INST room 30 obj 172 Black at 0,0
+ROOM 31 The Sanctuary 4000x1100 speed 18 views true [640x480@640x480] inst 83
+  INST room 31 obj 237 Stop at 384,32
+  INST room 31 obj 237 Stop at 448,32
+  INST room 31 obj 237 Stop at 512,32
+  INST room 31 obj 237 Stop at 512,96
+  INST room 31 obj 237 Stop at 448,64
+  INST room 31 obj 237 Stop at 448,128
+  INST room 31 obj 237 Stop at 256,192
+  INST room 31 obj 240 Stop 2 at 192,192
+  INST room 31 obj 1 Solid at 64,320
+  INST room 31 obj 1 Solid at 0,320
+  INST room 31 obj 1 Solid at 128,320
+  INST room 31 obj 1 Solid at 192,320
+  INST room 31 obj 1 Solid at 256,320
+  INST room 31 obj 1 Solid at 320,320
+  INST room 31 obj 1 Solid at 384,320
+  INST room 31 obj 1 Solid at 448,320
+  INST room 31 obj 1 Solid at 512,320
+  INST room 31 obj 1 Solid at 576,320
+  INST room 31 obj 1 Solid at 640,320
+  INST room 31 obj 1 Solid at -64,320
+  INST room 31 obj 1 Solid at -64,256
+  INST room 31 obj 1 Solid at -64,192
+  INST room 31 obj 1 Solid at 768,384
+  INST room 31 obj 1 Solid at 896,448
+  INST room 31 obj 1 Solid at 1152,576
+  INST room 31 obj 1 Solid at 1280,640
+  INST room 31 obj 1 Solid at 1344,640
+  INST room 31 obj 1 Solid at 1408,640
+  INST room 31 obj 1 Solid at 1536,640
+  INST room 31 obj 1 Solid at 1472,640
+  INST room 31 obj 1 Solid at 1600,640
+  INST room 31 obj 1 Solid at 1664,640
+  INST room 31 obj 1 Solid at 1728,640
+  INST room 31 obj 1 Solid at 1856,640
+  INST room 31 obj 1 Solid at 1792,640
+  INST room 31 obj 1 Solid at 1920,640
+  INST room 31 obj 1 Solid at 1984,640
+  INST room 31 obj 241 Stop3 at 192,264
+  INST room 31 obj 230 Dr at 128,165
+  INST room 31 obj 1 Solid at 704,352
+  INST room 31 obj 1 Solid at 832,416
+  INST room 31 obj 1 Solid at 960,480
+  INST room 31 obj 1 Solid at 1088,544
+  INST room 31 obj 1 Solid at 1216,608
+  INST room 31 obj 1 Solid at 1024,512
+  INST room 31 obj 245 Eye Deleter at 1728,576
+  INST room 31 obj 1 Solid at 2048,640
+  INST room 31 obj 1 Solid at 2112,640
+  INST room 31 obj 1 Solid at 2176,640
+  INST room 31 obj 1 Solid at 2240,640
+  INST room 31 obj 1 Solid at 2304,640
+  INST room 31 obj 1 Solid at 2368,640
+  INST room 31 obj 1 Solid at 2496,640
+  INST room 31 obj 1 Solid at 2432,640
+  INST room 31 obj 1 Solid at 2560,640
+  INST room 31 obj 1 Solid at 2624,640
+  INST room 31 obj 1 Solid at 2688,640
+  INST room 31 obj 1 Solid at 2752,640
+  INST room 31 obj 1 Solid at 2816,640
+  INST room 31 obj 1 Solid at 2880,640
+  INST room 31 obj 1 Solid at 2944,640
+  INST room 31 obj 1 Solid at 3008,640
+  INST room 31 obj 1 Solid at 3072,640
+  INST room 31 obj 1 Solid at 3136,640
+  INST room 31 obj 1 Solid at 3200,640
+  INST room 31 obj 1 Solid at 3264,640
+  INST room 31 obj 1 Solid at 3392,640
+  INST room 31 obj 1 Solid at 3328,640
+  INST room 31 obj 1 Solid at 3456,640
+  INST room 31 obj 1 Solid at 3520,640
+  INST room 31 obj 249 LeftSolid at 2688,576
+  INST room 31 obj 247 NextRobotnik at 3456,576
+  INST room 31 obj 248 FadeSound at 2752,576
+  INST room 31 obj 242 Dark at 0,0
+  INST room 31 obj 243 Light at 64,256
+  INST room 31 obj 243 Light at 384,256
+  INST room 31 obj 243 Light at 1344,576
+  INST room 31 obj 243 Light at 1792,576
+  INST room 31 obj 235 LevelFadeIn at 0,0
+  INST room 31 obj 236 Circle at 768,96
+  INST room 31 obj 238 The at -448,96
+  INST room 31 obj 239 Sanctuary at -1536,160
+  INST room 31 obj 244 Eyes at 1920,448
+ROOM 33   640x480 speed 3 views false [] inst 1
+  INST room 33 obj 251 Fall at 0,0
+ROOM 34 Fall 640x480 speed 15 views false [] inst 2
+  INST room 34 obj 250 Fallin' at 256,32
+  INST room 34 obj 39 Fade In 2 at 0,0
+ROOM 35   640x480 speed 30 views false [] inst 1
+  INST room 35 obj 257 Party at 0,0
+ROOM 36 PARTY 640x480 speed 30 views false [] inst 2
+  INST room 36 obj 252 PARTYTIEM at 160,256
+  INST room 36 obj 256 HOW2DANCEPARTY at 352,128
+ROOM 37 THEDANCEFLOOR 640x480 speed 30 views false [] inst 2
+  INST room 37 obj 258 Hi Sunkers at 160,288
+  INST room 37 obj 259 Hi Eggers at 320,288
+ROOM 38 Static 640x480 speed 30 views false [] inst 1
+  INST room 38 obj 260 LongStatic at 0,0
+ROOM 39 Stare 640x480 speed 30 views false [] inst 1
+  INST room 39 obj 261 Flicker at 0,0
+ROOM 40 Stare 2 640x480 speed 30 views false [] inst 1
+  INST room 40 obj 262 Flicker 2 at 0,0
+ROOM 41 Stare 4 640x480 speed 30 views false [] inst 1
+  INST room 41 obj 263 Creepers at 0,0
+ROOM 42 Stare 3 640x480 speed 30 views false [] inst 1
+  INST room 42 obj 262 Flicker 2 at 0,0
+ROOM 43 Static 2 640x480 speed 30 views false [] inst 1
+  INST room 43 obj 260 LongStatic at 0,0
+ROOM 44 Riddle 640x480 speed 30 views false [] inst 1
+  INST room 44 obj 264 Riddle Fiddle at 0,0
+SPRITE 0 TlelsStand frames 6 128x128
+SPRITE 1 TlelsWalk frames 4 128x128
+SPRITE 2 TlelsJump frames 14 128x128
+SPRITE 3 64x64 frames 1 64x64
+SPRITE 4 64x64 2 frames 1 64x64
+SPRITE 5 TlelsLeft frames 6 128x128
+SPRITE 6 TlelsWalkLeft frames 4 128x128
+SPRITE 7 TlelsJumpLeft frames 14 128x128
+SPRITE 8 TlelsTurnLeft frames 19 128x128
+SPRITE 9 TlelsTurnRight frames 19 128x128
+SPRITE 26 Fade Out frames 20 640x480
+SPRITE 27 Fade In frames 20 640x480
+SPRITE 29 LDFadeOut frames 8 640x480
+SPRITE 30 LDFadeIn frames 6 640x480
+SPRITE 31 Water frames 4 300x32
+SPRITE 32 Title frames 56 300x300
+SPRITE 33 Fade In 2 frames 10 667x500
+SPRITE 34 Press Enter frames 39 199x32
+SPRITE 35 Fade Out 2 frames 19 800x1000
+SPRITE 36 Sunky Did a Thing frames 11 640x185
+SPRITE 37 Level The Green One frames 8 640x184
+SPRITE 38 Level The Green One 2 frames 1 640x184
+SPRITE 39 Level The Green One 3 frames 13 640x301
+SPRITE 43 Flower frames 6 130x130
+SPRITE 44 Flower 2 frames 46 128x128
+SPRITE 45 Flower 3 frames 46 128x128
+SPRITE 140 Knicknacks frames 1 128x128
+SPRITE 141 KnicknacksWalk frames 2 128x128
+SPRITE 143 KnicknacksLeft frames 1 128x128
+SPRITE 144 KnicknacksWalkLeft frames 2 128x128
+SPRITE 148 Sunky frames 2 128x128
+SPRITE 149 Tlels frames 1 195x435
+SPRITE 150 Knicknacks frames 1 195x435
+SPRITE 151 Dr. Robotnik frames 1 195x435
+SPRITE 152 Static frames 3 186x126
+SPRITE 153 Locked frames 1 195x435
+SPRITE 154 SUNKY??? frames 2 640x480
+SPRITE 155 Sunkers frames 1 128x128
+SPRITE 156 Reach frames 24 128x128
+SPRITE 157 Layer1 frames 2 640x480
+SPRITE 158 Layer 2 frames 12 448x303
+SPRITE 159 Level Pattycake frames 8 640x184
+SPRITE 160 Level Pattycake 2 frames 1 640x184
+SPRITE 161 Level Pattycake 3 frames 11 640x301
+SPRITE 162 Sunky Sunker Sunkeroo! frames 4 640x480
+SPRITE 163 FLYING frames 1 99x104
+SPRITE 164 Trip frames 33 128x128
+SPRITE 165 CRYYY frames 2 128x128
+SPRITE 166 Ooks frames 1 128x160
+SPRITE 167 Turn frames 2 128x128
+SPRITE 168 Uh-Oh frames 1 128x128
+SPRITE 170 SunkyDance frames 6 128x128
+SPRITE 171 TlelsDance frames 6 128x128
+SPRITE 172 Party frames 1 186x126
+SPRITE 173 YOU MIGHT NOT BE ABLE TO RUN, BUT I MAY NEED TO DOUBLE CHECK THAT frames 8 640x184
+SPRITE 174 YOU MIGHT NOT BE ABLE TO RUN, BUT I MAY NEED TO DOUBLE CHECK THAT 2 frames 1 640x184
+SPRITE 175 YOU MIGHT NOT BE ABLE TO RUN, BUT I MAY NEED TO DOUBLE CHECK THAT 3 frames 13 640x301
+SPRITE 176 BigStatic frames 3 740x504
+SPRITE 178 Booty frames 1 640x480
+SPRITE 179 Shmohke frames 3 128x128
+SPRITE 180 Shmohke? frames 3 128x128
+SPRITE 181 ShmohkeLeft frames 3 128x128
+SPRITE 182 wweh frames 4 128x128
+SPRITE 183 KnicknacksDance frames 6 128x128
+SPRITE 184 WhatAGhost frames 41 128x128
+SPRITE 185 P a r t y frames 1 186x126
+SPRITE 186 Stand frames 1 99x155
+SPRITE 187 Walk frames 6 99x155
+SPRITE 188 Turn frames 1 99x155
+SPRITE 189 StandLeft frames 1 99x155
+SPRITE 190 WalkLeft frames 6 99x155
+SPRITE 191 The frames 1 93x43
+SPRITE 192 Sanctuary frames 1 299x43
+SPRITE 193 Circle frames 1 154x181
+SPRITE 194 Dark frames 1 680x500
+SPRITE 195 Light frames 4 80x80
+SPRITE 196 Eyes frames 4 32x32
+SPRITE 197 Falling frames 5 122x92
+SPRITE 198 HOW2DANCEPARTY frames 4 256x128
+SPRITE 199 PARTYTIEM frames 1 99x155
+SPRITE 200 YOU frames 5 99x155
+SPRITE 201 GOTTA frames 5 99x155
+SPRITE 202 PARTY frames 8 110x155
+SPRITE 203 Hi Sunkers frames 1 99x155
+SPRITE 204 Hi Eggers frames 2 128x128

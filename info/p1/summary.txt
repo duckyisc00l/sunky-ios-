@@ -1,0 +1,1180 @@
+version GameMaker8_0 fullscreen false scaling -1 interpolate false cursor true esc_close true f4 true f5f6 true freeze_on_lose_focus false
+counts sprites 105 sounds 40 backgrounds 33 scripts 0 fonts 0 timelines 0 objects 126 rooms 9 included 0 extensions 0
+SOUND 0 Level Fun ext .wav kind 1 bytes 14358746 vol 1
+SOUND 1 Ring ext .wav kind 0 bytes 120024 vol 1
+SOUND 2 Swipe ext .wav kind 0 bytes 28250 vol 1
+SOUND 3 Dash ext .wav kind 0 bytes 139228 vol 1
+SOUND 4 Turn ext .wav kind 0 bytes 203538 vol 1
+SOUND 5 Jump ext .wav kind 0 bytes 79210 vol 1
+SOUND 6 Motobug ext .wav kind 0 bytes 645884 vol 1
+SOUND 7 Strike ext .wav kind 0 bytes 99100 vol 1
+SOUND 8 Fall ext .wav kind 0 bytes 167184 vol 1
+SOUND 9 SpikeRise ext .wav kind 0 bytes 134032 vol 1
+SOUND 10 SpikeLower ext .wav kind 0 bytes 98496 vol 1
+SOUND 11 Explode ext .wav kind 0 bytes 175032 vol 1
+SOUND 12 End ext .wav kind 0 bytes 808614 vol 1
+SOUND 13 Sega ext .wav kind 0 bytes 287286 vol 0.8
+SOUND 14 Title ext .wav kind 1 bytes 4790834 vol 1
+SOUND 15 Sunky Did a Thing ext .wav kind 1 bytes 982256 vol 1
+SOUND 16 SignpostSpin ext .wav kind 3 bytes 174012 vol 1
+SOUND 17 Level The Green One ext .wav kind 1 bytes 14383780 vol 1
+SOUND 18 Skid ext .wav kind 0 bytes 49774 vol 1
+SOUND 19 Blast ext .wav kind 0 bytes 125866 vol 1
+SOUND 20 Sunky Fall ext .wav kind 0 bytes 244892 vol 1
+SOUND 21 Chomp ext .wav kind 0 bytes 375072 vol 1
+SOUND 22 Spring ext .wav kind 0 bytes 77768 vol 1
+SOUND 23 Faceplamp ext .wav kind 0 bytes 75714 vol 1
+SOUND 24 Level Moist ext .wav kind 1 bytes 18193600 vol 1
+SOUND 25 Underwater ext .wav kind 1 bytes 18193044 vol 1
+SOUND 26 Break ext .wav kind 0 bytes 25090 vol 1
+SOUND 27 FallIntoWater ext .wav kind 0 bytes 200528 vol 1
+SOUND 28 Splash ext .wav kind 0 bytes 155876 vol 1
+SOUND 30 SunkyFallIntoCliff ext .wav kind 0 bytes 255476 vol 1
+SOUND 31 Tube ext .wav kind 0 bytes 19960 vol 1
+SOUND 32 Fuse ext .WAV kind 0 bytes 36922 vol 1
+SOUND 33 Splode ext .wav kind 0 bytes 434220 vol 1
+SOUND 34 Fake Signpost Fly Away ext .wav kind 0 bytes 342060 vol 1
+SOUND 35 Act 2 ext .wav kind 1 bytes 10590600 vol 1
+SOUND 36 Falling ext .wav kind 0 bytes 370604 vol 1
+SOUND 37 Splat ext .wav kind 0 bytes 61484 vol 1
+SOUND 38 Stretch ext .wav kind 0 bytes 413740 vol 1
+SOUND 39 Pop ext .wav kind 0 bytes 71724 vol 1
+SOUND 40 ohno ext .wav kind 0 bytes 149096 vol 1
+ROOM ORDER 12 4 5 6 0 7 8 2 10
+ROOM 0 Level Fun 4000x544 speed 18 views true [640x480@640x480] inst 32
+  INST room 0 obj 0 Sunky at 128,256
+  INST room 0 obj 1 Solid at 0,384
+  INST room 0 obj 1 Solid at 64,384
+  INST room 0 obj 1 Solid at 128,384
+  INST room 0 obj 1 Solid at 192,384
+  INST room 0 obj 1 Solid at 256,384
+  INST room 0 obj 1 Solid at 320,384
+  INST room 0 obj 1 Solid at 384,384
+  INST room 0 obj 1 Solid at 448,384
+  INST room 0 obj 1 Solid at 512,384
+  INST room 0 obj 1 Solid at 576,384
+  INST room 0 obj 1 Solid at 640,384
+  INST room 0 obj 7 Coin at 512,320
+  INST room 0 obj 7 Coin at 576,320
+  INST room 0 obj 7 Coin at 640,320
+  INST room 0 obj 13 PlatformIndicator at 704,320
+  INST room 0 obj 14 Motobug Generatort at 1216,320
+  INST room 0 obj 18 Corner at 1856,320
+  INST room 0 obj 19 BackgroundScroll at 0,0
+  INST room 0 obj 1 Solid at 1792,203
+  INST room 0 obj 7 Coin at 2240,203
+  INST room 0 obj 7 Coin at 2304,203
+  INST room 0 obj 7 Coin at 2368,203
+  INST room 0 obj 7 Coin at 2432,203
+  INST room 0 obj 7 Coin at 3200,216
+  INST room 0 obj 7 Coin at 3136,216
+  INST room 0 obj 7 Coin at 3072,216
+  INST room 0 obj 25 SpikeGenerator at 3072,216
+  INST room 0 obj 30 Signpost at 3776,130
+  INST room 0 obj 1 Solid at -64,320
+  INST room 0 obj 1 Solid at -64,256
+  INST room 0 obj 9 Level Fun at 0,0
+ROOM 2 End 640x480 speed 30 views false [] inst 0
+ROOM 4 Some Company 640x480 speed 30 views true [640x480@640x480] inst 1
+  INST room 4 obj 31 Some Company at 24,184
+ROOM 5 LooneyDude Presents 640x480 speed 30 views true [640x480@640x480] inst 1
+  INST room 5 obj 34 LD at 0,0
+ROOM 6 Title 640x480 speed 30 views true [640x480@640x480] inst 3
+  INST room 6 obj 38 Title at 170,-30
+  INST room 6 obj 40 Press Enter at 220,372
+  INST room 6 obj 110 Level Select at 478,446
+ROOM 7 Level The Green One 4000x544 speed 18 views true [640x480@640x480] inst 42
+  INST room 7 obj 52 Flower 3 at 768,192
+  INST room 7 obj 51 Flower 2 at 640,192
+  INST room 7 obj 50 Flower at 896,128
+  INST room 7 obj 50 Flower at 256,128
+  INST room 7 obj 50 Flower at 128,160
+  INST room 7 obj 50 Flower at 1344,128
+  INST room 7 obj 51 Flower 2 at 1472,192
+  INST room 7 obj 50 Flower at 1600,128
+  INST room 7 obj 52 Flower 3 at 1856,256
+  INST room 7 obj 50 Flower at 2176,192
+  INST room 7 obj 50 Flower at 2880,192
+  INST room 7 obj 50 Flower at 3008,256
+  INST room 7 obj 51 Flower 2 at 3200,256
+  INST room 7 obj 52 Flower 3 at 3328,256
+  INST room 7 obj 0 Sunky at 128,258
+  INST room 7 obj 19 BackgroundScroll at 0,2
+  INST room 7 obj 7 Coin at 768,320
+  INST room 7 obj 7 Coin at 832,320
+  INST room 7 obj 7 Coin at 896,320
+  INST room 7 obj 54 Buzz Bomber Generator at 1088,320
+  INST room 7 obj 1 Solid at 1664,384
+  INST room 7 obj 1 Solid at 1664,448
+  INST room 7 obj 1 Solid at 1664,512
+  INST room 7 obj 59 Fall at 1828,320
+  INST room 7 obj 30 Signpost at 3776,296
+  INST room 7 obj 62 ChopperStop at 2560,704
+  INST room 7 obj 65 ChopperGenerator at 2176,384
+  INST room 7 obj 66 Spring at 3136,390
+  INST room 7 obj 7 Coin at 3168,320
+  INST room 7 obj 7 Coin at 3216,272
+  INST room 7 obj 7 Coin at 3280,256
+  INST room 7 obj 7 Coin at 3344,288
+  INST room 7 obj 7 Coin at 3392,336
+  INST room 7 obj 7 Coin at 3440,384
+  INST room 7 obj 1 Solid at -56,320
+  INST room 7 obj 1 Solid at -56,256
+  INST room 7 obj 1 Solid at 3456,452
+  INST room 7 obj 1 Solid at 3520,452
+  INST room 7 obj 1 Solid at 3584,452
+  INST room 7 obj 1 Solid at 3648,452
+  INST room 7 obj 1 Solid at 3712,453
+  INST room 7 obj 43 Level The Green One at 0,0
+ROOM 8 Level Moist 4000x2000 speed 18 views true [640x480@640x480] inst 915
+  INST room 8 obj 113 Win at Life at 3452,1184
+  INST room 8 obj 111 Weed DANK $$$$ at 1608,1108
+  INST room 8 obj 111 Weed DANK $$$$ at 1588,1116
+  INST room 8 obj 111 Weed DANK $$$$ at 976,1364
+  INST room 8 obj 111 Weed DANK $$$$ at 1004,1372
+  INST room 8 obj 111 Weed DANK $$$$ at 384,1108
+  INST room 8 obj 111 Weed DANK $$$$ at 360,1116
+  INST room 8 obj 111 Weed DANK $$$$ at 784,1620
+  INST room 8 obj 111 Weed DANK $$$$ at 808,1628
+  INST room 8 obj 111 Weed DANK $$$$ at 572,1940
+  INST room 8 obj 111 Weed DANK $$$$ at 596,1948
+  INST room 8 obj 111 Weed DANK $$$$ at 1696,1620
+  INST room 8 obj 111 Weed DANK $$$$ at 1724,1624
+  INST room 8 obj 111 Weed DANK $$$$ at 3112,788
+  INST room 8 obj 111 Weed DANK $$$$ at 3136,796
+  INST room 8 obj 111 Weed DANK $$$$ at 640,1108
+  INST room 8 obj 111 Weed DANK $$$$ at 620,1112
+  INST room 8 obj 111 Weed DANK $$$$ at 3192,1940
+  INST room 8 obj 111 Weed DANK $$$$ at 3216,1948
+  INST room 8 obj 111 Weed DANK $$$$ at 3548,1244
+  INST room 8 obj 111 Weed DANK $$$$ at 3512,1236
+  INST room 8 obj 111 Weed DANK $$$$ at 3472,1236
+  INST room 8 obj 111 Weed DANK $$$$ at 3436,1248
+  INST room 8 obj 102 Crystals at 1472,192
+  INST room 8 obj 102 Crystals at 3008,192
+  INST room 8 obj 102 Crystals at 448,128
+  INST room 8 obj 112 Crystal 2 at 392,1472
+  INST room 8 obj 112 Crystal 2 at 2148,1792
+  INST room 8 obj 112 Crystal 2 at 660,640
+  INST room 8 obj 112 Crystal 2 at 2412,640
+  INST room 8 obj 112 Crystal 2 at 3612,1344
+  INST room 8 obj 7 Coin at 448,256
+  INST room 8 obj 7 Coin at 384,256
+  INST room 8 obj 7 Coin at 512,256
+  INST room 8 obj 7 Coin at 576,256
+  INST room 8 obj 0 Sunky at 128,256
+  INST room 8 obj 73 Slope at 256,382
+  INST room 8 obj 73 Slope at 257,382
+  INST room 8 obj 73 Slope at 258,381
+  INST room 8 obj 73 Slope at 259,381
+  INST room 8 obj 73 Slope at 260,380
+  INST room 8 obj 73 Slope at 261,380
+  INST room 8 obj 73 Slope at 262,380
+  INST room 8 obj 73 Slope at 263,379
+  INST room 8 obj 73 Slope at 264,379
+  INST room 8 obj 73 Slope at 265,379
+  INST room 8 obj 73 Slope at 266,379
+  INST room 8 obj 73 Slope at 267,378
+  INST room 8 obj 73 Slope at 268,378
+  INST room 8 obj 73 Slope at 269,377
+  INST room 8 obj 73 Slope at 270,377
+  INST room 8 obj 73 Slope at 271,377
+  INST room 8 obj 73 Slope at 272,377
+  INST room 8 obj 73 Slope at 273,376
+  INST room 8 obj 73 Slope at 274,376
+  INST room 8 obj 73 Slope at 275,376
+  INST room 8 obj 73 Slope at 276,376
+  INST room 8 obj 73 Slope at 277,375
+  INST room 8 obj 73 Slope at 278,375
+  INST room 8 obj 73 Slope at 279,374
+  INST room 8 obj 73 Slope at 276,375
+  INST room 8 obj 73 Slope at 280,374
+  INST room 8 obj 73 Slope at 281,373
+  INST room 8 obj 73 Slope at 282,373
+  INST room 8 obj 73 Slope at 283,372
+  INST room 8 obj 73 Slope at 284,372
+  INST room 8 obj 73 Slope at 285,371
+  INST room 8 obj 73 Slope at 286,371
+  INST room 8 obj 73 Slope at 287,370
+  INST room 8 obj 73 Slope at 288,370
+  INST room 8 obj 73 Slope at 289,369
+  INST room 8 obj 73 Slope at 290,369
+  INST room 8 obj 73 Slope at 291,368
+  INST room 8 obj 73 Slope at 292,368
+  INST room 8 obj 73 Slope at 293,367
+  INST room 8 obj 73 Slope at 294,367
+  INST room 8 obj 73 Slope at 295,366
+  INST room 8 obj 73 Slope at 296,366
+  INST room 8 obj 73 Slope at 297,365
+  INST room 8 obj 73 Slope at 298,365
+  INST room 8 obj 73 Slope at 299,364
+  INST room 8 obj 73 Slope at 300,364
+  INST room 8 obj 73 Slope at 301,363
+  INST room 8 obj 73 Slope at 302,363
+  INST room 8 obj 73 Slope at 303,362
+  INST room 8 obj 73 Slope at 304,362
+  INST room 8 obj 73 Slope at 305,361
+  INST room 8 obj 73 Slope at 306,361
+  INST room 8 obj 73 Slope at 307,360
+  INST room 8 obj 73 Slope at 309,360
+  INST room 8 obj 73 Slope at 308,360
+  INST room 8 obj 73 Slope at 310,359
+  INST room 8 obj 73 Slope at 311,359
+  INST room 8 obj 73 Slope at 312,358
+  INST room 8 obj 73 Slope at 313,358
+  INST room 8 obj 73 Slope at 314,357
+  INST room 8 obj 73 Slope at 315,357
+  INST room 8 obj 73 Slope at 316,356
+  INST room 8 obj 73 Slope at 317,356
+  INST room 8 obj 73 Slope at 318,355
+  INST room 8 obj 73 Slope at 319,355
+  INST room 8 obj 73 Slope at 320,354
+  INST room 8 obj 73 Slope at 321,354
+  INST room 8 obj 73 Slope at 322,353
+  INST room 8 obj 73 Slope at 323,353
+  INST room 8 obj 73 Slope at 324,352
+  INST room 8 obj 73 Slope at 325,352
+  INST room 8 obj 73 Slope at 326,351
+  INST room 8 obj 73 Slope at 327,351
+  INST room 8 obj 73 Slope at 328,350
+  INST room 8 obj 73 Slope at 329,350
+  INST room 8 obj 73 Slope at 330,349
+  INST room 8 obj 73 Slope at 331,349
+  INST room 8 obj 73 Slope at 332,348
+  INST room 8 obj 73 Slope at 333,348
+  INST room 8 obj 73 Slope at 334,347
+  INST room 8 obj 73 Slope at 335,347
+  INST room 8 obj 73 Slope at 336,346
+  INST room 8 obj 73 Slope at 337,346
+  INST room 8 obj 73 Slope at 338,345
+  INST room 8 obj 73 Slope at 339,345
+  INST room 8 obj 73 Slope at 340,344
+  INST room 8 obj 73 Slope at 341,344
+  INST room 8 obj 73 Slope at 342,343
+  INST room 8 obj 73 Slope at 343,343
+  INST room 8 obj 73 Slope at 344,342
+  INST room 8 obj 73 Slope at 345,342
+  INST room 8 obj 73 Slope at 346,341
+  INST room 8 obj 73 Slope at 347,341
+  INST room 8 obj 73 Slope at 348,340
+  INST room 8 obj 73 Slope at 349,340
+  INST room 8 obj 73 Slope at 350,339
+  INST room 8 obj 73 Slope at 351,339
+  INST room 8 obj 73 Slope at 352,338
+  INST room 8 obj 73 Slope at 353,338
+  INST room 8 obj 73 Slope at 354,337
+  INST room 8 obj 73 Slope at 355,337
+  INST room 8 obj 73 Slope at 356,336
+  INST room 8 obj 73 Slope at 357,336
+  INST room 8 obj 73 Slope at 358,336
+  INST room 8 obj 73 Slope at 359,335
+  INST room 8 obj 73 Slope at 360,335
+  INST room 8 obj 73 Slope at 361,334
+  INST room 8 obj 73 Slope at 362,334
+  INST room 8 obj 73 Slope at 363,333
+  INST room 8 obj 73 Slope at 364,333
+  INST room 8 obj 73 Slope at 365,332
+  INST room 8 obj 73 Slope at 366,332
+  INST room 8 obj 73 Slope at 367,331
+  INST room 8 obj 73 Slope at 368,331
+  INST room 8 obj 73 Slope at 369,330
+  INST room 8 obj 73 Slope at 370,330
+  INST room 8 obj 73 Slope at 371,329
+  INST room 8 obj 73 Slope at 372,329
+  INST room 8 obj 73 Slope at 373,328
+  INST room 8 obj 73 Slope at 374,328
+  INST room 8 obj 73 Slope at 375,327
+  INST room 8 obj 73 Slope at 376,327
+  INST room 8 obj 73 Slope at 377,326
+  INST room 8 obj 73 Slope at 378,326
+  INST room 8 obj 73 Slope at 379,325
+  INST room 8 obj 73 Slope at 380,325
+  INST room 8 obj 73 Slope at 381,324
+  INST room 8 obj 73 Slope at 254,383
+  INST room 8 obj 73 Slope at 255,383
+  INST room 8 obj 73 Slope at 253,384
+  INST room 8 obj 73 Slope at 252,384
+  INST room 8 obj 73 Slope at 251,385
+  INST room 8 obj 73 Slope at 250,385
+  INST room 8 obj 73 Slope at 249,386
+  INST room 8 obj 73 Slope at 248,386
+  INST room 8 obj 73 Slope at 246,387
+  INST room 8 obj 73 Slope at 247,387
+  INST room 8 obj 73 Slope at 245,388
+  INST room 8 obj 73 Slope at 244,388
+  INST room 8 obj 73 Slope at 243,389
+  INST room 8 obj 73 Slope at 242,389
+  INST room 8 obj 73 Slope at 241,390
+  INST room 8 obj 73 Slope at 240,390
+  INST room 8 obj 75 Level Moist Indicator at 32,0
+  INST room 8 obj 74 Slope2 at 347,153
+  INST room 8 obj 74 Slope2 at 346,153
+  INST room 8 obj 74 Slope2 at 345,154
+  INST room 8 obj 74 Slope2 at 344,154
+  INST room 8 obj 74 Slope2 at 343,155
+  INST room 8 obj 74 Slope2 at 342,155
+  INST room 8 obj 74 Slope2 at 341,156
+  INST room 8 obj 74 Slope2 at 340,156
+  INST room 8 obj 74 Slope2 at 339,157
+  INST room 8 obj 74 Slope2 at 338,157
+  INST room 8 obj 74 Slope2 at 337,158
+  INST room 8 obj 74 Slope2 at 336,158
+  INST room 8 obj 74 Slope2 at 335,159
+  INST room 8 obj 74 Slope2 at 334,159
+  INST room 8 obj 74 Slope2 at 333,160
+  INST room 8 obj 74 Slope2 at 332,160
+  INST room 8 obj 74 Slope2 at 331,161
+  INST room 8 obj 74 Slope2 at 330,161
+  INST room 8 obj 74 Slope2 at 329,161
+  INST room 8 obj 74 Slope2 at 328,162
+  INST room 8 obj 74 Slope2 at 327,162
+  INST room 8 obj 74 Slope2 at 326,163
+  INST room 8 obj 74 Slope2 at 325,163
+  INST room 8 obj 74 Slope2 at 324,164
+  INST room 8 obj 74 Slope2 at 323,164
+  INST room 8 obj 74 Slope2 at 322,165
+  INST room 8 obj 74 Slope2 at 321,165
+  INST room 8 obj 74 Slope2 at 319,166
+  INST room 8 obj 74 Slope2 at 320,166
+  INST room 8 obj 74 Slope2 at 318,167
+  INST room 8 obj 74 Slope2 at 317,167
+  INST room 8 obj 74 Slope2 at 316,167
+  INST room 8 obj 74 Slope2 at 315,168
+  INST room 8 obj 74 Slope2 at 314,168
+  INST room 8 obj 74 Slope2 at 313,169
+  INST room 8 obj 74 Slope2 at 312,169
+  INST room 8 obj 74 Slope2 at 311,170
+  INST room 8 obj 74 Slope2 at 310,170
+  INST room 8 obj 74 Slope2 at 309,171
+  INST room 8 obj 74 Slope2 at 308,171
+  INST room 8 obj 74 Slope2 at 307,172
+  INST room 8 obj 74 Slope2 at 306,172
+  INST room 8 obj 74 Slope2 at 305,173
+  INST room 8 obj 74 Slope2 at 304,173
+  INST room 8 obj 74 Slope2 at 303,174
+  INST room 8 obj 74 Slope2 at 302,174
+  INST room 8 obj 74 Slope2 at 301,175
+  INST room 8 obj 74 Slope2 at 300,175
+  INST room 8 obj 74 Slope2 at 299,176
+  INST room 8 obj 74 Slope2 at 298,176
+  INST room 8 obj 74 Slope2 at 297,177
+  INST room 8 obj 74 Slope2 at 296,177
+  INST room 8 obj 74 Slope2 at 295,178
+  INST room 8 obj 74 Slope2 at 293,179
+  INST room 8 obj 74 Slope2 at 294,178
+  INST room 8 obj 74 Slope2 at 292,179
+  INST room 8 obj 74 Slope2 at 291,179
+  INST room 8 obj 74 Slope2 at 290,180
+  INST room 8 obj 74 Slope2 at 289,180
+  INST room 8 obj 74 Slope2 at 288,181
+  INST room 8 obj 74 Slope2 at 287,181
+  INST room 8 obj 74 Slope2 at 286,182
+  INST room 8 obj 74 Slope2 at 285,182
+  INST room 8 obj 74 Slope2 at 284,183
+  INST room 8 obj 74 Slope2 at 283,183
+  INST room 8 obj 74 Slope2 at 282,184
+  INST room 8 obj 74 Slope2 at 281,184
+  INST room 8 obj 74 Slope2 at 280,185
+  INST room 8 obj 74 Slope2 at 278,185
+  INST room 8 obj 74 Slope2 at 279,185
+  INST room 8 obj 74 Slope2 at 277,186
+  INST room 8 obj 74 Slope2 at 275,186
+  INST room 8 obj 74 Slope2 at 276,186
+  INST room 8 obj 74 Slope2 at 274,187
+  INST room 8 obj 74 Slope2 at 273,187
+  INST room 8 obj 74 Slope2 at 272,188
+  INST room 8 obj 74 Slope2 at 271,188
+  INST room 8 obj 74 Slope2 at 270,189
+  INST room 8 obj 74 Slope2 at 269,189
+  INST room 8 obj 74 Slope2 at 268,190
+  INST room 8 obj 74 Slope2 at 267,190
+  INST room 8 obj 74 Slope2 at 266,191
+  INST room 8 obj 74 Slope2 at 265,191
+  INST room 8 obj 74 Slope2 at 264,192
+  INST room 8 obj 74 Slope2 at 263,192
+  INST room 8 obj 74 Slope2 at 262,193
+  INST room 8 obj 74 Slope2 at 261,193
+  INST room 8 obj 74 Slope2 at 260,194
+  INST room 8 obj 74 Slope2 at 259,194
+  INST room 8 obj 74 Slope2 at 258,195
+  INST room 8 obj 74 Slope2 at 257,195
+  INST room 8 obj 74 Slope2 at 256,196
+  INST room 8 obj 74 Slope2 at 255,196
+  INST room 8 obj 74 Slope2 at 254,197
+  INST room 8 obj 74 Slope2 at 253,197
+  INST room 8 obj 74 Slope2 at 252,198
+  INST room 8 obj 74 Slope2 at 251,198
+  INST room 8 obj 74 Slope2 at 250,199
+  INST room 8 obj 74 Slope2 at 249,199
+  INST room 8 obj 74 Slope2 at 248,200
+  INST room 8 obj 74 Slope2 at 247,200
+  INST room 8 obj 74 Slope2 at 246,201
+  INST room 8 obj 74 Slope2 at 245,201
+  INST room 8 obj 74 Slope2 at 244,202
+  INST room 8 obj 74 Slope2 at 242,202
+  INST room 8 obj 74 Slope2 at 243,202
+  INST room 8 obj 74 Slope2 at 241,203
+  INST room 8 obj 74 Slope2 at 240,203
+  INST room 8 obj 74 Slope2 at 239,204
+  INST room 8 obj 74 Slope2 at 238,204
+  INST room 8 obj 74 Slope2 at 237,205
+  INST room 8 obj 74 Slope2 at 236,205
+  INST room 8 obj 74 Slope2 at 235,206
+  INST room 8 obj 74 Slope2 at 234,206
+  INST room 8 obj 74 Slope2 at 233,207
+  INST room 8 obj 74 Slope2 at 232,207
+  INST room 8 obj 59 Fall at 832,256
+  INST room 8 obj 76 Block that Breaks at 384,320
+  INST room 8 obj 76 Block that Breaks at 192,384
+  INST room 8 obj 76 Block that Breaks at 128,384
+  INST room 8 obj 76 Block that Breaks at 64,448
+  INST room 8 obj 76 Block that Breaks at 128,448
+  INST room 8 obj 76 Block that Breaks at 192,448
+  INST room 8 obj 76 Block that Breaks at 192,512
+  INST room 8 obj 76 Block that Breaks at 128,512
+  INST room 8 obj 76 Block that Breaks at 64,512
+  INST room 8 obj 76 Block that Breaks at 384,512
+  INST room 8 obj 76 Block that Breaks at 384,448
+  INST room 8 obj 76 Block that Breaks at 448,320
+  INST room 8 obj 76 Block that Breaks at 448,448
+  INST room 8 obj 76 Block that Breaks at 448,512
+  INST room 8 obj 76 Block that Breaks at 512,512
+  INST room 8 obj 76 Block that Breaks at 512,448
+  INST room 8 obj 76 Block that Breaks at 512,384
+  INST room 8 obj 76 Block that Breaks at 512,320
+  INST room 8 obj 76 Block that Breaks at 576,320
+  INST room 8 obj 76 Block that Breaks at 576,384
+  INST room 8 obj 76 Block that Breaks at 576,448
+  INST room 8 obj 76 Block that Breaks at 576,512
+  INST room 8 obj 76 Block that Breaks at 640,512
+  INST room 8 obj 76 Block that Breaks at 640,448
+  INST room 8 obj 76 Block that Breaks at 640,384
+  INST room 8 obj 76 Block that Breaks at 640,320
+  INST room 8 obj 76 Block that Breaks at 704,320
+  INST room 8 obj 76 Block that Breaks at 704,384
+  INST room 8 obj 76 Block that Breaks at 704,448
+  INST room 8 obj 76 Block that Breaks at 704,512
+  INST room 8 obj 76 Block that Breaks at 832,512
+  INST room 8 obj 76 Block that Breaks at 832,448
+  INST room 8 obj 76 Block that Breaks at 832,384
+  INST room 8 obj 76 Block that Breaks at 768,384
+  INST room 8 obj 76 Block that Breaks at 768,448
+  INST room 8 obj 76 Block that Breaks at 768,512
+  INST room 8 obj 30 Signpost at 3840,296
+  INST room 8 obj 76 Block that Breaks at 896,448
+  INST room 8 obj 76 Block that Breaks at 960,448
+  INST room 8 obj 76 Block that Breaks at 960,384
+  INST room 8 obj 76 Block that Breaks at 896,512
+  INST room 8 obj 76 Block that Breaks at 960,512
+  INST room 8 obj 76 Block that Breaks at 1280,512
+  INST room 8 obj 76 Block that Breaks at 1408,512
+  INST room 8 obj 76 Block that Breaks at 1344,512
+  INST room 8 obj 76 Block that Breaks at 1152,512
+  INST room 8 obj 76 Block that Breaks at 1088,512
+  INST room 8 obj 76 Block that Breaks at 1024,512
+  INST room 8 obj 76 Block that Breaks at 1024,384
+  INST room 8 obj 76 Block that Breaks at 1152,448
+  INST room 8 obj 76 Block that Breaks at 1280,384
+  INST room 8 obj 76 Block that Breaks at 1280,448
+  INST room 8 obj 76 Block that Breaks at 1216,448
+  INST room 8 obj 76 Block that Breaks at 1216,512
+  INST room 8 obj 76 Block that Breaks at 1408,448
+  INST room 8 obj 76 Block that Breaks at 1344,448
+  INST room 8 obj 76 Block that Breaks at 1344,384
+  INST room 8 obj 76 Block that Breaks at 1408,384
+  INST room 8 obj 76 Block that Breaks at 1472,384
+  INST room 8 obj 76 Block that Breaks at 1472,448
+  INST room 8 obj 76 Block that Breaks at 1472,512
+  INST room 8 obj 76 Block that Breaks at 1536,512
+  INST room 8 obj 76 Block that Breaks at 1536,448
+  INST room 8 obj 76 Block that Breaks at 1600,512
+  INST room 8 obj 76 Block that Breaks at 1536,384
+  INST room 8 obj 76 Block that Breaks at 1728,384
+  INST room 8 obj 76 Block that Breaks at 1664,384
+  INST room 8 obj 76 Block that Breaks at 1600,384
+  INST room 8 obj 76 Block that Breaks at 1600,448
+  INST room 8 obj 76 Block that Breaks at 1792,448
+  INST room 8 obj 76 Block that Breaks at 1728,448
+  INST room 8 obj 76 Block that Breaks at 1664,448
+  INST room 8 obj 76 Block that Breaks at 1664,512
+  INST room 8 obj 76 Block that Breaks at 1728,512
+  INST room 8 obj 76 Block that Breaks at 1792,512
+  INST room 8 obj 76 Block that Breaks at 1792,384
+  INST room 8 obj 76 Block that Breaks at 1920,384
+  INST room 8 obj 76 Block that Breaks at 1984,384
+  INST room 8 obj 76 Block that Breaks at 2048,384
+  INST room 8 obj 76 Block that Breaks at 2048,448
+  INST room 8 obj 76 Block that Breaks at 1984,448
+  INST room 8 obj 76 Block that Breaks at 1920,448
+  INST room 8 obj 76 Block that Breaks at 1920,512
+  INST room 8 obj 76 Block that Breaks at 1984,512
+  INST room 8 obj 76 Block that Breaks at 2048,512
+  INST room 8 obj 76 Block that Breaks at 2112,512
+  INST room 8 obj 76 Block that Breaks at 2112,448
+  INST room 8 obj 76 Block that Breaks at 2112,384
+  INST room 8 obj 76 Block that Breaks at 2496,512
+  INST room 8 obj 76 Block that Breaks at 2496,448
+  INST room 8 obj 76 Block that Breaks at 2496,384
+  INST room 8 obj 76 Block that Breaks at 2560,384
+  INST room 8 obj 76 Block that Breaks at 2624,384
+  INST room 8 obj 76 Block that Breaks at 2560,512
+  INST room 8 obj 76 Block that Breaks at 2560,448
+  INST room 8 obj 76 Block that Breaks at 2624,448
+  INST room 8 obj 76 Block that Breaks at 2624,512
+  INST room 8 obj 76 Block that Breaks at 2688,512
+  INST room 8 obj 76 Block that Breaks at 2688,448
+  INST room 8 obj 76 Block that Breaks at 2688,384
+  INST room 8 obj 76 Block that Breaks at 2752,384
+  INST room 8 obj 76 Block that Breaks at 2816,384
+  INST room 8 obj 76 Block that Breaks at 2880,384
+  INST room 8 obj 76 Block that Breaks at 3008,384
+  INST room 8 obj 76 Block that Breaks at 3072,384
+  INST room 8 obj 76 Block that Breaks at 3136,448
+  INST room 8 obj 76 Block that Breaks at 3072,448
+  INST room 8 obj 76 Block that Breaks at 2752,448
+  INST room 8 obj 76 Block that Breaks at 2752,512
+  INST room 8 obj 76 Block that Breaks at 2816,448
+  INST room 8 obj 76 Block that Breaks at 3008,448
+  INST room 8 obj 76 Block that Breaks at 2944,448
+  INST room 8 obj 76 Block that Breaks at 2880,448
+  INST room 8 obj 76 Block that Breaks at 2816,512
+  INST room 8 obj 76 Block that Breaks at 2880,512
+  INST room 8 obj 76 Block that Breaks at 2944,512
+  INST room 8 obj 76 Block that Breaks at 3136,512
+  INST room 8 obj 76 Block that Breaks at 3008,512
+  INST room 8 obj 76 Block that Breaks at 3072,512
+  INST room 8 obj 76 Block that Breaks at 3200,512
+  INST room 8 obj 76 Block that Breaks at 3200,448
+  INST room 8 obj 76 Block that Breaks at 3200,384
+  INST room 8 obj 76 Block that Breaks at 3136,384
+  INST room 8 obj 76 Block that Breaks at 3264,384
+  INST room 8 obj 76 Block that Breaks at 3328,384
+  INST room 8 obj 76 Block that Breaks at 3392,384
+  INST room 8 obj 76 Block that Breaks at 3456,384
+  INST room 8 obj 76 Block that Breaks at 3520,384
+  INST room 8 obj 76 Block that Breaks at 3456,448
+  INST room 8 obj 76 Block that Breaks at 3264,448
+  INST room 8 obj 76 Block that Breaks at 3328,448
+  INST room 8 obj 76 Block that Breaks at 3392,448
+  INST room 8 obj 76 Block that Breaks at 3520,448
+  INST room 8 obj 76 Block that Breaks at 3584,384
+  INST room 8 obj 76 Block that Breaks at 3584,448
+  INST room 8 obj 76 Block that Breaks at 3584,512
+  INST room 8 obj 76 Block that Breaks at 3520,512
+  INST room 8 obj 76 Block that Breaks at 3264,512
+  INST room 8 obj 76 Block that Breaks at 3328,512
+  INST room 8 obj 76 Block that Breaks at 3456,512
+  INST room 8 obj 76 Block that Breaks at 3392,512
+  INST room 8 obj 1 Solid at 3648,448
+  INST room 8 obj 1 Solid at 3648,384
+  INST room 8 obj 1 Solid at 3648,512
+  INST room 8 obj 1 Solid at 3648,640
+  INST room 8 obj 1 Solid at 3648,576
+  INST room 8 obj 76 Block that Breaks at 1024,448
+  INST room 8 obj 76 Block that Breaks at 1088,448
+  INST room 8 obj 1 Solid at 704,320
+  INST room 8 obj 78 RightSolid at 3648,0
+  INST room 8 obj 78 RightSolid at 3648,64
+  INST room 8 obj 78 RightSolid at 3648,128
+  INST room 8 obj 78 RightSolid at 3648,192
+  INST room 8 obj 78 RightSolid at 3648,256
+  INST room 8 obj 78 RightSolid at 3648,320
+  INST room 8 obj 1 Solid at 320,384
+  INST room 8 obj 1 Solid at 256,384
+  INST room 8 obj 1 Solid at 3840,448
+  INST room 8 obj 1 Solid at 3904,448
+  INST room 8 obj 1 Solid at 3968,448
+  INST room 8 obj 1 Solid at 256,448
+  INST room 8 obj 1 Solid at 320,448
+  INST room 8 obj 1 Solid at 1664,832
+  INST room 8 obj 1 Solid at 1664,896
+  INST room 8 obj 1 Solid at 1664,960
+  INST room 8 obj 1 Solid at 1664,1024
+  INST room 8 obj 1 Solid at 1664,1088
+  INST room 8 obj 1 Solid at 1664,1152
+  INST room 8 obj 1 Solid at 1600,1152
+  INST room 8 obj 1 Solid at 1536,1152
+  INST room 8 obj 1 Solid at 1536,1216
+  INST room 8 obj 1 Solid at 1536,1280
+  INST room 8 obj 1 Solid at 1536,1344
+  INST room 8 obj 1 Solid at 1536,1408
+  INST room 8 obj 1 Solid at 1472,1408
+  INST room 8 obj 1 Solid at 1408,1408
+  INST room 8 obj 1 Solid at 1344,1408
+  INST room 8 obj 1 Solid at 1216,1408
+  INST room 8 obj 1 Solid at 1280,1408
+  INST room 8 obj 1 Solid at 1152,1408
+  INST room 8 obj 1 Solid at 1088,1408
+  INST room 8 obj 1 Solid at 1024,1408
+  INST room 8 obj 1 Solid at 960,1408
+  INST room 8 obj 1 Solid at 896,1408
+  INST room 8 obj 1 Solid at 832,1408
+  INST room 8 obj 1 Solid at 768,1408
+  INST room 8 obj 1 Solid at 704,1408
+  INST room 8 obj 1 Solid at 640,1408
+  INST room 8 obj 1 Solid at 576,1408
+  INST room 8 obj 1 Solid at 512,1408
+  INST room 8 obj 1 Solid at 448,1408
+  INST room 8 obj 1 Solid at 384,1408
+  INST room 8 obj 1 Solid at 320,1408
+  INST room 8 obj 1 Solid at 320,1344
+  INST room 8 obj 1 Solid at 320,1280
+  INST room 8 obj 1 Solid at 320,1216
+  INST room 8 obj 1 Solid at 320,1152
+  INST room 8 obj 1 Solid at 384,1152
+  INST room 8 obj 1 Solid at 448,1152
+  INST room 8 obj 1 Solid at 512,1152
+  INST room 8 obj 1 Solid at 576,1152
+  INST room 8 obj 1 Solid at 640,1152
+  INST room 8 obj 1 Solid at 704,1152
+  INST room 8 obj 1 Solid at 768,1152
+  INST room 8 obj 1 Solid at 1280,1152
+  INST room 8 obj 1 Solid at 1216,1152
+  INST room 8 obj 1 Solid at 832,1152
+  INST room 8 obj 1 Solid at 896,1152
+  INST room 8 obj 1 Solid at 1088,1152
+  INST room 8 obj 1 Solid at 960,1152
+  INST room 8 obj 1 Solid at 1024,1152
+  INST room 8 obj 1 Solid at 1152,1152
+  INST room 8 obj 1 Solid at 1088,1472
+  INST room 8 obj 1 Solid at 1088,1536
+  INST room 8 obj 1 Solid at 1088,1600
+  INST room 8 obj 1 Solid at 1088,1664
+  INST room 8 obj 1 Solid at 1088,1728
+  INST room 8 obj 1 Solid at 1088,1792
+  INST room 8 obj 1 Solid at 1088,1856
+  INST room 8 obj 1 Solid at 1024,1856
+  INST room 8 obj 1 Solid at 960,1856
+  INST room 8 obj 1 Solid at 896,1856
+  INST room 8 obj 1 Solid at 832,1856
+  INST room 8 obj 1 Solid at 704,2024
+  INST room 8 obj 1 Solid at 768,2024
+  INST room 8 obj 1 Solid at 640,2024
+  INST room 8 obj 1 Solid at 832,2024
+  INST room 8 obj 1 Solid at 896,2024
+  INST room 8 obj 1 Solid at 960,2024
+  INST room 8 obj 1 Solid at 1024,2024
+  INST room 8 obj 1 Solid at 1088,2024
+  INST room 8 obj 1 Solid at 1152,2024
+  INST room 8 obj 1 Solid at 1216,2024
+  INST room 8 obj 1 Solid at 1280,2024
+  INST room 8 obj 1 Solid at 832,1664
+  INST room 8 obj 1 Solid at 768,1664
+  INST room 8 obj 1 Solid at 704,1664
+  INST room 8 obj 1 Solid at 640,1664
+  INST room 8 obj 1 Solid at 576,1664
+  INST room 8 obj 1 Solid at 512,1664
+  INST room 8 obj 1 Solid at 448,1664
+  INST room 8 obj 1 Solid at 384,1664
+  INST room 8 obj 1 Solid at 320,1664
+  INST room 8 obj 1 Solid at 256,1664
+  INST room 8 obj 1 Solid at 192,1664
+  INST room 8 obj 1 Solid at 128,1664
+  INST room 8 obj 1 Solid at 64,1664
+  INST room 8 obj 1 Solid at 0,1664
+  INST room 8 obj 1 Solid at 0,1728
+  INST room 8 obj 1 Solid at 0,1792
+  INST room 8 obj 1 Solid at 0,1856
+  INST room 8 obj 1 Solid at 0,1920
+  INST room 8 obj 1 Solid at 0,1984
+  INST room 8 obj 1 Solid at 64,1984
+  INST room 8 obj 1 Solid at 128,1984
+  INST room 8 obj 1 Solid at 192,1984
+  INST room 8 obj 1 Solid at 256,1984
+  INST room 8 obj 1 Solid at 320,1984
+  INST room 8 obj 1 Solid at 384,1984
+  INST room 8 obj 1 Solid at 448,1984
+  INST room 8 obj 1 Solid at 512,1984
+  INST room 8 obj 1 Solid at 576,1984
+  INST room 8 obj 1 Solid at 0,1600
+  INST room 8 obj 1 Solid at 0,1536
+  INST room 8 obj 1 Solid at 0,1472
+  INST room 8 obj 1 Solid at 0,1408
+  INST room 8 obj 1 Solid at 0,1344
+  INST room 8 obj 1 Solid at 0,1280
+  INST room 8 obj 1 Solid at 0,1216
+  INST room 8 obj 1 Solid at 0,1152
+  INST room 8 obj 1 Solid at 0,1088
+  INST room 8 obj 1 Solid at 0,1024
+  INST room 8 obj 1 Solid at 0,960
+  INST room 8 obj 1 Solid at 0,896
+  INST room 8 obj 1 Solid at 0,832
+  INST room 8 obj 1 Solid at 64,832
+  INST room 8 obj 1 Solid at 128,832
+  INST room 8 obj 1 Solid at 192,832
+  INST room 8 obj 1 Solid at 256,832
+  INST room 8 obj 1 Solid at 512,832
+  INST room 8 obj 1 Solid at 320,832
+  INST room 8 obj 1 Solid at 384,832
+  INST room 8 obj 1 Solid at 448,832
+  INST room 8 obj 1 Solid at 576,832
+  INST room 8 obj 1 Solid at 640,832
+  INST room 8 obj 1 Solid at 704,832
+  INST room 8 obj 1 Solid at 768,832
+  INST room 8 obj 1 Solid at 832,832
+  INST room 8 obj 1 Solid at 896,832
+  INST room 8 obj 1 Solid at 960,832
+  INST room 8 obj 1 Solid at 1024,832
+  INST room 8 obj 1 Solid at 1088,832
+  INST room 8 obj 1 Solid at 1152,832
+  INST room 8 obj 1 Solid at 1216,832
+  INST room 8 obj 1 Solid at 1280,832
+  INST room 8 obj 1 Solid at 1344,832
+  INST room 8 obj 1 Solid at 0,768
+  INST room 8 obj 1 Solid at 0,704
+  INST room 8 obj 1 Solid at 0,640
+  INST room 8 obj 1 Solid at 0,576
+  INST room 8 obj 1 Solid at 1728,832
+  INST room 8 obj 1 Solid at 1792,832
+  INST room 8 obj 1 Solid at 1856,832
+  INST room 8 obj 1 Solid at 1920,832
+  INST room 8 obj 1 Solid at 1984,832
+  INST room 8 obj 1 Solid at 2048,832
+  INST room 8 obj 1 Solid at 2112,832
+  INST room 8 obj 1 Solid at 2176,832
+  INST room 8 obj 1 Solid at 2240,832
+  INST room 8 obj 1 Solid at 2304,832
+  INST room 8 obj 1 Solid at 2368,832
+  INST room 8 obj 1 Solid at 2432,832
+  INST room 8 obj 1 Solid at 2496,832
+  INST room 8 obj 1 Solid at 2560,832
+  INST room 8 obj 1 Solid at 2624,832
+  INST room 8 obj 1 Solid at 2688,832
+  INST room 8 obj 1 Solid at 2880,832
+  INST room 8 obj 1 Solid at 2752,832
+  INST room 8 obj 1 Solid at 2816,832
+  INST room 8 obj 1 Solid at 2944,832
+  INST room 8 obj 1 Solid at 3008,832
+  INST room 8 obj 1 Solid at 3072,832
+  INST room 8 obj 1 Solid at 3136,832
+  INST room 8 obj 1 Solid at 3200,832
+  INST room 8 obj 1 Solid at 3264,832
+  INST room 8 obj 1 Solid at 3328,832
+  INST room 8 obj 1 Solid at 3328,1024
+  INST room 8 obj 1 Solid at 3328,896
+  INST room 8 obj 1 Solid at 3328,960
+  INST room 8 obj 1 Solid at 3328,1088
+  INST room 8 obj 1 Solid at 3328,1152
+  INST room 8 obj 1 Solid at 3328,1216
+  INST room 8 obj 1 Solid at 3328,1280
+  INST room 8 obj 1 Solid at 3328,1344
+  INST room 8 obj 1 Solid at 3328,1408
+  INST room 8 obj 1 Solid at 3328,1472
+  INST room 8 obj 1 Solid at 3328,1536
+  INST room 8 obj 1 Solid at 3328,1600
+  INST room 8 obj 1 Solid at 3392,1280
+  INST room 8 obj 1 Solid at 3456,1280
+  INST room 8 obj 1 Solid at 3520,1280
+  INST room 8 obj 1 Solid at 3584,1280
+  INST room 8 obj 1 Solid at 3584,1216
+  INST room 8 obj 1 Solid at 3584,1152
+  INST room 8 obj 1 Solid at 3840,832
+  INST room 8 obj 1 Solid at 3840,768
+  INST room 8 obj 1 Solid at 3840,896
+  INST room 8 obj 1 Solid at 3840,960
+  INST room 8 obj 1 Solid at 3840,1024
+  INST room 8 obj 1 Solid at 3840,1088
+  INST room 8 obj 1 Solid at 3840,1152
+  INST room 8 obj 1 Solid at 3840,1216
+  INST room 8 obj 1 Solid at 3840,1280
+  INST room 8 obj 1 Solid at 3840,1344
+  INST room 8 obj 1 Solid at 3840,1408
+  INST room 8 obj 1 Solid at 3840,1472
+  INST room 8 obj 1 Solid at 3840,1536
+  INST room 8 obj 1 Solid at 3776,1536
+  INST room 8 obj 1 Solid at 3712,1536
+  INST room 8 obj 1 Solid at 3648,1536
+  INST room 8 obj 1 Solid at 3584,1536
+  INST room 8 obj 1 Solid at 3840,1600
+  INST room 8 obj 1 Solid at 3840,1664
+  INST room 8 obj 1 Solid at 3840,1728
+  INST room 8 obj 1 Solid at 3840,1792
+  INST room 8 obj 1 Solid at 3840,1856
+  INST room 8 obj 1 Solid at 3840,1920
+  INST room 8 obj 1 Solid at 3840,1984
+  INST room 8 obj 1 Solid at 3776,1984
+  INST room 8 obj 1 Solid at 3712,1984
+  INST room 8 obj 1 Solid at 3648,1984
+  INST room 8 obj 1 Solid at 3584,1984
+  INST room 8 obj 1 Solid at 3520,1984
+  INST room 8 obj 1 Solid at 3456,1984
+  INST room 8 obj 1 Solid at 3392,1984
+  INST room 8 obj 1 Solid at 3328,1984
+  INST room 8 obj 1 Solid at 3264,1984
+  INST room 8 obj 1 Solid at 3200,1984
+  INST room 8 obj 1 Solid at 3136,1984
+  INST room 8 obj 1 Solid at 3072,1984
+  INST room 8 obj 1 Solid at 3008,1984
+  INST room 8 obj 1 Solid at 2944,1984
+  INST room 8 obj 1 Solid at 2880,1984
+  INST room 8 obj 1 Solid at 2816,1984
+  INST room 8 obj 1 Solid at 2752,1984
+  INST room 8 obj 1 Solid at 2688,1984
+  INST room 8 obj 1 Solid at 2624,1984
+  INST room 8 obj 1 Solid at 2560,1984
+  INST room 8 obj 1 Solid at 2496,1984
+  INST room 8 obj 1 Solid at 2432,1984
+  INST room 8 obj 1 Solid at 2368,1984
+  INST room 8 obj 1 Solid at 2304,1984
+  INST room 8 obj 1 Solid at 2240,1984
+  INST room 8 obj 1 Solid at 2176,1984
+  INST room 8 obj 1 Solid at 2112,1984
+  INST room 8 obj 1 Solid at 2048,1984
+  INST room 8 obj 1 Solid at 1984,1984
+  INST room 8 obj 1 Solid at 1920,1984
+  INST room 8 obj 1 Solid at 1856,1984
+  INST room 8 obj 1 Solid at 1792,1984
+  INST room 8 obj 1 Solid at 1728,1984
+  INST room 8 obj 1 Solid at 1664,1984
+  INST room 8 obj 1 Solid at 1600,1984
+  INST room 8 obj 1 Solid at 1536,1984
+  INST room 8 obj 1 Solid at 1472,1984
+  INST room 8 obj 1 Solid at 1408,1984
+  INST room 8 obj 1 Solid at 1280,1984
+  INST room 8 obj 1 Solid at 1344,1984
+  INST room 8 obj 1 Solid at 1344,1920
+  INST room 8 obj 1 Solid at 1344,1856
+  INST room 8 obj 1 Solid at 1344,1792
+  INST room 8 obj 1 Solid at 1344,1728
+  INST room 8 obj 1 Solid at 1344,1664
+  INST room 8 obj 1 Solid at 1408,1664
+  INST room 8 obj 1 Solid at 1472,1664
+  INST room 8 obj 1 Solid at 1536,1664
+  INST room 8 obj 1 Solid at 1600,1664
+  INST room 8 obj 1 Solid at 1664,1664
+  INST room 8 obj 1 Solid at 1792,1664
+  INST room 8 obj 1 Solid at 1728,1664
+  INST room 8 obj 1 Solid at 1792,1600
+  INST room 8 obj 1 Solid at 1792,1536
+  INST room 8 obj 1 Solid at 1792,1472
+  INST room 8 obj 1 Solid at 1792,1408
+  INST room 8 obj 1 Solid at 1792,1344
+  INST room 8 obj 1 Solid at 2496,896
+  INST room 8 obj 1 Solid at 2496,960
+  INST room 8 obj 1 Solid at 2496,1024
+  INST room 8 obj 1 Solid at 2496,1088
+  INST room 8 obj 1 Solid at 2432,1088
+  INST room 8 obj 1 Solid at 2368,1088
+  INST room 8 obj 1 Solid at 2304,1088
+  INST room 8 obj 1 Solid at 2240,1088
+  INST room 8 obj 1 Solid at 2176,1088
+  INST room 8 obj 1 Solid at 2112,1088
+  INST room 8 obj 1 Solid at 2048,1088
+  INST room 8 obj 1 Solid at 2048,1152
+  INST room 8 obj 1 Solid at 2048,1216
+  INST room 8 obj 1 Solid at 2048,1280
+  INST room 8 obj 1 Solid at 2048,1344
+  INST room 8 obj 1 Solid at 2048,1408
+  INST room 8 obj 1 Solid at 2048,1472
+  INST room 8 obj 1 Solid at 2048,1536
+  INST room 8 obj 1 Solid at 2048,1600
+  INST room 8 obj 1 Solid at 2048,1664
+  INST room 8 obj 1 Solid at 2048,1728
+  INST room 8 obj 1 Solid at 2112,1728
+  INST room 8 obj 1 Solid at 2176,1728
+  INST room 8 obj 1 Solid at 2240,1728
+  INST room 8 obj 1 Solid at 2304,1728
+  INST room 8 obj 1 Solid at 2304,1664
+  INST room 8 obj 1 Solid at 2304,1600
+  INST room 8 obj 1 Solid at 2304,1536
+  INST room 8 obj 1 Solid at 2304,1472
+  INST room 8 obj 1 Solid at 2304,1408
+  INST room 8 obj 1 Solid at 2304,1344
+  INST room 8 obj 1 Solid at 2368,1344
+  INST room 8 obj 1 Solid at 2432,1344
+  INST room 8 obj 1 Solid at 2496,1344
+  INST room 8 obj 1 Solid at 2560,1344
+  INST room 8 obj 1 Solid at 2624,1344
+  INST room 8 obj 1 Solid at 2688,1344
+  INST room 8 obj 1 Solid at 2752,1344
+  INST room 8 obj 1 Solid at 2752,1280
+  INST room 8 obj 1 Solid at 2752,1216
+  INST room 8 obj 1 Solid at 2752,1152
+  INST room 8 obj 1 Solid at 2752,1088
+  INST room 8 obj 1 Solid at 2816,1088
+  INST room 8 obj 1 Solid at 2880,1088
+  INST room 8 obj 1 Solid at 2944,1088
+  INST room 8 obj 1 Solid at 3008,1088
+  INST room 8 obj 1 Solid at 3072,1088
+  INST room 8 obj 1 Solid at 3072,1152
+  INST room 8 obj 1 Solid at 3072,1216
+  INST room 8 obj 1 Solid at 3072,1280
+  INST room 8 obj 1 Solid at 3072,1344
+  INST room 8 obj 1 Solid at 3072,1408
+  INST room 8 obj 1 Solid at 3072,1472
+  INST room 8 obj 1 Solid at 3072,1536
+  INST room 8 obj 1 Solid at 3072,1600
+  INST room 8 obj 1 Solid at 3008,1600
+  INST room 8 obj 1 Solid at 2944,1600
+  INST room 8 obj 1 Solid at 2880,1600
+  INST room 8 obj 1 Solid at 2816,1600
+  INST room 8 obj 1 Solid at 2752,1600
+  INST room 8 obj 1 Solid at 2688,1600
+  INST room 8 obj 1 Solid at 2624,1600
+  INST room 8 obj 1 Solid at 2560,1600
+  INST room 8 obj 1 Solid at 3648,704
+  INST room 8 obj 1 Solid at 3648,768
+  INST room 8 obj 1 Solid at 3648,832
+  INST room 8 obj 1 Solid at 3584,832
+  INST room 8 obj 1 Solid at 3520,832
+  INST room 8 obj 1 Solid at 3456,832
+  INST room 8 obj 1 Solid at 3392,832
+  INST room 8 obj 76 Block that Breaks at 64,384
+  INST room 8 obj 76 Block that Breaks at 448,384
+  INST room 8 obj 76 Block that Breaks at 384,384
+  INST room 8 obj 76 Block that Breaks at 2944,384
+  INST room 8 obj 76 Block that Breaks at 896,384
+  INST room 8 obj 76 Block that Breaks at 1088,384
+  INST room 8 obj 76 Block that Breaks at 1152,384
+  INST room 8 obj 76 Block that Breaks at 1216,384
+  INST room 8 obj 98 Orbinaughty Generator at 1344,320
+  INST room 8 obj 1 Solid at 3904,644
+  INST room 8 obj 1 Solid at 3904,580
+  INST room 8 obj 1 Solid at 3904,708
+  INST room 8 obj 78 RightSolid at 4064,384
+  INST room 8 obj 78 RightSolid at 4064,320
+  INST room 8 obj 76 Block that Breaks at 1856,384
+  INST room 8 obj 76 Block that Breaks at 1856,448
+  INST room 8 obj 76 Block that Breaks at 1856,512
+  INST room 8 obj 25 SpikeGenerator at 1856,312
+  INST room 8 obj 25 SpikeGenerator at 1920,312
+  INST room 8 obj 25 SpikeGenerator at 2048,312
+  INST room 8 obj 25 SpikeGenerator at 1984,312
+  INST room 8 obj 1 Solid at 0,512
+  INST room 8 obj 1 Solid at 0,448
+  INST room 8 obj 76 Block that Breaks at 0,384
+  INST room 8 obj 99 SpikeDegenerator at 2920,320
+  INST room 8 obj 101 Oops Generator at 3008,320
+  INST room 8 obj 76 Block that Breaks at 2176,384
+  INST room 8 obj 76 Block that Breaks at 2240,384
+  INST room 8 obj 76 Block that Breaks at 2304,384
+  INST room 8 obj 76 Block that Breaks at 2368,384
+  INST room 8 obj 76 Block that Breaks at 2432,384
+  INST room 8 obj 76 Block that Breaks at 2432,448
+  INST room 8 obj 76 Block that Breaks at 2368,448
+  INST room 8 obj 76 Block that Breaks at 2240,448
+  INST room 8 obj 76 Block that Breaks at 2304,448
+  INST room 8 obj 76 Block that Breaks at 2176,448
+  INST room 8 obj 76 Block that Breaks at 2176,512
+  INST room 8 obj 76 Block that Breaks at 2240,512
+  INST room 8 obj 76 Block that Breaks at 2304,512
+  INST room 8 obj 76 Block that Breaks at 2432,512
+  INST room 8 obj 76 Block that Breaks at 2368,512
+  INST room 8 obj 1 Solid at 3776,400
+  INST room 8 obj 1 Solid at 3712,400
+  INST room 8 obj 1 Solid at 0,256
+  INST room 8 obj 1 Solid at 0,320
+  INST room 8 obj 72 Water at 64,448
+  INST room 8 obj 72 Water at 128,448
+  INST room 8 obj 72 Water at 192,448
+  INST room 8 obj 72 Water at 256,448
+  INST room 8 obj 72 Water at 320,448
+  INST room 8 obj 72 Water at 384,448
+  INST room 8 obj 72 Water at 448,448
+  INST room 8 obj 72 Water at 512,448
+  INST room 8 obj 72 Water at 576,448
+  INST room 8 obj 72 Water at 640,448
+  INST room 8 obj 72 Water at 704,448
+  INST room 8 obj 72 Water at 768,448
+  INST room 8 obj 72 Water at 832,448
+  INST room 8 obj 72 Water at 896,448
+  INST room 8 obj 72 Water at 960,448
+  INST room 8 obj 72 Water at 3840,448
+  INST room 8 obj 72 Water at 3904,448
+  INST room 8 obj 72 Water at 3968,448
+  INST room 8 obj 72 Water at 1024,448
+  INST room 8 obj 72 Water at 1088,448
+  INST room 8 obj 72 Water at 1152,448
+  INST room 8 obj 72 Water at 1216,448
+  INST room 8 obj 72 Water at 1280,448
+  INST room 8 obj 72 Water at 1344,448
+  INST room 8 obj 72 Water at 1408,448
+  INST room 8 obj 72 Water at 1472,448
+  INST room 8 obj 72 Water at 1536,448
+  INST room 8 obj 72 Water at 1600,448
+  INST room 8 obj 72 Water at 1664,448
+  INST room 8 obj 72 Water at 1728,448
+  INST room 8 obj 72 Water at 1792,448
+  INST room 8 obj 72 Water at 1920,448
+  INST room 8 obj 72 Water at 1984,448
+  INST room 8 obj 72 Water at 2048,448
+  INST room 8 obj 72 Water at 2112,448
+  INST room 8 obj 72 Water at 2496,448
+  INST room 8 obj 72 Water at 2560,448
+  INST room 8 obj 72 Water at 2624,448
+  INST room 8 obj 72 Water at 2688,448
+  INST room 8 obj 72 Water at 2752,448
+  INST room 8 obj 72 Water at 2816,448
+  INST room 8 obj 72 Water at 2880,448
+  INST room 8 obj 72 Water at 2944,448
+  INST room 8 obj 72 Water at 3008,448
+  INST room 8 obj 72 Water at 3072,448
+  INST room 8 obj 72 Water at 3136,448
+  INST room 8 obj 72 Water at 3200,448
+  INST room 8 obj 72 Water at 3264,448
+  INST room 8 obj 72 Water at 3328,448
+  INST room 8 obj 72 Water at 3392,448
+  INST room 8 obj 72 Water at 3456,448
+  INST room 8 obj 72 Water at 3584,448
+  INST room 8 obj 72 Water at 3520,448
+  INST room 8 obj 72 Water at 3648,448
+  INST room 8 obj 87 Water 2 at 3712,448
+  INST room 8 obj 87 Water 2 at 3776,448
+  INST room 8 obj 72 Water at 1856,448
+  INST room 8 obj 72 Water at 0,448
+  INST room 8 obj 72 Water at 2176,448
+  INST room 8 obj 72 Water at 2240,448
+  INST room 8 obj 72 Water at 2368,448
+  INST room 8 obj 72 Water at 2304,448
+  INST room 8 obj 72 Water at 2432,448
+  INST room 8 obj 162 Water3 at 3712,480
+  INST room 8 obj 162 Water3 at 3776,480
+  INST room 8 obj 91 Mushroom at 64,336
+  INST room 8 obj 91 Mushroom at 704,272
+  INST room 8 obj 91 Mushroom at 1152,336
+  INST room 8 obj 91 Mushroom at 1184,336
+  INST room 8 obj 92 Mushroom 2 at 96,340
+  INST room 8 obj 92 Mushroom 2 at 672,276
+  INST room 8 obj 92 Mushroom 2 at 1120,340
+  INST room 8 obj 92 Mushroom 2 at 1216,340
+  INST room 8 obj 92 Mushroom 2 at 2016,340
+  INST room 8 obj 92 Mushroom 2 at 1968,340
+  INST room 8 obj 91 Mushroom at 1992,336
+  INST room 8 obj 91 Mushroom at 2512,336
+  INST room 8 obj 92 Mushroom 2 at 2528,340
+ROOM 10 Level Secelt 640x480 speed 30 views false [] inst 28
+  INST room 10 obj 106 Level Fun LS at 32,32
+  INST room 10 obj 106 Level Fun LS at 96,32
+  INST room 10 obj 106 Level Fun LS at 160,32
+  INST room 10 obj 106 Level Fun LS at 224,32
+  INST room 10 obj 108 Level Moist LS at 32,240
+  INST room 10 obj 108 Level Moist LS at 96,240
+  INST room 10 obj 108 Level Moist LS at 160,240
+  INST room 10 obj 108 Level Moist LS at 224,240
+  INST room 10 obj 108 Level Moist LS at 288,240
+  INST room 10 obj 108 Level Moist LS at 0,240
+  INST room 10 obj 107 LTGO LS at 0,128
+  INST room 10 obj 107 LTGO LS at 64,128
+  INST room 10 obj 107 LTGO LS at 128,128
+  INST room 10 obj 107 LTGO LS at 192,128
+  INST room 10 obj 107 LTGO LS at 256,128
+  INST room 10 obj 107 LTGO LS at 320,128
+  INST room 10 obj 107 LTGO LS at 384,128
+  INST room 10 obj 107 LTGO LS at 448,128
+  INST room 10 obj 107 LTGO LS at 512,128
+  INST room 10 obj 109 Level Pacguy's Fav LS at 0,336
+  INST room 10 obj 109 Level Pacguy's Fav LS at 64,336
+  INST room 10 obj 109 Level Pacguy's Fav LS at 128,336
+  INST room 10 obj 109 Level Pacguy's Fav LS at 192,336
+  INST room 10 obj 109 Level Pacguy's Fav LS at 256,336
+  INST room 10 obj 109 Level Pacguy's Fav LS at 320,336
+  INST room 10 obj 109 Level Pacguy's Fav LS at 384,336
+  INST room 10 obj 109 Level Pacguy's Fav LS at 448,336
+  INST room 10 obj 109 Level Pacguy's Fav LS at 480,336
+ROOM 12 Warning 640x480 speed 30 views false [] inst 1
+  INST room 12 obj 140 Play at 256,400
+SPRITE 0 SunkyStand frames 1 128x128
+SPRITE 1 SunkyWalk frames 4 128x128
+SPRITE 2 SunkyJump frames 14 128x128
+SPRITE 3 64x64 frames 1 64x64
+SPRITE 4 64x64 2 frames 1 64x64
+SPRITE 5 SunkyLeft frames 1 128x128
+SPRITE 6 SunkyWalkLeft frames 4 128x128
+SPRITE 7 SunkyJumpLeft frames 14 128x128
+SPRITE 8 SunkyTurnLeft frames 23 128x128
+SPRITE 9 SunkyTurnRight frames 23 128x128
+SPRITE 10 Coin frames 12 60x60
+SPRITE 11 ByeBye frames 5 60x60
+SPRITE 12 Level Fun frames 8 633x184
+SPRITE 13 Level Fun 2 frames 1 236x181
+SPRITE 14 Level Fun 3 frames 9 348x297
+SPRITE 15 Platform frames 4 128x400
+SPRITE 16 Platform 2 frames 1 128x400
+SPRITE 17 Motobug frames 4 256x256
+SPRITE 18 MotobugFall frames 11 256x500
+SPRITE 19 Reach frames 23 300x300
+SPRITE 20 Spikes frames 1 60x64
+SPRITE 21 Spikes Rise frames 2 55x64
+SPRITE 22 Spikes Lower frames 2 55x64
+SPRITE 23 Sunkysplode frames 10 640x480
+SPRITE 24 Signpost frames 20 170x158
+SPRITE 25 Some Company frames 44 595x74
+SPRITE 26 Fade Out frames 20 640x480
+SPRITE 27 Fade In frames 20 640x480
+SPRITE 29 LDFadeOut frames 8 640x480
+SPRITE 30 LDFadeIn frames 6 640x480
+SPRITE 31 Water frames 4 300x32
+SPRITE 32 Title frames 56 300x300
+SPRITE 33 Fade In 2 frames 10 667x500
+SPRITE 34 Press Enter frames 39 199x32
+SPRITE 35 Fade Out 2 frames 19 800x1000
+SPRITE 36 Sunky Did a Thing frames 11 640x185
+SPRITE 37 Level The Green One frames 7 640x184
+SPRITE 38 Level The Green One 2 frames 1 312x181
+SPRITE 39 Level The Green One 3 frames 13 397x301
+SPRITE 40 Lyrics frames 62 338x223
+SPRITE 41 Lyrics 2 frames 91 332x182
+SPRITE 42 Lyrics 4 frames 81 287x46
+SPRITE 43 Flower frames 6 130x130
+SPRITE 44 Flower 2 frames 46 128x128
+SPRITE 45 Flower 3 frames 46 128x128
+SPRITE 47 Buzz Bomber frames 47 203x146
+SPRITE 48 Buzz Bomber 2 frames 2 149x91
+SPRITE 49 Missile Create frames 2 64x64
+SPRITE 50 Missile frames 2 32x32
+SPRITE 51 Fall frames 28 128x192
+SPRITE 53 Chopper frames 7 128x128
+SPRITE 54 Spring frames 1 128x64
+SPRITE 55 Spring 2 frames 12 128x300
+SPRITE 56 SunkySpring frames 5 128x128
+SPRITE 57 SunkySpring2 frames 17 128x128
+SPRITE 58 Chopper Collision frames 1 128x128
+SPRITE 59 Level Moist frames 6 230x182
+SPRITE 61 Water frames 16 64x64
+SPRITE 62 Slope frames 2 1x64
+SPRITE 64 Block frames 1 64x64
+SPRITE 65 Break frames 3 128x128
+SPRITE 66 SunkyFallIntoWater frames 22 128x192
+SPRITE 67 SunkyFallIntoWater2 frames 1 128x192
+SPRITE 68 Splash frames 4 64x64
+SPRITE 69 SunkySwim frames 14 128x130
+SPRITE 70 SunkySwimLeft frames 14 128x130
+SPRITE 73 SunkySwimTurnLeft frames 5 128x130
+SPRITE 74 SunkySwimTurnRight frames 5 128x130
+SPRITE 75 SunkySinky frames 7 128x300
+SPRITE 76 SunkySwimMask frames 1 128x130
+SPRITE 83 Mushrooms frames 21 48x48
+SPRITE 84 Mushroom 2 frames 21 48x40
+SPRITE 86 Mushroom Bye frames 3 48x40
+SPRITE 87 Orbinaughty frames 4 180x360
+SPRITE 88 Orbinaughty Middle frames 3 180x360
+SPRITE 89 Orbinaughty Low frames 4 180x360
+SPRITE 90 Orbinaughty Up frames 3 180x360
+SPRITE 91 Oops! frames 1 162x70
+SPRITE 92 Crystals frames 1 216x192
+SPRITE 93 Crystals Bye frames 3 216x192
+SPRITE 94 (Again) frames 1 32x16
+SPRITE 95 Level Select frames 1 160x32
+SPRITE 96 Weed frames 22 17x45
+SPRITE 98 Win at Life Monitor frames 1 98x98
+SPRITE 99 LOL JK frames 1 98x98
+SPRITE 102 Pipe frames 1 64x64
+SPRITE 103 PipePrepare frames 27 64x64
+SPRITE 104 Fire frames 3 64x200
+SPRITE 105 Fire 2 frames 1 640x480
+SPRITE 106 Fire 3 frames 3 64x200
+SPRITE 108 Fire Mask frames 1 64x200
+SPRITE 110 SunkyFan frames 15 128x128
+SPRITE 113 SunkyFallAgeen frames 13 300x432
+SPRITE 115 Empty frames 1 64x64
+SPRITE 119 Button frames 1 164x60
+SPRITE 120 Play frames 1 128x64
+SPRITE 121 Button 2 frames 1 128x64
+SPRITE 122 Quit frames 1 163x60
+SPRITE 126 SunkyRotate frames 9 448x258
+SPRITE 136 SunkySquash frames 1 128x128
+SPRITE 137 SunkySquash 2 frames 2 128x128
+SPRITE 138 SunkySquash 3 frames 11 128x128
+SPRITE 139 SunkySquash4 frames 6 128x128
+SPRITE 140 Water2 frames 16 64x32
+SPRITE 141 Water3 frames 16 64x32

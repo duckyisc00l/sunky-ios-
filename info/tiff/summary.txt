@@ -1,0 +1,1023 @@
+version GameMaker8_1 fullscreen false scaling -1 interpolate false cursor true esc_close true f4 true f5f6 false freeze_on_lose_focus false
+counts sprites 106 sounds 39 backgrounds 31 scripts 0 fonts 0 timelines 0 objects 182 rooms 30 included 0 extensions 0
+SOUND 0 We Are Framily ext .wav kind 1 bytes 2964524 vol 1
+SOUND 1 Dialouge ext .wav kind 0 bytes 642348 vol 1
+SOUND 2 Swipe ext .wav kind 0 bytes 28250 vol 1
+SOUND 3 Dash ext .wav kind 0 bytes 139228 vol 1
+SOUND 4 Turn ext .wav kind 0 bytes 203538 vol 1
+SOUND 5 Jump ext .wav kind 0 bytes 79210 vol 1
+SOUND 6 Oothboond ext .wav kind 1 bytes 5191724 vol 1
+SOUND 7 Static ext .wav kind 0 bytes 198164 vol 1
+SOUND 8 Warp ext .wav kind 0 bytes 329772 vol 1
+SOUND 9 SpecialRing ext .wav kind 0 bytes 182828 vol 1
+SOUND 10 Milk and Cereal ext .wav kind 0 bytes 915500 vol 1
+SOUND 11 BLEEP ext .wav kind 0 bytes 735276 vol 1
+SOUND 12 Chomp ext .wav kind 0 bytes 71724 vol 0.83
+SOUND 13 CremJump ext .wav kind 0 bytes 31602 vol 1
+SOUND 14 Title ext .wav kind 1 bytes 4790834 vol 1
+SOUND 15 Pbbt ext .wav kind 0 bytes 43052 vol 1
+SOUND 16 CerealPour ext .wav kind 0 bytes 911404 vol 1
+SOUND 17 BigStatic ext .wav kind 0 bytes 26124 vol 0.7
+SOUND 18 Why ext .wav kind 1 bytes 13557804 vol 1
+SOUND 19 Appear ext .wav kind 0 bytes 217132 vol 1
+SOUND 20 Milk ext .wav kind 0 bytes 559660 vol 1
+SOUND 21 Ambience ext .wav kind 1 bytes 3574102 vol 1
+SOUND 22 LongStatic ext .wav kind 0 bytes 317754 vol 0.72
+SOUND 23 Candy ext .wav kind 1 bytes 7811116 vol 1
+SOUND 41 Head Shake ext .wav kind 0 bytes 135212 vol 1
+SOUND 42 Intro Music ext .wav kind 1 bytes 2777132 vol 1
+SOUND 43 Fake Bluescreen ext .wav kind 0 bytes 161836 vol 1
+SOUND 44 Smooch ext .wav kind 0 bytes 428076 vol 1
+SOUND 45 Break ext .wav kind 0 bytes 53292 vol 1
+SOUND 46 Soos ext .wav kind 1 bytes 1025068 vol 1
+SOUND 47 Credits ext .mp3 kind 1 bytes 932205 vol 1
+SOUND 48 BreakRock ext .wav kind 0 bytes 146988 vol 1
+SOUND 49 Lick ext .wav kind 0 bytes 1183788 vol 1
+SOUND 50 GOTTAGOFAST ext .wav kind 1 bytes 3149400 vol 1
+SOUND 51 ActWhudevuh ext .wav kind 1 bytes 5571036 vol 1
+SOUND 52 Kiss ext .wav kind 0 bytes 14380 vol 1
+SOUND 53 Pull ext .wav kind 0 bytes 100396 vol 1
+SOUND 54 End ext .wav kind 1 bytes 2369984 vol 1
+SOUND 55 Chewing ext .wav kind 0 bytes 364936 vol 1
+ROOM ORDER 48 57 58 59 46 47 6 49 50 52 51 7 45 14 22 53 30 54 56 60 61 63 62 66 67 68 69 70 71 64
+ROOM 6 Title 896x504 speed 30 views true [896x504@896x504] inst 3
+  INST room 6 obj 40 Press Enter at 344,372
+  INST room 6 obj 110 Level Select at 2,2
+  INST room 6 obj 280 Pals at 20,248
+ROOM 7 Level The Green One 896x504 speed 18 views true [896x504@896x504] inst 9
+  INST room 7 obj 259 Hi Eemie at 576,260
+  INST room 7 obj 1 Solid at 576,388
+  INST room 7 obj 1 Solid at 640,388
+  INST room 7 obj 166 Cutscenerz at 512,324
+  INST room 7 obj 0 Sunky at 0,260
+  INST room 7 obj 1 Solid at -58,256
+  INST room 7 obj 1 Solid at -58,320
+  INST room 7 obj 265 Coin at 680,196
+  INST room 7 obj 43 Level The Green One at 140,36
+ROOM 14 Special 1157x4000 speed 30 views true [896x504@896x504] inst 145
+  INST room 14 obj 282 Block at 534,89
+  INST room 14 obj 282 Block at 445,89
+  INST room 14 obj 282 Block at 623,89
+  INST room 14 obj 282 Block at 712,534
+  INST room 14 obj 282 Block at 712,445
+  INST room 14 obj 282 Block at 712,445
+  INST room 14 obj 282 Block at 712,356
+  INST room 14 obj 282 Block at 356,89
+  INST room 14 obj 282 Block at 356,178
+  INST room 14 obj 282 Block at 356,267
+  INST room 14 obj 282 Block at 356,267
+  INST room 14 obj 282 Block at 356,356
+  INST room 14 obj 282 Block at 356,356
+  INST room 14 obj 282 Block at 356,445
+  INST room 14 obj 282 Block at 356,534
+  INST room 14 obj 282 Block at 712,267
+  INST room 14 obj 282 Block at 712,178
+  INST room 14 obj 282 Block at 712,89
+  INST room 14 obj 281 Spin at 534,267
+  INST room 14 obj 282 Block at 267,534
+  INST room 14 obj 282 Block at 801,534
+  INST room 14 obj 282 Block at 890,534
+  INST room 14 obj 282 Block at 979,534
+  INST room 14 obj 282 Block at 267,534
+  INST room 14 obj 282 Block at 178,534
+  INST room 14 obj 282 Block at 89,534
+  INST room 14 obj 284 Blup at 534,801
+  INST room 14 obj 282 Block at 89,1068
+  INST room 14 obj 282 Block at 178,1068
+  INST room 14 obj 282 Block at 267,1068
+  INST room 14 obj 282 Block at 356,1068
+  INST room 14 obj 282 Block at 801,1068
+  INST room 14 obj 282 Block at 890,1068
+  INST room 14 obj 282 Block at 979,1068
+  INST room 14 obj 282 Block at 712,1068
+  INST room 14 obj 282 Block at 356,1157
+  INST room 14 obj 282 Block at 356,1246
+  INST room 14 obj 282 Block at 356,1424
+  INST room 14 obj 282 Block at 356,1335
+  INST room 14 obj 282 Block at 712,1157
+  INST room 14 obj 282 Block at 712,1335
+  INST room 14 obj 282 Block at 712,1246
+  INST room 14 obj 282 Block at 712,1513
+  INST room 14 obj 282 Block at 712,1424
+  INST room 14 obj 282 Block at 356,1513
+  INST room 14 obj 285 oRotate at 0,0
+  INST room 14 obj 282 Block at 267,1513
+  INST room 14 obj 282 Block at 178,1513
+  INST room 14 obj 282 Block at 801,1513
+  INST room 14 obj 282 Block at 890,1513
+  INST room 14 obj 282 Block at 979,1513
+  INST room 14 obj 282 Block at 89,1513
+  INST room 14 obj 282 Block at 89,1869
+  INST room 14 obj 282 Block at 178,1869
+  INST room 14 obj 282 Block at 267,1869
+  INST room 14 obj 282 Block at 356,1869
+  INST room 14 obj 282 Block at 712,1869
+  INST room 14 obj 282 Block at 801,1869
+  INST room 14 obj 282 Block at 890,1869
+  INST room 14 obj 282 Block at 979,1869
+  INST room 14 obj 282 Block at 356,1958
+  INST room 14 obj 282 Block at 356,2047
+  INST room 14 obj 282 Block at 356,2136
+  INST room 14 obj 282 Block at 356,2225
+  INST room 14 obj 282 Block at 712,1958
+  INST room 14 obj 282 Block at 712,2047
+  INST room 14 obj 282 Block at 712,2136
+  INST room 14 obj 282 Block at 712,2225
+  INST room 14 obj 283 Goal at 89,1780
+  INST room 14 obj 283 Goal at 89,1691
+  INST room 14 obj 283 Goal at 89,1602
+  INST room 14 obj 283 Goal at 979,1602
+  INST room 14 obj 283 Goal at 979,1691
+  INST room 14 obj 283 Goal at 979,1780
+  INST room 14 obj 282 Block at 267,2225
+  INST room 14 obj 282 Block at 178,2225
+  INST room 14 obj 282 Block at 89,2225
+  INST room 14 obj 282 Block at 801,2225
+  INST room 14 obj 282 Block at 890,2225
+  INST room 14 obj 282 Block at 979,2225
+  INST room 14 obj 282 Block at 979,2759
+  INST room 14 obj 282 Block at 890,2759
+  INST room 14 obj 282 Block at 801,2759
+  INST room 14 obj 282 Block at 712,2759
+  INST room 14 obj 282 Block at 712,2848
+  INST room 14 obj 282 Block at 712,2937
+  INST room 14 obj 282 Block at 356,2937
+  INST room 14 obj 282 Block at 356,2848
+  INST room 14 obj 282 Block at 356,2759
+  INST room 14 obj 282 Block at 267,2759
+  INST room 14 obj 282 Block at 178,2759
+  INST room 14 obj 282 Block at 89,2759
+  INST room 14 obj 283 Goal at 89,2670
+  INST room 14 obj 283 Goal at 89,2581
+  INST room 14 obj 283 Goal at 89,2492
+  INST room 14 obj 283 Goal at 89,2403
+  INST room 14 obj 283 Goal at 89,2314
+  INST room 14 obj 283 Goal at 979,2314
+  INST room 14 obj 283 Goal at 979,2403
+  INST room 14 obj 283 Goal at 979,2492
+  INST room 14 obj 283 Goal at 979,2581
+  INST room 14 obj 283 Goal at 979,2670
+  INST room 14 obj 284 Blup at 534,2492
+  INST room 14 obj 282 Block at 356,3026
+  INST room 14 obj 282 Block at 178,3026
+  INST room 14 obj 282 Block at 267,3026
+  INST room 14 obj 282 Block at 712,3026
+  INST room 14 obj 282 Block at 801,3026
+  INST room 14 obj 282 Block at 890,3026
+  INST room 14 obj 282 Block at 890,3115
+  INST room 14 obj 282 Block at 890,3204
+  INST room 14 obj 282 Block at 890,3382
+  INST room 14 obj 282 Block at 890,3293
+  INST room 14 obj 282 Block at 890,3471
+  INST room 14 obj 282 Block at 178,3115
+  INST room 14 obj 282 Block at 178,3293
+  INST room 14 obj 282 Block at 178,3204
+  INST room 14 obj 282 Block at 178,3382
+  INST room 14 obj 282 Block at 178,3471
+  INST room 14 obj 282 Block at 890,3560
+  INST room 14 obj 282 Block at 178,3560
+  INST room 14 obj 282 Block at 178,3649
+  INST room 14 obj 282 Block at 178,3738
+  INST room 14 obj 282 Block at 178,3827
+  INST room 14 obj 282 Block at 890,3738
+  INST room 14 obj 282 Block at 890,3827
+  INST room 14 obj 282 Block at 890,3649
+  INST room 14 obj 283 Goal at 267,3827
+  INST room 14 obj 283 Goal at 356,3827
+  INST room 14 obj 283 Goal at 445,3827
+  INST room 14 obj 283 Goal at 534,3827
+  INST room 14 obj 283 Goal at 623,3827
+  INST room 14 obj 283 Goal at 712,3827
+  INST room 14 obj 283 Goal at 801,3827
+  INST room 14 obj 283 Goal at 0,979
+  INST room 14 obj 283 Goal at 0,890
+  INST room 14 obj 283 Goal at 0,801
+  INST room 14 obj 283 Goal at 0,712
+  INST room 14 obj 283 Goal at 0,623
+  INST room 14 obj 283 Goal at 1068,623
+  INST room 14 obj 283 Goal at 1068,712
+  INST room 14 obj 283 Goal at 1068,801
+  INST room 14 obj 283 Goal at 1068,890
+  INST room 14 obj 283 Goal at 1068,979
+  INST room 14 obj 287 Too Many Generators at 89,0
+ROOM 22 Sunkyses 896x504 speed 30 views false [] inst 2
+  INST room 22 obj 163 Static at 0,0
+  INST room 22 obj 190 Sunkyses at 0,0
+ROOM 30 ? 1900x504 speed 18 views true [896x504@896x504] inst 15
+  INST room 30 obj 0 Sunky at 0,256
+  INST room 30 obj 289 Table at 1664,256
+  INST room 30 obj 1 Solid at -54,256
+  INST room 30 obj 1 Solid at -52,320
+  INST room 30 obj 293 Box at 1600,352
+  INST room 30 obj 1 Solid at 1536,256
+  INST room 30 obj 297 Snuk at 1792,224
+  INST room 30 obj 288 Trippy Floor at 0,384
+  INST room 30 obj 288 Trippy Floor at 256,384
+  INST room 30 obj 288 Trippy Floor at 512,384
+  INST room 30 obj 288 Trippy Floor at 768,384
+  INST room 30 obj 288 Trippy Floor at 1024,384
+  INST room 30 obj 288 Trippy Floor at 1280,384
+  INST room 30 obj 288 Trippy Floor at 1536,384
+  INST room 30 obj 288 Trippy Floor at 1792,384
+ROOM 45 White 896x504 speed 18 views true [896x504@896x504] inst 1
+  INST room 45 obj 251 Wait at 0,0
+ROOM 46 Milk and Cereal 896x504 speed 30 views false [] inst 1
+  INST room 46 obj 268 Milk at 128,0
+ROOM 47 LooneyDudePresents 896x504 speed 15 views false [] inst 2
+  INST room 47 obj 251 Wait at 0,0
+  INST room 47 obj 39 Fade In 2 at 0,0
+ROOM 48 Warning 896x504 speed 30 views false [] inst 1
+  INST room 48 obj 275 Play at 320,288
+ROOM 49   896x504 speed 30 views false [] inst 1
+  INST room 49 obj 277 Wait Fade at 0,0
+ROOM 50 1 896x504 speed 30 views false [] inst 1
+  INST room 50 obj 278 LongWaitFade at 0,0
+ROOM 51 2 896x504 speed 30 views false [] inst 1
+  INST room 51 obj 279 AnotherWait at 0,0
+ROOM 52   896x504 speed 30 views false [] inst 1
+  INST room 52 obj 277 Wait Fade at 0,0
+ROOM 53   896x504 speed 30 views false [] inst 1
+  INST room 53 obj 277 Wait Fade at 0,0
+ROOM 54   896x504 speed 30 views false [] inst 1
+  INST room 54 obj 277 Wait Fade at 0,0
+ROOM 56 3 896x504 speed 30 views false [] inst 1
+  INST room 56 obj 279 AnotherWait at 0,0
+ROOM 57 Intro 896x504 speed 10 views false [] inst 1
+  INST room 57 obj 299 Intro at 288,128
+ROOM 58 Intro 2 896x504 speed 10 views false [] inst 2
+  INST room 58 obj 300 Intro 2 at 288,128
+  INST room 58 obj 301 Smoochie at 192,256
+ROOM 59 FakeBlueScreen 896x504 speed 30 views false [] inst 1
+  INST room 59 obj 302 Fake Bluescreen at 0,0
+ROOM 60 Title 2 896x504 speed 30 views true [896x504@896x504] inst 3
+  INST room 60 obj 40 Press Enter at 344,372
+  INST room 60 obj 303 Eemie 2 at 636,204
+  INST room 60 obj 304 MakemeaCrem at 0,0
+ROOM 61 KondandFeir 10000x504 speed 18 views true [896x504@896x504] inst 197
+  INST room 61 obj 201 Knicknacks at 0,256
+  INST room 61 obj 1 Solid at 0,384
+  INST room 61 obj 1 Solid at 64,384
+  INST room 61 obj 1 Solid at 128,384
+  INST room 61 obj 1 Solid at 192,384
+  INST room 61 obj 1 Solid at 256,384
+  INST room 61 obj 1 Solid at 384,384
+  INST room 61 obj 1 Solid at 320,384
+  INST room 61 obj 1 Solid at 448,384
+  INST room 61 obj 1 Solid at 512,384
+  INST room 61 obj 1 Solid at 576,384
+  INST room 61 obj 1 Solid at 640,384
+  INST room 61 obj 1 Solid at 704,384
+  INST room 61 obj 1 Solid at 768,384
+  INST room 61 obj 1 Solid at 832,384
+  INST room 61 obj 1 Solid at 896,384
+  INST room 61 obj 1 Solid at 1024,384
+  INST room 61 obj 1 Solid at 1088,384
+  INST room 61 obj 1 Solid at 1152,384
+  INST room 61 obj 1 Solid at 1216,384
+  INST room 61 obj 1 Solid at 1280,384
+  INST room 61 obj 1 Solid at 1344,384
+  INST room 61 obj 1 Solid at 1408,384
+  INST room 61 obj 1 Solid at 1472,384
+  INST room 61 obj 1 Solid at 1536,384
+  INST room 61 obj 1 Solid at 1600,384
+  INST room 61 obj 1 Solid at 1664,384
+  INST room 61 obj 1 Solid at 1728,384
+  INST room 61 obj 1 Solid at 960,384
+  INST room 61 obj 1 Solid at 1792,384
+  INST room 61 obj 307 BGScroll2 at 0,0
+  INST room 61 obj 309 Monitor at 1088,288
+  INST room 61 obj 309 Monitor at 1984,288
+  INST room 61 obj 309 Monitor at 2560,288
+  INST room 61 obj 309 Monitor at 2880,288
+  INST room 61 obj 309 Monitor at 3072,288
+  INST room 61 obj 309 Monitor at 3200,288
+  INST room 61 obj 309 Monitor at 3328,288
+  INST room 61 obj 309 Monitor at 3584,288
+  INST room 61 obj 309 Monitor at 3712,288
+  INST room 61 obj 309 Monitor at 4032,288
+  INST room 61 obj 309 Monitor at 3936,288
+  INST room 61 obj 309 Monitor at 3840,288
+  INST room 61 obj 309 Monitor at 4128,288
+  INST room 61 obj 309 Monitor at 4224,288
+  INST room 61 obj 309 Monitor at 4320,288
+  INST room 61 obj 309 Monitor at 4416,288
+  INST room 61 obj 309 Monitor at 4512,288
+  INST room 61 obj 309 Monitor at 7104,288
+  INST room 61 obj 309 Monitor at 9504,288
+  INST room 61 obj 1 Solid at 1856,384
+  INST room 61 obj 1 Solid at 1920,384
+  INST room 61 obj 1 Solid at 1984,384
+  INST room 61 obj 1 Solid at 2048,384
+  INST room 61 obj 1 Solid at 2112,384
+  INST room 61 obj 1 Solid at 2176,384
+  INST room 61 obj 1 Solid at 2240,384
+  INST room 61 obj 1 Solid at 2304,384
+  INST room 61 obj 1 Solid at 2368,384
+  INST room 61 obj 1 Solid at 2432,384
+  INST room 61 obj 1 Solid at 2496,384
+  INST room 61 obj 1 Solid at 2560,384
+  INST room 61 obj 1 Solid at 2624,384
+  INST room 61 obj 1 Solid at 2688,384
+  INST room 61 obj 1 Solid at 2752,384
+  INST room 61 obj 1 Solid at 2816,384
+  INST room 61 obj 1 Solid at 2880,384
+  INST room 61 obj 1 Solid at 2944,384
+  INST room 61 obj 1 Solid at 3008,384
+  INST room 61 obj 1 Solid at 3008,384
+  INST room 61 obj 1 Solid at 3072,384
+  INST room 61 obj 1 Solid at 3136,384
+  INST room 61 obj 1 Solid at 3200,384
+  INST room 61 obj 1 Solid at 3264,384
+  INST room 61 obj 1 Solid at 3328,384
+  INST room 61 obj 1 Solid at 3392,384
+  INST room 61 obj 1 Solid at 3456,384
+  INST room 61 obj 1 Solid at 3520,384
+  INST room 61 obj 1 Solid at 3584,384
+  INST room 61 obj 1 Solid at 3648,384
+  INST room 61 obj 1 Solid at 3712,384
+  INST room 61 obj 1 Solid at 3776,384
+  INST room 61 obj 1 Solid at 3840,384
+  INST room 61 obj 1 Solid at 3904,384
+  INST room 61 obj 1 Solid at 3968,384
+  INST room 61 obj 1 Solid at 4032,384
+  INST room 61 obj 1 Solid at 4096,384
+  INST room 61 obj 1 Solid at 4160,384
+  INST room 61 obj 1 Solid at 4224,384
+  INST room 61 obj 1 Solid at 4288,384
+  INST room 61 obj 1 Solid at 4288,448
+  INST room 61 obj 1 Solid at 4352,448
+  INST room 61 obj 1 Solid at 4352,384
+  INST room 61 obj 1 Solid at 4416,384
+  INST room 61 obj 1 Solid at 4480,384
+  INST room 61 obj 1 Solid at 4608,384
+  INST room 61 obj 1 Solid at 4672,384
+  INST room 61 obj 1 Solid at 4736,384
+  INST room 61 obj 1 Solid at 4864,384
+  INST room 61 obj 1 Solid at 4928,384
+  INST room 61 obj 1 Solid at 4992,384
+  INST room 61 obj 1 Solid at 4928,384
+  INST room 61 obj 1 Solid at 4800,384
+  INST room 61 obj 1 Solid at 4736,384
+  INST room 61 obj 1 Solid at 4672,384
+  INST room 61 obj 1 Solid at 4608,384
+  INST room 61 obj 1 Solid at 4544,384
+  INST room 61 obj 1 Solid at 4480,384
+  INST room 61 obj 1 Solid at 4992,384
+  INST room 61 obj 1 Solid at 5056,384
+  INST room 61 obj 1 Solid at 5120,384
+  INST room 61 obj 1 Solid at 5184,384
+  INST room 61 obj 1 Solid at 5248,384
+  INST room 61 obj 1 Solid at 5312,384
+  INST room 61 obj 1 Solid at 5376,384
+  INST room 61 obj 1 Solid at 5440,384
+  INST room 61 obj 1 Solid at 5504,384
+  INST room 61 obj 1 Solid at 5568,384
+  INST room 61 obj 1 Solid at 5632,384
+  INST room 61 obj 1 Solid at 5696,384
+  INST room 61 obj 1 Solid at 5760,384
+  INST room 61 obj 1 Solid at 5824,384
+  INST room 61 obj 1 Solid at 5888,384
+  INST room 61 obj 1 Solid at 5952,384
+  INST room 61 obj 1 Solid at 5952,384
+  INST room 61 obj 1 Solid at 6016,448
+  INST room 61 obj 1 Solid at 6080,448
+  INST room 61 obj 1 Solid at 6144,448
+  INST room 61 obj 1 Solid at 6208,448
+  INST room 61 obj 1 Solid at 6144,448
+  INST room 61 obj 1 Solid at 6144,384
+  INST room 61 obj 1 Solid at 6016,384
+  INST room 61 obj 1 Solid at 6080,384
+  INST room 61 obj 1 Solid at 6144,384
+  INST room 61 obj 1 Solid at 6272,384
+  INST room 61 obj 1 Solid at 6336,384
+  INST room 61 obj 1 Solid at 6400,384
+  INST room 61 obj 1 Solid at 6464,384
+  INST room 61 obj 1 Solid at 6144,384
+  INST room 61 obj 1 Solid at 6208,384
+  INST room 61 obj 1 Solid at 6464,384
+  INST room 61 obj 1 Solid at 6528,384
+  INST room 61 obj 1 Solid at 6592,384
+  INST room 61 obj 1 Solid at 6656,384
+  INST room 61 obj 1 Solid at 6720,384
+  INST room 61 obj 1 Solid at 6784,384
+  INST room 61 obj 1 Solid at 6848,384
+  INST room 61 obj 1 Solid at 6912,384
+  INST room 61 obj 1 Solid at 6976,384
+  INST room 61 obj 1 Solid at 7040,384
+  INST room 61 obj 1 Solid at 7104,384
+  INST room 61 obj 1 Solid at 7168,384
+  INST room 61 obj 1 Solid at 7232,384
+  INST room 61 obj 1 Solid at 7296,384
+  INST room 61 obj 1 Solid at 7360,384
+  INST room 61 obj 1 Solid at 7424,384
+  INST room 61 obj 1 Solid at 7488,384
+  INST room 61 obj 1 Solid at 7552,384
+  INST room 61 obj 1 Solid at 7616,384
+  INST room 61 obj 1 Solid at 7680,384
+  INST room 61 obj 1 Solid at 7744,384
+  INST room 61 obj 1 Solid at 7808,384
+  INST room 61 obj 1 Solid at 7872,384
+  INST room 61 obj 1 Solid at 7936,384
+  INST room 61 obj 1 Solid at 8000,384
+  INST room 61 obj 1 Solid at 8064,384
+  INST room 61 obj 1 Solid at 8128,384
+  INST room 61 obj 1 Solid at 8192,384
+  INST room 61 obj 1 Solid at 8256,384
+  INST room 61 obj 1 Solid at 8320,384
+  INST room 61 obj 1 Solid at 8384,384
+  INST room 61 obj 1 Solid at 8448,384
+  INST room 61 obj 1 Solid at 8512,384
+  INST room 61 obj 1 Solid at 8576,384
+  INST room 61 obj 1 Solid at 8640,384
+  INST room 61 obj 1 Solid at 8704,384
+  INST room 61 obj 1 Solid at 8768,384
+  INST room 61 obj 1 Solid at 8832,384
+  INST room 61 obj 1 Solid at 8896,384
+  INST room 61 obj 1 Solid at 8960,384
+  INST room 61 obj 1 Solid at 9024,384
+  INST room 61 obj 1 Solid at 9088,384
+  INST room 61 obj 1 Solid at 9152,384
+  INST room 61 obj 1 Solid at 9216,384
+  INST room 61 obj 1 Solid at 9280,384
+  INST room 61 obj 1 Solid at 9344,384
+  INST room 61 obj 1 Solid at 9408,384
+  INST room 61 obj 1 Solid at 9472,384
+  INST room 61 obj 1 Solid at 9536,384
+  INST room 61 obj 1 Solid at 9600,384
+  INST room 61 obj 1 Solid at 9664,384
+  INST room 61 obj 1 Solid at 9728,384
+  INST room 61 obj 1 Solid at 9792,384
+  INST room 61 obj 1 Solid at 9856,384
+  INST room 61 obj 1 Solid at 9920,384
+  INST room 61 obj 1 Solid at 9984,384
+  INST room 61 obj 198 YOU MIGHT NOT BE ABLE TO RUN, BUT I MAY NEED TO DOUBLE CHECK THAT at 128,64
+ROOM 62 Hotep 1900x504 speed 18 views true [896x504@896x504] inst 383
+  INST room 62 obj 310 Hotep at 0,0
+  INST room 62 obj 310 Hotep at 64,0
+  INST room 62 obj 310 Hotep at 128,0
+  INST room 62 obj 310 Hotep at 192,0
+  INST room 62 obj 310 Hotep at 256,0
+  INST room 62 obj 310 Hotep at 320,0
+  INST room 62 obj 310 Hotep at 384,0
+  INST room 62 obj 310 Hotep at 448,0
+  INST room 62 obj 310 Hotep at 512,0
+  INST room 62 obj 310 Hotep at 576,0
+  INST room 62 obj 310 Hotep at 640,0
+  INST room 62 obj 310 Hotep at 704,0
+  INST room 62 obj 310 Hotep at 768,0
+  INST room 62 obj 310 Hotep at 832,0
+  INST room 62 obj 310 Hotep at 896,0
+  INST room 62 obj 310 Hotep at 832,64
+  INST room 62 obj 310 Hotep at 768,64
+  INST room 62 obj 310 Hotep at 704,64
+  INST room 62 obj 310 Hotep at 640,64
+  INST room 62 obj 310 Hotep at 576,64
+  INST room 62 obj 310 Hotep at 512,64
+  INST room 62 obj 310 Hotep at 448,64
+  INST room 62 obj 310 Hotep at 384,64
+  INST room 62 obj 310 Hotep at 320,64
+  INST room 62 obj 310 Hotep at 256,64
+  INST room 62 obj 310 Hotep at 192,64
+  INST room 62 obj 310 Hotep at 128,64
+  INST room 62 obj 310 Hotep at 64,64
+  INST room 62 obj 310 Hotep at 0,64
+  INST room 62 obj 310 Hotep at 0,128
+  INST room 62 obj 310 Hotep at 64,128
+  INST room 62 obj 310 Hotep at 128,128
+  INST room 62 obj 310 Hotep at 192,128
+  INST room 62 obj 310 Hotep at 256,128
+  INST room 62 obj 310 Hotep at 320,128
+  INST room 62 obj 310 Hotep at 384,128
+  INST room 62 obj 310 Hotep at 448,128
+  INST room 62 obj 310 Hotep at 512,128
+  INST room 62 obj 310 Hotep at 576,128
+  INST room 62 obj 310 Hotep at 640,128
+  INST room 62 obj 310 Hotep at 704,128
+  INST room 62 obj 310 Hotep at 768,128
+  INST room 62 obj 310 Hotep at 832,128
+  INST room 62 obj 310 Hotep at 896,192
+  INST room 62 obj 310 Hotep at 768,256
+  INST room 62 obj 310 Hotep at 704,256
+  INST room 62 obj 310 Hotep at 576,192
+  INST room 62 obj 310 Hotep at 512,192
+  INST room 62 obj 310 Hotep at 448,192
+  INST room 62 obj 310 Hotep at 384,192
+  INST room 62 obj 310 Hotep at 320,192
+  INST room 62 obj 310 Hotep at 256,192
+  INST room 62 obj 310 Hotep at 0,192
+  INST room 62 obj 310 Hotep at 0,256
+  INST room 62 obj 310 Hotep at 0,320
+  INST room 62 obj 310 Hotep at 64,320
+  INST room 62 obj 310 Hotep at 128,320
+  INST room 62 obj 310 Hotep at 192,320
+  INST room 62 obj 310 Hotep at 256,320
+  INST room 62 obj 310 Hotep at 320,320
+  INST room 62 obj 310 Hotep at 640,320
+  INST room 62 obj 310 Hotep at 704,320
+  INST room 62 obj 310 Hotep at 768,320
+  INST room 62 obj 310 Hotep at 832,320
+  INST room 62 obj 310 Hotep at 896,320
+  INST room 62 obj 310 Hotep at 896,256
+  INST room 62 obj 310 Hotep at 832,256
+  INST room 62 obj 310 Hotep at 640,192
+  INST room 62 obj 310 Hotep at 704,192
+  INST room 62 obj 310 Hotep at 832,192
+  INST room 62 obj 310 Hotep at 768,192
+  INST room 62 obj 310 Hotep at 576,320
+  INST room 62 obj 310 Hotep at 512,320
+  INST room 62 obj 310 Hotep at 448,320
+  INST room 62 obj 310 Hotep at 384,320
+  INST room 62 obj 310 Hotep at 320,256
+  INST room 62 obj 310 Hotep at 128,256
+  INST room 62 obj 310 Hotep at 192,256
+  INST room 62 obj 310 Hotep at 256,256
+  INST room 62 obj 310 Hotep at 384,256
+  INST room 62 obj 310 Hotep at 512,256
+  INST room 62 obj 310 Hotep at 640,256
+  INST room 62 obj 310 Hotep at 576,256
+  INST room 62 obj 310 Hotep at 448,256
+  INST room 62 obj 310 Hotep at 192,192
+  INST room 62 obj 310 Hotep at 128,192
+  INST room 62 obj 310 Hotep at 64,192
+  INST room 62 obj 310 Hotep at 64,256
+  INST room 62 obj 310 Hotep at 960,0
+  INST room 62 obj 310 Hotep at 1216,0
+  INST room 62 obj 310 Hotep at 1280,0
+  INST room 62 obj 310 Hotep at 1344,0
+  INST room 62 obj 310 Hotep at 1408,0
+  INST room 62 obj 310 Hotep at 1472,0
+  INST room 62 obj 310 Hotep at 1536,0
+  INST room 62 obj 310 Hotep at 1600,0
+  INST room 62 obj 310 Hotep at 1664,0
+  INST room 62 obj 310 Hotep at 1728,0
+  INST room 62 obj 310 Hotep at 1792,0
+  INST room 62 obj 310 Hotep at 1856,0
+  INST room 62 obj 310 Hotep at 1792,64
+  INST room 62 obj 310 Hotep at 1856,64
+  INST room 62 obj 310 Hotep at 1856,128
+  INST room 62 obj 310 Hotep at 1792,128
+  INST room 62 obj 310 Hotep at 1728,128
+  INST room 62 obj 310 Hotep at 1664,128
+  INST room 62 obj 310 Hotep at 1600,128
+  INST room 62 obj 310 Hotep at 1536,128
+  INST room 62 obj 310 Hotep at 1472,128
+  INST room 62 obj 310 Hotep at 1408,128
+  INST room 62 obj 310 Hotep at 1536,64
+  INST room 62 obj 310 Hotep at 1728,64
+  INST room 62 obj 310 Hotep at 1664,64
+  INST room 62 obj 310 Hotep at 1600,64
+  INST room 62 obj 310 Hotep at 1472,64
+  INST room 62 obj 310 Hotep at 1408,64
+  INST room 62 obj 310 Hotep at 1344,64
+  INST room 62 obj 310 Hotep at 1216,64
+  INST room 62 obj 310 Hotep at 1280,64
+  INST room 62 obj 310 Hotep at 1152,128
+  INST room 62 obj 310 Hotep at 1088,128
+  INST room 62 obj 310 Hotep at 896,128
+  INST room 62 obj 310 Hotep at 896,64
+  INST room 62 obj 310 Hotep at 1024,0
+  INST room 62 obj 310 Hotep at 1088,0
+  INST room 62 obj 310 Hotep at 1152,0
+  INST room 62 obj 310 Hotep at 1152,64
+  INST room 62 obj 310 Hotep at 1088,64
+  INST room 62 obj 310 Hotep at 1024,128
+  INST room 62 obj 310 Hotep at 960,64
+  INST room 62 obj 310 Hotep at 1024,64
+  INST room 62 obj 310 Hotep at 960,128
+  INST room 62 obj 310 Hotep at 960,192
+  INST room 62 obj 310 Hotep at 960,256
+  INST room 62 obj 310 Hotep at 960,320
+  INST room 62 obj 310 Hotep at 1024,320
+  INST room 62 obj 310 Hotep at 1088,320
+  INST room 62 obj 310 Hotep at 1152,320
+  INST room 62 obj 310 Hotep at 1216,320
+  INST room 62 obj 310 Hotep at 1408,320
+  INST room 62 obj 310 Hotep at 1472,320
+  INST room 62 obj 310 Hotep at 1472,256
+  INST room 62 obj 310 Hotep at 1472,192
+  INST room 62 obj 310 Hotep at 1408,192
+  INST room 62 obj 310 Hotep at 1344,192
+  INST room 62 obj 310 Hotep at 1344,128
+  INST room 62 obj 310 Hotep at 1280,128
+  INST room 62 obj 310 Hotep at 1216,128
+  INST room 62 obj 310 Hotep at 1152,192
+  INST room 62 obj 310 Hotep at 1088,192
+  INST room 62 obj 310 Hotep at 1024,192
+  INST room 62 obj 310 Hotep at 1024,256
+  INST room 62 obj 310 Hotep at 1088,256
+  INST room 62 obj 310 Hotep at 1152,256
+  INST room 62 obj 310 Hotep at 1216,256
+  INST room 62 obj 310 Hotep at 1280,256
+  INST room 62 obj 310 Hotep at 1280,320
+  INST room 62 obj 310 Hotep at 1344,320
+  INST room 62 obj 310 Hotep at 1344,256
+  INST room 62 obj 310 Hotep at 1408,256
+  INST room 62 obj 310 Hotep at 1216,192
+  INST room 62 obj 310 Hotep at 1280,192
+  INST room 62 obj 310 Hotep at 1536,256
+  INST room 62 obj 310 Hotep at 1536,192
+  INST room 62 obj 310 Hotep at 1600,192
+  INST room 62 obj 310 Hotep at 1664,192
+  INST room 62 obj 310 Hotep at 1728,192
+  INST room 62 obj 310 Hotep at 1856,192
+  INST room 62 obj 310 Hotep at 1792,192
+  INST room 62 obj 310 Hotep at 1856,256
+  INST room 62 obj 310 Hotep at 1792,256
+  INST room 62 obj 310 Hotep at 1728,256
+  INST room 62 obj 310 Hotep at 1664,256
+  INST room 62 obj 310 Hotep at 1600,256
+  INST room 62 obj 310 Hotep at 1536,320
+  INST room 62 obj 310 Hotep at 1600,320
+  INST room 62 obj 310 Hotep at 1664,320
+  INST room 62 obj 310 Hotep at 1728,320
+  INST room 62 obj 310 Hotep at 1792,320
+  INST room 62 obj 310 Hotep at 1856,320
+  INST room 62 obj 289 Table at 1664,256
+  INST room 62 obj 297 Snuk at 1792,224
+  INST room 62 obj 1 Solid at 0,384
+  INST room 62 obj 1 Solid at 0,384
+  INST room 62 obj 1 Solid at 0,384
+  INST room 62 obj 1 Solid at 0,384
+  INST room 62 obj 1 Solid at 0,384
+  INST room 62 obj 1 Solid at 0,384
+  INST room 62 obj 1 Solid at 0,384
+  INST room 62 obj 1 Solid at 0,384
+  INST room 62 obj 1 Solid at 64,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 192,384
+  INST room 62 obj 1 Solid at 256,384
+  INST room 62 obj 1 Solid at 256,384
+  INST room 62 obj 1 Solid at 320,384
+  INST room 62 obj 1 Solid at 320,384
+  INST room 62 obj 1 Solid at 320,384
+  INST room 62 obj 1 Solid at 320,384
+  INST room 62 obj 1 Solid at 320,384
+  INST room 62 obj 1 Solid at 320,384
+  INST room 62 obj 1 Solid at 320,384
+  INST room 62 obj 1 Solid at 256,384
+  INST room 62 obj 1 Solid at 256,384
+  INST room 62 obj 1 Solid at 192,384
+  INST room 62 obj 1 Solid at 192,384
+  INST room 62 obj 1 Solid at 192,384
+  INST room 62 obj 1 Solid at 192,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 64,384
+  INST room 62 obj 1 Solid at 64,384
+  INST room 62 obj 1 Solid at 64,384
+  INST room 62 obj 1 Solid at 64,384
+  INST room 62 obj 1 Solid at 64,384
+  INST room 62 obj 1 Solid at 64,384
+  INST room 62 obj 1 Solid at 64,384
+  INST room 62 obj 1 Solid at 64,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 128,384
+  INST room 62 obj 1 Solid at 192,384
+  INST room 62 obj 1 Solid at 192,384
+  INST room 62 obj 1 Solid at 256,384
+  INST room 62 obj 1 Solid at 320,384
+  INST room 62 obj 1 Solid at 320,384
+  INST room 62 obj 1 Solid at 384,384
+  INST room 62 obj 1 Solid at 384,384
+  INST room 62 obj 1 Solid at 384,384
+  INST room 62 obj 1 Solid at 448,384
+  INST room 62 obj 1 Solid at 448,384
+  INST room 62 obj 1 Solid at 448,384
+  INST room 62 obj 1 Solid at 448,384
+  INST room 62 obj 1 Solid at 512,384
+  INST room 62 obj 1 Solid at 512,384
+  INST room 62 obj 1 Solid at 576,384
+  INST room 62 obj 1 Solid at 576,384
+  INST room 62 obj 1 Solid at 576,384
+  INST room 62 obj 1 Solid at 576,384
+  INST room 62 obj 1 Solid at 576,384
+  INST room 62 obj 1 Solid at 576,384
+  INST room 62 obj 1 Solid at 640,384
+  INST room 62 obj 1 Solid at 640,384
+  INST room 62 obj 1 Solid at 704,384
+  INST room 62 obj 1 Solid at 768,384
+  INST room 62 obj 1 Solid at 768,384
+  INST room 62 obj 1 Solid at 768,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 896,384
+  INST room 62 obj 1 Solid at 896,384
+  INST room 62 obj 1 Solid at 896,384
+  INST room 62 obj 1 Solid at 448,384
+  INST room 62 obj 1 Solid at 448,384
+  INST room 62 obj 1 Solid at 448,384
+  INST room 62 obj 1 Solid at 448,384
+  INST room 62 obj 1 Solid at 448,384
+  INST room 62 obj 1 Solid at 512,384
+  INST room 62 obj 1 Solid at 576,384
+  INST room 62 obj 1 Solid at 640,384
+  INST room 62 obj 1 Solid at 640,384
+  INST room 62 obj 1 Solid at 640,384
+  INST room 62 obj 1 Solid at 640,384
+  INST room 62 obj 1 Solid at 704,384
+  INST room 62 obj 1 Solid at 704,384
+  INST room 62 obj 1 Solid at 768,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 832,384
+  INST room 62 obj 1 Solid at 896,384
+  INST room 62 obj 1 Solid at 960,384
+  INST room 62 obj 1 Solid at 960,384
+  INST room 62 obj 1 Solid at 1024,384
+  INST room 62 obj 1 Solid at 1024,384
+  INST room 62 obj 1 Solid at 1024,384
+  INST room 62 obj 1 Solid at 1024,384
+  INST room 62 obj 1 Solid at 1088,384
+  INST room 62 obj 1 Solid at 1088,384
+  INST room 62 obj 1 Solid at 1088,384
+  INST room 62 obj 1 Solid at 1088,384
+  INST room 62 obj 1 Solid at 1088,384
+  INST room 62 obj 1 Solid at 1088,384
+  INST room 62 obj 1 Solid at 1088,384
+  INST room 62 obj 1 Solid at 1088,384
+  INST room 62 obj 1 Solid at 1152,384
+  INST room 62 obj 1 Solid at 1152,384
+  INST room 62 obj 1 Solid at 1152,384
+  INST room 62 obj 1 Solid at 1216,384
+  INST room 62 obj 1 Solid at 1216,384
+  INST room 62 obj 1 Solid at 1280,384
+  INST room 62 obj 1 Solid at 1280,384
+  INST room 62 obj 1 Solid at 1280,384
+  INST room 62 obj 1 Solid at 1280,384
+  INST room 62 obj 1 Solid at 1280,384
+  INST room 62 obj 1 Solid at 1280,384
+  INST room 62 obj 1 Solid at 1472,384
+  INST room 62 obj 1 Solid at 1472,384
+  INST room 62 obj 1 Solid at 1472,384
+  INST room 62 obj 1 Solid at 1536,384
+  INST room 62 obj 1 Solid at 1536,384
+  INST room 62 obj 1 Solid at 1600,384
+  INST room 62 obj 1 Solid at 1600,384
+  INST room 62 obj 1 Solid at 1600,384
+  INST room 62 obj 1 Solid at 1600,384
+  INST room 62 obj 1 Solid at 1600,384
+  INST room 62 obj 1 Solid at 1600,384
+  INST room 62 obj 1 Solid at 1600,384
+  INST room 62 obj 1 Solid at 1600,384
+  INST room 62 obj 1 Solid at 1600,384
+  INST room 62 obj 1 Solid at 1664,384
+  INST room 62 obj 1 Solid at 1664,384
+  INST room 62 obj 1 Solid at 1664,384
+  INST room 62 obj 1 Solid at 1664,384
+  INST room 62 obj 1 Solid at 1664,384
+  INST room 62 obj 1 Solid at 1728,384
+  INST room 62 obj 1 Solid at 1728,384
+  INST room 62 obj 1 Solid at 1728,384
+  INST room 62 obj 1 Solid at 1728,384
+  INST room 62 obj 1 Solid at 1728,384
+  INST room 62 obj 1 Solid at 1728,384
+  INST room 62 obj 1 Solid at 1728,384
+  INST room 62 obj 1 Solid at 1728,384
+  INST room 62 obj 1 Solid at 1728,384
+  INST room 62 obj 1 Solid at 1792,384
+  INST room 62 obj 1 Solid at 1792,384
+  INST room 62 obj 1 Solid at 1792,384
+  INST room 62 obj 1 Solid at 1792,384
+  INST room 62 obj 1 Solid at 1792,384
+  INST room 62 obj 1 Solid at 1792,384
+  INST room 62 obj 1 Solid at 1792,384
+  INST room 62 obj 1 Solid at 1792,384
+  INST room 62 obj 1 Solid at 1792,384
+  INST room 62 obj 1 Solid at 1792,384
+  INST room 62 obj 1 Solid at 1792,384
+  INST room 62 obj 1 Solid at 1792,384
+  INST room 62 obj 1 Solid at 1856,384
+  INST room 62 obj 1 Solid at 1856,384
+  INST room 62 obj 1 Solid at 1856,384
+  INST room 62 obj 1 Solid at 1856,384
+  INST room 62 obj 1 Solid at 1856,384
+  INST room 62 obj 1 Solid at 1856,384
+  INST room 62 obj 1 Solid at 1856,384
+  INST room 62 obj 1 Solid at 1856,384
+  INST room 62 obj 1 Solid at 1856,384
+  INST room 62 obj 311 MusictomyEars at 0,0
+  INST room 62 obj 1 Solid at 1408,384
+  INST room 62 obj 1 Solid at 1344,384
+  INST room 62 obj 308 Spinny at -64,256
+  INST room 62 obj 315 Rock at 448,320
+  INST room 62 obj 288 Trippy Floor at 0,384
+  INST room 62 obj 288 Trippy Floor at 256,384
+  INST room 62 obj 288 Trippy Floor at 512,384
+  INST room 62 obj 288 Trippy Floor at 768,384
+  INST room 62 obj 288 Trippy Floor at 1024,384
+  INST room 62 obj 288 Trippy Floor at 1536,384
+  INST room 62 obj 288 Trippy Floor at 1792,384
+  INST room 62 obj 288 Trippy Floor at 1280,384
+ROOM 63 Static 896x504 speed 10 views false [] inst 1
+  INST room 63 obj 203 BigStatic at 0,0
+ROOM 64 Credits 896x504 speed 30 views false [] inst 41
+  INST room 64 obj 1 Solid at 0,0
+  INST room 64 obj 1 Solid at 128,0
+  INST room 64 obj 1 Solid at 64,0
+  INST room 64 obj 1 Solid at 192,0
+  INST room 64 obj 1 Solid at 256,0
+  INST room 64 obj 1 Solid at 320,0
+  INST room 64 obj 1 Solid at 384,0
+  INST room 64 obj 1 Solid at 448,0
+  INST room 64 obj 1 Solid at 512,0
+  INST room 64 obj 1 Solid at 576,0
+  INST room 64 obj 1 Solid at 640,0
+  INST room 64 obj 1 Solid at 704,0
+  INST room 64 obj 1 Solid at 768,0
+  INST room 64 obj 1 Solid at 832,0
+  INST room 64 obj 1 Solid at 0,64
+  INST room 64 obj 1 Solid at 0,128
+  INST room 64 obj 1 Solid at 0,192
+  INST room 64 obj 1 Solid at 0,256
+  INST room 64 obj 1 Solid at 0,320
+  INST room 64 obj 1 Solid at 0,384
+  INST room 64 obj 1 Solid at 0,448
+  INST room 64 obj 1 Solid at 64,448
+  INST room 64 obj 1 Solid at 128,448
+  INST room 64 obj 1 Solid at 192,448
+  INST room 64 obj 1 Solid at 320,448
+  INST room 64 obj 1 Solid at 256,448
+  INST room 64 obj 1 Solid at 448,448
+  INST room 64 obj 1 Solid at 640,448
+  INST room 64 obj 1 Solid at 704,448
+  INST room 64 obj 1 Solid at 384,448
+  INST room 64 obj 1 Solid at 512,448
+  INST room 64 obj 1 Solid at 576,448
+  INST room 64 obj 1 Solid at 768,448
+  INST room 64 obj 1 Solid at 832,448
+  INST room 64 obj 1 Solid at 832,384
+  INST room 64 obj 1 Solid at 832,320
+  INST room 64 obj 1 Solid at 832,256
+  INST room 64 obj 1 Solid at 832,192
+  INST room 64 obj 1 Solid at 832,128
+  INST room 64 obj 1 Solid at 832,64
+  INST room 64 obj 312 Cremspin at 192,256
+ROOM 66   896x504 speed 30 views false [] inst 1
+  INST room 66 obj 277 Wait Fade at 0,0
+ROOM 67 4 896x504 speed 30 views false [] inst 1
+  INST room 67 obj 279 AnotherWait at 0,0
+ROOM 68 Title 3 896x504 speed 30 views true [896x504@896x504] inst 4
+  INST room 68 obj 40 Press Enter at 344,372
+  INST room 68 obj 303 Eemie 2 at 636,204
+  INST room 68 obj 318 SillyFactory at 4,4
+  INST room 68 obj 319 Crem 2 at -56,204
+ROOM 69 Act Whudevuh 896x504 speed 18 views true [896x504@896x504] inst 22
+  INST room 69 obj 324 Fire at 0,88
+  INST room 69 obj 326 Fire2 at 448,92
+  INST room 69 obj 320 Silly at 384,256
+  INST room 69 obj 321 Wall1 at -960,0
+  INST room 69 obj 323 Wall3 at 0,-576
+  INST room 69 obj 322 Wall2 at 960,0
+  INST room 69 obj 1 Solid at -64,320
+  INST room 69 obj 1 Solid at 896,320
+  INST room 69 obj 1 Solid at 0,384
+  INST room 69 obj 1 Solid at 64,384
+  INST room 69 obj 1 Solid at 192,384
+  INST room 69 obj 1 Solid at 128,384
+  INST room 69 obj 1 Solid at 256,384
+  INST room 69 obj 1 Solid at 320,384
+  INST room 69 obj 1 Solid at 384,384
+  INST room 69 obj 1 Solid at 448,384
+  INST room 69 obj 1 Solid at 512,384
+  INST room 69 obj 1 Solid at 576,384
+  INST room 69 obj 1 Solid at 640,384
+  INST room 69 obj 1 Solid at 704,384
+  INST room 69 obj 1 Solid at 768,384
+  INST room 69 obj 1 Solid at 832,384
+ROOM 70 Sunky 896x504 speed 30 views false [] inst 1
+  INST room 70 obj 331 Sunky... at 0,0
+ROOM 71 End 896x504 speed 10 views false [] inst 1
+  INST room 71 obj 329 Intro 3 at 256,128
+SPRITE 0 EemieStand frames 1 128x128
+SPRITE 1 EemieWalk frames 4 128x128
+SPRITE 2 EemieJump frames 14 128x128
+SPRITE 3 64x64 frames 1 64x64
+SPRITE 4 64x64 2 frames 1 64x64
+SPRITE 5 EemieLeft frames 1 128x128
+SPRITE 6 TlelsWalkLeft frames 4 128x128
+SPRITE 7 TlelsJumpLeft frames 14 128x128
+SPRITE 8 TlelsTurnLeft frames 18 128x128
+SPRITE 9 TlelsTurnRight frames 18 128x128
+SPRITE 26 Fade Out frames 20 640x480
+SPRITE 27 Fade In frames 20 640x480
+SPRITE 29 LDFadeOut frames 8 640x480
+SPRITE 30 LDFadeIn frames 6 640x480
+SPRITE 31 Water frames 4 300x32
+SPRITE 32 Title frames 11 300x300
+SPRITE 33 Fade In 2 frames 10 896x504
+SPRITE 34 Press Enter frames 39 199x32
+SPRITE 35 Fade Out 2 frames 19 900x510
+SPRITE 36 Sunky Did a Thing frames 11 640x185
+SPRITE 37 Level The Green One frames 8 640x184
+SPRITE 38 Level The Green One 2 frames 1 640x184
+SPRITE 39 Level The Green One 3 frames 12 640x301
+SPRITE 43 Flower frames 6 130x130
+SPRITE 44 Flower 2 frames 46 128x128
+SPRITE 45 Flower 3 frames 46 128x128
+SPRITE 140 Knicknacks frames 1 128x128
+SPRITE 141 KnicknacksWalk frames 4 128x128
+SPRITE 143 KnicknacksLeft frames 1 128x128
+SPRITE 144 KnicknacksWalkLeft frames 4 128x128
+SPRITE 148 Ring frames 8 180x180
+SPRITE 152 Static frames 3 186x126
+SPRITE 155 Sunkers frames 1 128x128
+SPRITE 159 Level Pattycake frames 8 640x184
+SPRITE 160 Level Pattycake 2 frames 1 640x184
+SPRITE 161 Level Pattycake 3 frames 11 640x301
+SPRITE 162 Sunky Sunker Sunkeroo! frames 6 896x504
+SPRITE 163 FLYING frames 1 99x104
+SPRITE 166 Ooks frames 1 128x160
+SPRITE 170 SunkyDance frames 6 128x128
+SPRITE 171 TlelsDance frames 6 128x128
+SPRITE 173 YOU MIGHT NOT BE ABLE TO RUN, BUT I MAY NEED TO DOUBLE CHECK THAT frames 9 640x184
+SPRITE 174 YOU MIGHT NOT BE ABLE TO RUN, BUT I MAY NEED TO DOUBLE CHECK THAT 2 frames 1 640x184
+SPRITE 175 YOU MIGHT NOT BE ABLE TO RUN, BUT I MAY NEED TO DOUBLE CHECK THAT 3 frames 13 640x301
+SPRITE 176 BigStatic frames 3 896x504
+SPRITE 178 Booty frames 1 896x504
+SPRITE 179 Shmohke frames 3 128x128
+SPRITE 180 Shmohke? frames 3 128x128
+SPRITE 181 ShmohkeLeft frames 3 128x128
+SPRITE 182 wweh frames 4 128x128
+SPRITE 183 KnicknacksDance frames 6 128x128
+SPRITE 191 The frames 1 93x43
+SPRITE 192 Sanctuary frames 1 299x43
+SPRITE 193 Circle frames 1 154x181
+SPRITE 194 Dark frames 1 680x500
+SPRITE 204 Hi Eemie frames 1 128x128
+SPRITE 205 HeTurntsAround frames 23 128x128
+SPRITE 206 LookUp frames 20 128x128
+SPRITE 207 Jump frames 1 128x128
+SPRITE 208 WhiteIn frames 4 1300x600
+SPRITE 209 WhiteOut frames 3 896x504
+SPRITE 210 Milk frames 1 640x480
+SPRITE 211 and frames 1 640x480
+SPRITE 212 Cereal frames 1 640x480
+SPRITE 213 Play frames 2 256x128
+SPRITE 214 Pals frames 1 827x256
+SPRITE 215 Spin frames 4 89x89
+SPRITE 216 Block frames 1 89x89
+SPRITE 217 Goal frames 2 89x89
+SPRITE 218 Blup frames 2 89x89
+SPRITE 219 Duck Overload frames 6 237x122
+SPRITE 220 Trippy Floor frames 8 256x128
+SPRITE 221 Milk and Cereal frames 14 128x128
+SPRITE 222 Table frames 1 128x128
+SPRITE 223 Cereal and Milk frames 5 200x322
+SPRITE 224 Milk frames 14 200x322
+SPRITE 225 Up frames 1 64x32
+SPRITE 226 Stand frames 6 128x160
+SPRITE 227 Reverse frames 6 128x160
+SPRITE 228 Intro frames 48 320x240
+SPRITE 229 Intro 2 frames 1 320x240
+SPRITE 230 Smoochies frames 4 215x81
+SPRITE 231 Fake BlueScreen frames 5 896x504
+SPRITE 232 Eemie 2 frames 1 188x204
+SPRITE 233 Crem frames 9 300x300
+SPRITE 234 Monitor frames 1 98x98
+SPRITE 235 Spin frames 4 128x128
+SPRITE 236 Hotep frames 36 64x64
+SPRITE 237 Cremspin frames 14 128x128
+SPRITE 238 MilkandCereal frames 3 128x128
+SPRITE 240 Rock frames 7 64x64
+SPRITE 241 SillyTitle frames 5 300x300
+SPRITE 242 Crem 2 frames 1 300x300
+SPRITE 243 Silly frames 1 128x128
+SPRITE 244 SillyWalk frames 4 128x128
+SPRITE 245 SillyWalkLeft frames 4 128x128
+SPRITE 246 SillyLeft frames 1 128x128
+SPRITE 247 Wall frames 1 896x504
+SPRITE 248 Fire frames 12 448x303
+SPRITE 249 SunkyScene frames 52 128x160
+SPRITE 250 Fire 2 frames 12 448x303
+SPRITE 251 Milk and Snereal frames 32 128x384
+SPRITE 252 Chew frames 4 128x128
+SPRITE 253 Heart frames 14 896x504
+SPRITE 254 Intro 3 frames 45 320x240
+SPRITE 256 Credits frames 9 896x504
