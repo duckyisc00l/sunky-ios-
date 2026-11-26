@@ -1240,6 +1240,11 @@ int loop(CommandLineArgs args, const char *argv0) {
             // Run one game step (Begin Step, Keyboard, Alarms, Step, End Step, room transitions)
             if (shouldStep) {
                 Runner_step(runner);
+                { // SUNKY-IOS lab: BS_START_ROOM=n jumps to room n once the game is running
+                    static int sunkyFrames = 0;
+                    const char* sr = getenv("BS_START_ROOM");
+                    if (sr != nullptr && ++sunkyFrames == 90) runner->pendingRoom = atoi(sr);
+                }
             }
 
             if (freeCamActive) {

@@ -1,27 +1,15 @@
 #!/usr/bin/env bash
-# Sunky the Game 2 in the phone's shape: plays through the same steps as the Simulator check and
-# takes screenshots. Usage: ci/lab-g2wide.sh <butterscotch binary> <data.win> <out dir>
+# Sunky the Game 2 in the phone's shape: jumps straight to each room named (BS_START_ROOM) and
+# takes screenshots there. Usage: ci/lab-g2wide.sh <butterscotch binary> <data.win> <out dir> <room>...
 set -uo pipefail
-bs=$(realpath "$1"); data=$(realpath "$2"); out=$(realpath -m "$3"); mkdir -p "$out"
+bs=$(realpath "$1"); data=$(realpath "$2"); out=$(realpath -m "$3"); shift 3; mkdir -p "$out"
 cd "$(dirname "$data")"
-timeout 110 "$bs" "$data" --disable-log-colours --widescreen-hack 2.174 --window-size 1113x512 > "$out/log.txt" 2>&1 &
-pid=$!
-wid=$(timeout 20 xdotool search --sync --onlyvisible --name "" 2>/dev/null | tail -1)
-geo() { eval "$(xdotool getwindowgeometry --shell "$wid" 2>/dev/null)"; }
-# the game's window sits at the top left of the virtual screen, 1113 x 512
 shot() { import -window root -crop 1113x512+0+0 "$out/$1.png" 2>/dev/null; }
-tap() { xdotool mousemove $(python3 -c "print(int(1113*$1), int(512*$2))") click 1 2>/dev/null; }
-key() { xdotool windowfocus "$wid" 2>/dev/null; xdotool key --clearmodifiers "$@" 2>/dev/null; }
-hold() { xdotool windowfocus "$wid" 2>/dev/null; xdotool keydown "$1"; sleep "$2"; xdotool keyup "$1"; }
-sleep 4; shot 01-logo
-for i in 1 2 3 4 5 6; do tap 0.5 0.72; sleep 2; done; shot 02-after-play
-for i in 1 2 3 4; do key Return; sleep 2; done; shot 03-after-enter
-sleep 3; shot 04-level
-xdotool windowfocus "$wid" 2>/dev/null; xdotool keydown Control_L
-hold Right 4; shot 05-right
-key Up; sleep 0.3; hold Right 4; shot 06-more
-xdotool keyup Control_L
-sleep 4; shot 07-late
-for i in 1 2 3; do key Return; sleep 2; done; hold Right 6; shot 08-later
-geo; echo "window ${WIDTH}x${HEIGHT}" >> "$out/log.txt"
-kill $pid 2>/dev/null; wait $pid 2>/dev/null
+for r in "$@"; do
+  BS_START_ROOM=$r timeout 30 "$bs" "$data" --disable-log-colours --widescreen-hack 2.174 --window-size 1113x512 > "$out/room$r.log" 2>&1 &
+  pid=$!
+  sleep 6; shot "r$r-a"
+  xdotool keydown Right; sleep 3; shot "r$r-b"; xdotool keyup Right
+  xdotool keydown Left; sleep 3; shot "r$r-c"; xdotool keyup Left
+  kill $pid 2>/dev/null; wait $pid 2>/dev/null; sleep 1
+done
