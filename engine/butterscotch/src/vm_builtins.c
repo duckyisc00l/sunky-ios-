@@ -9917,7 +9917,7 @@ static RValue builtin_window_set_size(VMContext* ctx, RValue* args, MAYBE_UNUSED
     if (width < 1) width = 1;
     if (height < 1) height = 1;
 
-    if (runner->setWindowSize != nullptr) {
+    if (runner->setWindowSize != nullptr && getenv("BS_START_ROOM") == nullptr) { // SUNKY-IOS lab: keep the phone-shaped window
         runner->setWindowSize(width, height);
     }
 
