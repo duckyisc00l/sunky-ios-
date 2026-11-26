@@ -1379,7 +1379,7 @@ int loop(CommandLineArgs args, const char *argv0) {
                 Runner_drawPost(runner, fbWidth, fbHeight);
                 renderer->vtable->endFrameEnd(renderer);
                 Runner_drawGUI(runner, fbWidth, fbHeight, gameW, gameH);
-                Runner_sunkySideArtOnScreen(runner, 0, fbHeight); // SUNKY-IOS
+                Runner_sunkySideArtOnScreen(runner, *hostFramebuffer, fbHeight); // SUNKY-IOS
 
                 if (showDebugOverlay && renderer->vtable->drawTextUI != nullptr) {
                     renderer->vtable->beginGUI(renderer, fbWidth, fbHeight, 0, 0, fbWidth, fbHeight, RENDER_TARGET_HOST_FRAMEBUFFER);
