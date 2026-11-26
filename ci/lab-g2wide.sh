@@ -4,7 +4,11 @@
 set -uo pipefail
 bs=$(realpath "$1"); data=$(realpath "$2"); out=$(realpath -m "$3"); shift 3; mkdir -p "$out"
 cd "$(dirname "$data")"
-shot() { import -window root -crop 1113x512+0+0 "$out/$1.png" 2>/dev/null; }
+# find the game's 1113 x 512 window wherever it was put, and capture just that
+shot() {
+  local g; g=$(xwininfo -root -tree 2>/dev/null | grep -oE "1113x512\+[0-9]+\+[0-9]+" | head -1)
+  import -window root ${g:+-crop $g} "$out/$1.png" 2>/dev/null
+}
 for r in "$@"; do
   BS_START_ROOM=$r timeout 30 "$bs" "$data" --disable-log-colours --widescreen-hack 2.174 --window-size 1113x512 > "$out/room$r.log" 2>&1 &
   pid=$!

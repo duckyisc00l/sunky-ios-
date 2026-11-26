@@ -119,7 +119,7 @@ jobs:
       - name: Build Butterscotch (SDL2, Linux)
         run: |
           sudo rm -f /var/lib/man-db/auto-update
-          sudo apt-get update -qq && sudo apt-get install -y -qq libsdl2-dev xvfb xdotool imagemagick libgl1-mesa-dev >/dev/null
+          sudo apt-get update -qq && sudo apt-get install -y -qq libsdl2-dev xvfb xdotool x11-utils imagemagick libgl1-mesa-dev >/dev/null
           # our copy (the one in the app), so widescreen changes can be seen here
           cp -r engine/butterscotch bs
           cmake -S bs -B bs/build -DBACKEND=sdl2 -DCMAKE_BUILD_TYPE=Release -DENABLE_FMOD=OFF > /tmp/cmake.log 2>&1 || { tail -40 /tmp/cmake.log; exit 1; }
