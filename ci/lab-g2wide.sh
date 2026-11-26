@@ -8,8 +8,9 @@ timeout 110 "$bs" "$data" --disable-log-colours --widescreen-hack 2.174 --window
 pid=$!
 wid=$(timeout 20 xdotool search --sync --onlyvisible --name "" 2>/dev/null | tail -1)
 geo() { eval "$(xdotool getwindowgeometry --shell "$wid" 2>/dev/null)"; }
-shot() { [ -n "$wid" ] && import -window "$wid" "$out/$1.png" 2>/dev/null; }
-tap() { geo; xdotool mousemove --window "$wid" $(python3 -c "print(int($WIDTH*$1), int($HEIGHT*$2))") click 1 2>/dev/null; }
+# the game's window sits at the top left of the virtual screen, 1113 x 512
+shot() { import -window root -crop 1113x512+0+0 "$out/$1.png" 2>/dev/null; }
+tap() { xdotool mousemove $(python3 -c "print(int(1113*$1), int(512*$2))") click 1 2>/dev/null; }
 key() { xdotool windowfocus "$wid" 2>/dev/null; xdotool key --clearmodifiers "$@" 2>/dev/null; }
 hold() { xdotool windowfocus "$wid" 2>/dev/null; xdotool keydown "$1"; sleep "$2"; xdotool keyup "$1"; }
 sleep 4; shot 01-logo
