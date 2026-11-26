@@ -1346,12 +1346,12 @@ void GLRenderer_sunkyFillSides(Renderer* renderer, int32_t surfaceId, int32_t le
 // SUNKY-IOS: a screen that doesn't scroll and is only as wide as the old picture (title, menus,
 // map) gets its widescreen sides filled from the thin band at its edges, mirrored back and forth.
 bool GLRenderer_sunkyDrawSideArt(Renderer* renderer, FileSystem* fs, const char* name, int32_t surfaceId, int32_t left, int32_t contentW);
+void GLRenderer_sunkyBlackSides(Renderer* renderer, int32_t surfaceId, int32_t left, int32_t contentW);
 
 void Runner_sunkyFillMenuSides(Runner* runner, int32_t gameW) {
 #if defined(ENABLE_MODERN_GL)
     bool anchored = runner->sunkyAnchored;
     runner->sunkyAnchored = false;
-    if (anchored) return; // the picture already sits against the screen edge: nothing to fill
     if (runner->widescreenExtraWidth <= 0 || runner->currentRoom == nullptr || !runner->viewsEnabled || !runner->usingAppSurface) return;
     GMLCamera* cam = Runner_getCameraForView(runner, 0);
     if (cam == nullptr || cam->viewWidth <= 0) return;
@@ -1364,6 +1364,12 @@ void Runner_sunkyFillMenuSides(Runner* runner, int32_t gameW) {
         char file[160];
         snprintf(file, sizeof file, "sunky_side_%s.png", rn);
         if (GLRenderer_sunkyDrawSideArt(runner->renderer, runner->fileSystem, file, runner->applicationSurfaceId, left, baseW)) return;
+        // a screen with side art showing something else (a black card first): plain black sides,
+        // unless its picture was placed against the screen edge (the HELLO splash)
+        if (!anchored && runner->fileSystem->vtable->fileExists(runner->fileSystem, file)) {
+            GLRenderer_sunkyBlackSides(runner->renderer, runner->applicationSurfaceId, left, baseW);
+            return;
+        }
     }
     // any other screen this narrow is left with black sides (nothing copied or stretched)
     (void) GLRenderer_sunkyFillSides;

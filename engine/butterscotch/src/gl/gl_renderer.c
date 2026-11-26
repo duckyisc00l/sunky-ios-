@@ -2813,7 +2813,7 @@ void GLRenderer_sunkyFillSides(Renderer* renderer, int32_t surfaceId, int32_t le
 // SUNKY-IOS: side art for a screen that's only as wide as the old picture. The art file is 128
 // pixels wide (game pixels) and as tall as the screen: the left 64 columns go to the left of the
 // picture (their right edge against it), the right 64 to the right. Loaded once per file.
-typedef struct { char* name; GLuint fbo, tex; int32_t w, h; bool ok; } SunkySideArt;
+typedef struct { char* name; GLuint fbo, tex; int32_t w, h; bool ok; uint8_t edgeL[3], edgeR[3]; } SunkySideArt;
 static SunkySideArt* sunkyArts = nullptr;
 static int32_t sunkyArtCount = 0;
 
@@ -2829,6 +2829,13 @@ static SunkySideArt* sunkyLoadArt(FileSystem* fs, const char* name) {
     uint8_t* pixels = stbi_load_from_memory(data, size, &w, &h, &ch, 4);
     free(data);
     if (pixels == nullptr) return a;
+    // the art's colour right against the picture, on each side (to check it belongs to what's showing)
+    for (int side = 0; side < 2; side++) {
+        uint32_t sum[3] = {0, 0, 0};
+        int col = side == 0 ? w / 2 - 1 : w / 2;
+        for (int y = 0; y < h; y++) for (int c = 0; c < 3; c++) sum[c] += pixels[((size_t) y * w + col) * 4 + c];
+        for (int c = 0; c < 3; c++) (side == 0 ? a->edgeL : a->edgeR)[c] = (uint8_t) (sum[c] / (uint32_t) h);
+    }
     // GL keeps rows bottom-up, the same way the surfaces are kept, so flip the picture
     uint8_t* flipped = malloc((size_t) w * (size_t) h * 4);
     for (int y = 0; y < h; y++) memcpy(flipped + (size_t) y * w * 4, pixels + (size_t) (h - 1 - y) * w * 4, (size_t) w * 4);
@@ -2853,6 +2860,24 @@ static SunkySideArt* sunkyLoadArt(FileSystem* fs, const char* name) {
     return a;
 }
 
+void GLRenderer_sunkyBlackSides(Renderer* renderer, int32_t surfaceId, int32_t left, int32_t contentW) {
+    GLRenderer* gl = (GLRenderer*) renderer;
+    if (0 > surfaceId || (uint32_t) surfaceId >= gl->surfaceCount || gl->surfaces[surfaceId] == 0) return;
+    int32_t w = gl->surfaceWidth[surfaceId], h = gl->surfaceHeight[surfaceId];
+    flushBatch(gl);
+    GLint prevFb = 0; glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFb);
+    GLboolean scissor = glIsEnabled(GL_SCISSOR_TEST);
+    GLfloat cc[4]; glGetFloatv(GL_COLOR_CLEAR_VALUE, cc);
+    glBindFramebuffer(GL_FRAMEBUFFER, gl->surfaces[surfaceId]);
+    glEnable(GL_SCISSOR_TEST);
+    glClearColor(0, 0, 0, 1);
+    glScissor(0, 0, left, h); glClear(GL_COLOR_BUFFER_BIT);
+    glScissor(left + contentW, 0, w - left - contentW, h); glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(cc[0], cc[1], cc[2], cc[3]);
+    if (!scissor) glDisable(GL_SCISSOR_TEST);
+    glBindFramebuffer(GL_FRAMEBUFFER, (GLuint) prevFb);
+}
+
 bool GLRenderer_sunkyDrawSideArt(Renderer* renderer, FileSystem* fs, const char* name, int32_t surfaceId, int32_t left, int32_t contentW) {
     GLRenderer* gl = (GLRenderer*) renderer;
     if (0 > surfaceId || (uint32_t) surfaceId >= gl->surfaceCount || gl->surfaces[surfaceId] == 0) return false;
@@ -2863,6 +2888,23 @@ bool GLRenderer_sunkyDrawSideArt(Renderer* renderer, FileSystem* fs, const char*
     int32_t right = left + contentW;
     int32_t lw = left < half ? left : half, rw = (w - right) < half ? (w - right) : half;
     flushBatch(gl);
+    // only when the screen showing is the one the art was drawn for: the picture's own edge colour
+    // must match the art's (the same room can show something else first, like a black title card)
+    {
+        GLint prevFb = 0;
+        glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFb);
+        glBindFramebuffer(GL_FRAMEBUFFER, gl->surfaces[surfaceId]);
+        uint8_t colL[256 * 4], colR[256 * 4];
+        int32_t n = h < 256 ? h : 256;
+        glReadPixels(left, 0, 1, n, GL_RGBA, GL_UNSIGNED_BYTE, colL);
+        glReadPixels(right - 1, 0, 1, n, GL_RGBA, GL_UNSIGNED_BYTE, colR);
+        glBindFramebuffer(GL_FRAMEBUFFER, (GLuint) prevFb);
+        uint32_t sl[3] = {0, 0, 0}, sr[3] = {0, 0, 0};
+        for (int32_t y = 0; y < n; y++) for (int c = 0; c < 3; c++) { sl[c] += colL[y * 4 + c]; sr[c] += colR[y * 4 + c]; }
+        int32_t dl = 0, dr = 0;
+        for (int c = 0; c < 3; c++) { dl += abs((int32_t) (sl[c] / (uint32_t) n) - a->edgeL[c]); dr += abs((int32_t) (sr[c] / (uint32_t) n) - a->edgeR[c]); }
+        if (dl > 90 || dr > 90) return false;
+    }
     GLint prevRead = 0, prevDraw = 0;
     glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &prevRead);
     glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &prevDraw);
