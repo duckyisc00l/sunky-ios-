@@ -6,7 +6,9 @@
 set -e
 here=$(dirname "$0"); to=$1
 cp "$here/warning.png" "$to/sunky_side_rm_logo.png"      # the WARNING screen after the HELLO splash
-cp "$here/black.png"   "$to/sunky_side_room19.png"       # LOONEY DUDE PRESENTS: plain black sides
+cp "$here/warning.png" "$to/sunky_side_room19.png"       # the WARNING card is shown here too (then LOONEY DUDE PRESENTS: black sides)
+cp "$here/warning.need" "$to/sunky_side_room19.png.need"
+cp "$here/warning.need" "$to/sunky_side_rm_logo.png.need"
 cp "$here/black.png"   "$to/sunky_side_room18.png"
 cp "$here/title.png"   "$to/sunky_side_rm_title.png"     # the SUNKY THE GAME 2 title
 cp "$here/curtain.png" "$to/sunky_side_Curtain.png"      # the curtain screen

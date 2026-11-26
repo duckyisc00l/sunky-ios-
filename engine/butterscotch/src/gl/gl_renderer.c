@@ -2813,7 +2813,7 @@ void GLRenderer_sunkyFillSides(Renderer* renderer, int32_t surfaceId, int32_t le
 // SUNKY-IOS: side art for a screen that's only as wide as the old picture. The art file is 128
 // pixels wide (game pixels) and as tall as the screen: the left 64 columns go to the left of the
 // picture (their right edge against it), the right 64 to the right. Loaded once per file.
-typedef struct { char* name; GLuint fbo, tex; int32_t w, h; bool ok; uint8_t edgeL[3], edgeR[3]; } SunkySideArt;
+typedef struct { char* name; GLuint fbo, tex; int32_t w, h; bool ok; uint8_t edgeL[3], edgeR[3]; bool hasNeed; int32_t need[4]; } SunkySideArt;
 static SunkySideArt* sunkyArts = nullptr;
 static int32_t sunkyArtCount = 0;
 
@@ -2824,6 +2824,16 @@ static SunkySideArt* sunkyLoadArt(FileSystem* fs, const char* name) {
     memset(a, 0, sizeof(*a));
     a->name = safeStrdup(name);
     uint8_t* data = nullptr; int32_t size = 0;
+    // optional <name>.need: "r g b tolerance" the band just inside the picture's left edge must
+    // average (to tell apart two black screens in one room, like the WARNING and LOONEY DUDE cards)
+    {
+        char needName[200]; snprintf(needName, sizeof needName, "%s.need", name);
+        char* txt = fs != nullptr ? fs->vtable->readFileText(fs, needName) : nullptr;
+        if (txt != nullptr) {
+            a->hasNeed = sscanf(txt, "%d %d %d %d", &a->need[0], &a->need[1], &a->need[2], &a->need[3]) == 4;
+            free(txt);
+        }
+    }
     if (fs == nullptr || !fs->vtable->readFileBinary(fs, name, &data, &size) || data == nullptr) return a;
     int w = 0, h = 0, ch = 0;
     uint8_t* pixels = stbi_load_from_memory(data, size, &w, &h, &ch, 4);
@@ -2902,6 +2912,20 @@ bool GLRenderer_sunkyDrawSideArtOnScreen(Renderer* renderer, FileSystem* fs, con
         }
     }
     if (dl > 90 && dr > 90) { glBindFramebuffer(GL_FRAMEBUFFER, (GLuint) prevFb); return false; }
+    if (a->hasNeed) {
+        int32_t bw = (int32_t) (24.0f * sc + 0.5f); if (bw > 64) bw = 64;
+        static uint8_t band[64 * 4];
+        uint64_t acc[3] = {0, 0, 0}; int32_t cnt = 0;
+        for (int32_t i = 0; i < 48; i++) {
+            int32_t yy = y0 + (int32_t) ((int64_t) i * vh / 48);
+            glReadPixels(xl, yy, bw, 1, GL_RGBA, GL_UNSIGNED_BYTE, band);
+            for (int32_t k = 0; k < bw; k++) { for (int c = 0; c < 3; c++) acc[c] += band[k * 4 + c]; cnt++; }
+        }
+        int32_t d = 0;
+        for (int c = 0; c < 3; c++) d += abs((int32_t) (acc[c] / (uint64_t) cnt) - a->need[c]);
+        if (getenv("BS_START_ROOM") != nullptr) fprintf(stderr, "side art %s: band %d,%d,%d need %d,%d,%d\n", name, (int) (acc[0] / cnt), (int) (acc[1] / cnt), (int) (acc[2] / cnt), a->need[0], a->need[1], a->need[2]);
+        if (d > a->need[3]) { glBindFramebuffer(GL_FRAMEBUFFER, (GLuint) prevFb); return false; }
+    }
     int32_t half = a->w / 2;
     int32_t lw = left < half ? left : half, rw = (gameW - left - contentW) < half ? (gameW - left - contentW) : half;
     GLboolean scissor = glIsEnabled(GL_SCISSOR_TEST);
@@ -2938,7 +2962,7 @@ bool GLRenderer_sunkyDrawSideArt(Renderer* renderer, FileSystem* fs, const char*
     GLRenderer* gl = (GLRenderer*) renderer;
     if (0 > surfaceId || (uint32_t) surfaceId >= gl->surfaceCount || gl->surfaces[surfaceId] == 0) return false;
     SunkySideArt* a = sunkyLoadArt(fs, name);
-    if (!a->ok) return false;
+    if (!a->ok || a->hasNeed) return false; // art with a band to check is decided on the finished screen
     int32_t w = gl->surfaceWidth[surfaceId], h = gl->surfaceHeight[surfaceId];
     int32_t half = a->w / 2;
     int32_t right = left + contentW;
