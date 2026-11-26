@@ -120,13 +120,17 @@ jobs:
         run: |
           sudo rm -f /var/lib/man-db/auto-update
           sudo apt-get update -qq && sudo apt-get install -y -qq libsdl2-dev xvfb xdotool imagemagick libgl1-mesa-dev >/dev/null
-          git clone -q https://github.com/ButterscotchRunner/Butterscotch bs && git -C bs checkout -q $(cat ci/BUTTERSCOTCH_COMMIT)
+          # our copy (the one in the app), so widescreen changes can be seen here
+          cp -r engine/butterscotch bs
           cmake -S bs -B bs/build -DBACKEND=sdl2 -DCMAKE_BUILD_TYPE=Release -DENABLE_FMOD=OFF > /tmp/cmake.log 2>&1 || { tail -40 /tmp/cmake.log; exit 1; }
           cmake --build bs/build -j4 > /tmp/build.log 2>&1 || { grep -E "error" /tmp/build.log | head -30; exit 1; }
           ls -la bs/build/butterscotch
       - name: Run Sunky the Game 2
         env: { LIBGL_ALWAYS_SOFTWARE: "1", SDL_AUDIODRIVER: dummy }
-        run: xvfb-run -a -s "-screen 0 1280x960x24" ci/lab-g2.sh bs/build/butterscotch games/g2x/data.win out/g2
+        run: |
+          xvfb-run -a -s "-screen 0 1280x960x24" ci/lab-g2.sh bs/build/butterscotch games/g2x/data.win out/g2
+          # the phone's shape (2.174), the way the app widens it
+          BS_ARGS="--widescreen-hack 2.174 --window-size 1113x512" xvfb-run -a -s "-screen 0 1280x960x24" ci/lab-g2.sh bs/build/butterscotch games/g2x/data.win out/g2/wide
       - name: Publish to branch r-g2
         if: always()
         run: |

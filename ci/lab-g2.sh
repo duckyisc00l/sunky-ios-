@@ -12,10 +12,10 @@ python3 "$(dirname "$0")/txtr.py" "$data" "$out/txtr"
 grep -n -B4 -E "keyboard_check|keyboard_key_press|keyboard_set_map" /tmp/disasm.txt > "$out/keys.txt"
 gzip -c /tmp/disasm.txt > "$out/disasm.txt.gz"
 cd "$(dirname "$data")"
-timeout 60 "$bs" "$data" --disable-log-colours > "$out/log.txt" 2>&1 &
+timeout 60 "$bs" "$data" --disable-log-colours ${BS_ARGS:-} > "$out/log.txt" 2>&1 &
 pid=$!
 wid=$(timeout 20 xdotool search --sync --onlyvisible --name "" 2>/dev/null | tail -1)
-shot() { import -window root -crop 1000x600+0+0 "$out/$1.png" 2>/dev/null; }
+shot() { import -window root -crop 1200x600+0+0 "$out/$1.png" 2>/dev/null; }
 key() { [ -n "$wid" ] && xdotool windowfocus "$wid" 2>/dev/null; xdotool key --clearmodifiers "$@" 2>/dev/null; }
 hold() { [ -n "$wid" ] && xdotool windowfocus "$wid" 2>/dev/null; xdotool keydown "$1"; sleep "$2"; xdotool keyup "$1"; }
 sleep 5; shot 01-start
