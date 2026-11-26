@@ -2891,6 +2891,12 @@ bool GLRenderer_sunkyDrawSideArtOnScreen(Renderer* renderer, FileSystem* fs, con
         static int dbg = 0;
         if (dbg++ % 60 == 0) {
             uint8_t mid[4] = {0}; glReadPixels(vx + vw / 2, y0 + vh / 2, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, mid);
+            static uint8_t row[4096 * 4];
+            int32_t rw = vw < 4096 ? vw : 4096;
+            glReadPixels(vx, y0 + vh / 3, rw, 1, GL_RGBA, GL_UNSIGNED_BYTE, row);
+            int32_t first = -1, last = -1;
+            for (int32_t i = 0; i < rw; i++) if (row[i * 4] + row[i * 4 + 1] + row[i * 4 + 2] > 40) { if (first < 0) first = i; last = i; }
+            fprintf(stderr, "  row at a third: colour from %d to %d; at %d: %u,%u,%u\n", first, last, xl + 2, row[(xl + 2) * 4], row[(xl + 2) * 4 + 1], row[(xl + 2) * 4 + 2]);
             fprintf(stderr, "side art %s on screen: edge differences %d %d; left avg %u,%u,%u right avg %u,%u,%u at x %d/%d y0 %d vh %d fbH %d view %d,%d %dx%d mid %u,%u,%u\n",
                 name, dl, dr, sl[0] / n, sl[1] / n, sl[2] / n, sr[0] / n, sr[1] / n, sr[2] / n, xl, xr, y0, vh, fbH, vx, vy, vw, vh, mid[0], mid[1], mid[2]);
         }
