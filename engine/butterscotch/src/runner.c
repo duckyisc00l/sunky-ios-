@@ -636,6 +636,7 @@ static bool sunkyWideBackground(Runner* runner, RuntimeBackground* bg, int32_t t
     if (reachesL != reachesR) {
         float shift = reachesL ? viewL - (float) cam->viewX : viewR - ((float) cam->viewX + (float) cam->viewWidth);
         sunkyBgColumns(runner, tpagIndex, 0.0f, (float) tpag->boundingWidth, x0 + shift, sx, y0, sy, bg->alpha);
+        runner->sunkyAnchored = true;
         return true;
     }
     sunkyBgColumns(runner, tpagIndex, 0.0f, (float) tpag->boundingWidth, x0, sx, y0, sy, bg->alpha);
@@ -1363,6 +1364,9 @@ void GLRenderer_sunkyFillSides(Renderer* renderer, int32_t surfaceId, int32_t le
 // map) gets its widescreen sides filled from the thin band at its edges, mirrored back and forth.
 void Runner_sunkyFillMenuSides(Runner* runner, int32_t gameW) {
 #if defined(ENABLE_MODERN_GL)
+    bool anchored = runner->sunkyAnchored;
+    runner->sunkyAnchored = false;
+    if (anchored) return; // the picture already sits against the screen edge: nothing to fill
     if (runner->widescreenExtraWidth <= 0 || runner->currentRoom == nullptr || !runner->viewsEnabled || !runner->usingAppSurface) return;
     GMLCamera* cam = Runner_getCameraForView(runner, 0);
     if (cam == nullptr || cam->viewWidth <= 0) return;

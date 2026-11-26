@@ -751,6 +751,7 @@ struct Runner {
     // SUNKY-IOS: room pixels the widened view adds to the LEFT of the game's own view (last frame),
     // so a snapshot of the screen lines up with where the game draws it
     float sunkyWideLeft;
+    bool sunkyAnchored; // SUNKY-IOS: this frame's picture was placed against the screen edge (no side fill)
     // Camera of the on-screen view being drawn while the widescreen hack/free camera is active (nullptr otherwise); its projection gets drawViewClipAdjustment
     GMLCamera* drawViewCamera;
     Matrix4f drawViewClipAdjustment;
