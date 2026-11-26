@@ -1362,6 +1362,7 @@ bool GLRenderer_sunkyDrawSideArtOnScreen(Renderer* renderer, FileSystem* fs, con
                                          int32_t vx, int32_t vy, int32_t vw, int32_t vh, int32_t gameW, int32_t left, int32_t contentW);
 static char sunkyPendingArt[160] = "";
 static int32_t sunkyPendingLeft = 0, sunkyPendingW = 0, sunkyPendingGameW = 0;
+static bool sunkyPendingAnchored = false;
 
 // SUNKY-IOS: after the whole frame (the game's own on-screen drawing included), side art for a
 // screen that only appeared on the screen itself
@@ -1369,7 +1370,8 @@ void Runner_sunkySideArtOnScreen(Runner* runner, unsigned int fbo, int32_t fbH) 
 #if defined(ENABLE_MODERN_GL)
     if (sunkyPendingArt[0] == 0) return;
     if (!GLRenderer_sunkyDrawSideArtOnScreen(runner->renderer, runner->fileSystem, sunkyPendingArt, fbo, fbH,
-            runner->viewportX, runner->viewportY, runner->viewportW, runner->viewportH, sunkyPendingGameW, sunkyPendingLeft, sunkyPendingW)) {
+            runner->viewportX, runner->viewportY, runner->viewportW, runner->viewportH, sunkyPendingGameW, sunkyPendingLeft, sunkyPendingW)
+        && !sunkyPendingAnchored) { // (a splash placed against the screen edge needs nothing)
         // while the game swaps screens it briefly still shows the last one: try the other screens'
         // art (listed in sunky_side_all.txt) so the sides don't flash black
         static char** names = nullptr; static int32_t count = -1;
@@ -1416,7 +1418,7 @@ void Runner_sunkyFillMenuSides(Runner* runner, int32_t gameW) {
     int32_t left = runner->widescreenExtraWidth / 2;
     // whatever happens below, look at the finished screen too: some cards are drawn straight to it
     snprintf(sunkyPendingArt, sizeof sunkyPendingArt, "%s", file);
-    sunkyPendingLeft = left; sunkyPendingW = baseW; sunkyPendingGameW = gameW;
+    sunkyPendingLeft = left; sunkyPendingW = baseW; sunkyPendingGameW = gameW; sunkyPendingAnchored = anchored;
     if (!runner->viewsEnabled || !runner->usingAppSurface) return;
     if (GLRenderer_sunkyDrawSideArt(runner->renderer, runner->fileSystem, file, runner->applicationSurfaceId, left, baseW)) {
         sunkyPendingArt[0] = 0;
