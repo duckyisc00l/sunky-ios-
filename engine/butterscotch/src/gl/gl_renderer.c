@@ -2860,6 +2860,48 @@ static SunkySideArt* sunkyLoadArt(FileSystem* fs, const char* name) {
     return a;
 }
 
+// SUNKY-IOS: the same side art, checked and drawn on the screen itself after everything else (for
+// screens the game draws straight to the screen, like Sunky 2's title). vx..vh is where the game's
+// picture sits on the screen (top-left origin), fbH the screen's height.
+bool GLRenderer_sunkyDrawSideArtOnScreen(Renderer* renderer, FileSystem* fs, const char* name, GLuint fbo, int32_t fbH,
+                                         int32_t vx, int32_t vy, int32_t vw, int32_t vh, int32_t gameW, int32_t left, int32_t contentW) {
+    GLRenderer* gl = (GLRenderer*) renderer;
+    SunkySideArt* a = sunkyLoadArt(fs, name);
+    if (!a->ok || gameW <= 0 || vw <= 0 || vh <= 0) return false;
+    flushBatch(gl);
+    float sc = (float) vw / (float) gameW;
+    int32_t y0 = fbH - (vy + vh);
+    int32_t xl = vx + (int32_t) ((float) left * sc + 0.5f), xr = vx + (int32_t) ((float) (left + contentW) * sc + 0.5f);
+    GLint prevFb = 0; glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFb);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    int32_t n = vh < 512 ? vh : 512;
+    uint8_t colL[512 * 4], colR[512 * 4];
+    // sample a column one game pixel inside each edge, spread over the height
+    int32_t inset = (int32_t) (sc + 0.5f);
+    for (int32_t i = 0; i < n; i++) {
+        int32_t yy = y0 + (int32_t) ((int64_t) i * vh / n);
+        glReadPixels(xl + inset, yy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, colL + i * 4);
+        glReadPixels(xr - 1 - inset, yy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, colR + i * 4);
+    }
+    uint32_t sl[3] = {0, 0, 0}, sr[3] = {0, 0, 0};
+    for (int32_t i = 0; i < n; i++) for (int c = 0; c < 3; c++) { sl[c] += colL[i * 4 + c]; sr[c] += colR[i * 4 + c]; }
+    int32_t dl = 0, dr = 0;
+    for (int c = 0; c < 3; c++) { dl += abs((int32_t) (sl[c] / (uint32_t) n) - a->edgeL[c]); dr += abs((int32_t) (sr[c] / (uint32_t) n) - a->edgeR[c]); }
+    if (getenv("BS_START_ROOM") != nullptr) fprintf(stderr, "side art %s on screen: edge differences %d %d\n", name, dl, dr);
+    if (dl > 90 && dr > 90) { glBindFramebuffer(GL_FRAMEBUFFER, (GLuint) prevFb); return false; }
+    int32_t half = a->w / 2;
+    int32_t lw = left < half ? left : half, rw = (gameW - left - contentW) < half ? (gameW - left - contentW) : half;
+    GLboolean scissor = glIsEnabled(GL_SCISSOR_TEST);
+    glDisable(GL_SCISSOR_TEST);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, a->fbo);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
+    if (lw > 0) glBlitFramebuffer(half - lw, 0, half, a->h, xl - (int32_t) ((float) lw * sc + 0.5f), y0, xl, y0 + vh, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    if (rw > 0) glBlitFramebuffer(half, 0, half + rw, a->h, xr, y0, xr + (int32_t) ((float) rw * sc + 0.5f), y0 + vh, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBindFramebuffer(GL_FRAMEBUFFER, (GLuint) prevFb);
+    if (scissor) glEnable(GL_SCISSOR_TEST);
+    return true;
+}
+
 void GLRenderer_sunkyBlackSides(Renderer* renderer, int32_t surfaceId, int32_t left, int32_t contentW) {
     GLRenderer* gl = (GLRenderer*) renderer;
     if (0 > surfaceId || (uint32_t) surfaceId >= gl->surfaceCount || gl->surfaces[surfaceId] == 0) return;

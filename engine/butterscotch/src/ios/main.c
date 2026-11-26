@@ -353,6 +353,7 @@ int32_t bs_ios_step(int32_t winW, int32_t winH, float deltaTime) {
     Runner_drawPost(runner, winW, winH);
     runner->renderer->vtable->endFrameEnd(runner->renderer);
     Runner_drawGUI(runner, winW, winH, gameW, gameH);
+    Runner_sunkySideArtOnScreen(runner, gHostFramebuffer, winH); // SUNKY-IOS
 
     gViewport[0] = (int32_t) runner->viewportX;
     gViewport[1] = (int32_t) runner->viewportY;

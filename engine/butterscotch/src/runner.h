@@ -1017,6 +1017,7 @@ bool Runner_surfaceSetTarget(Runner* runner, int32_t surfaceID);
 void Runner_guiSizeChanged(Runner* runner);
 float Runner_sunkyWideFactor(Runner* runner); // SUNKY-IOS
 void Runner_sunkyFillMenuSides(Runner* runner, int32_t gameW); // SUNKY-IOS
+void Runner_sunkySideArtOnScreen(Runner* runner, unsigned int fbo, int32_t fbH); // SUNKY-IOS
 // Pops the top of the surface stack and bind whatever is below (or the main framebuffer when the stack is empty).
 // Returns false when there was nothing to pop.
 bool Runner_surfaceResetTarget(Runner* runner);

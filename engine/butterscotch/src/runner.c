@@ -1358,6 +1358,23 @@ void GLRenderer_sunkyFillSides(Renderer* renderer, int32_t surfaceId, int32_t le
 // map) gets its widescreen sides filled from the thin band at its edges, mirrored back and forth.
 bool GLRenderer_sunkyDrawSideArt(Renderer* renderer, FileSystem* fs, const char* name, int32_t surfaceId, int32_t left, int32_t contentW);
 void GLRenderer_sunkyBlackSides(Renderer* renderer, int32_t surfaceId, int32_t left, int32_t contentW);
+bool GLRenderer_sunkyDrawSideArtOnScreen(Renderer* renderer, FileSystem* fs, const char* name, unsigned int fbo, int32_t fbH,
+                                         int32_t vx, int32_t vy, int32_t vw, int32_t vh, int32_t gameW, int32_t left, int32_t contentW);
+static char sunkyPendingArt[160] = "";
+static int32_t sunkyPendingLeft = 0, sunkyPendingW = 0, sunkyPendingGameW = 0;
+
+// SUNKY-IOS: after the whole frame (the game's own on-screen drawing included), side art for a
+// screen that only appeared on the screen itself
+void Runner_sunkySideArtOnScreen(Runner* runner, unsigned int fbo, int32_t fbH) {
+#if defined(ENABLE_MODERN_GL)
+    if (sunkyPendingArt[0] == 0) return;
+    GLRenderer_sunkyDrawSideArtOnScreen(runner->renderer, runner->fileSystem, sunkyPendingArt, fbo, fbH,
+        runner->viewportX, runner->viewportY, runner->viewportW, runner->viewportH, sunkyPendingGameW, sunkyPendingLeft, sunkyPendingW);
+    sunkyPendingArt[0] = 0;
+#else
+    (void) runner; (void) fbo; (void) fbH;
+#endif
+}
 
 void Runner_sunkyFillMenuSides(Runner* runner, int32_t gameW) {
 #if defined(ENABLE_MODERN_GL)
@@ -1379,6 +1396,9 @@ void Runner_sunkyFillMenuSides(Runner* runner, int32_t gameW) {
         // unless its picture was placed against the screen edge (the HELLO splash)
         if (!anchored && runner->fileSystem->vtable->fileExists(runner->fileSystem, file)) {
             GLRenderer_sunkyBlackSides(runner->renderer, runner->applicationSurfaceId, left, baseW);
+            // it may still be drawn straight to the screen later in the frame: check again then
+            snprintf(sunkyPendingArt, sizeof sunkyPendingArt, "%s", file);
+            sunkyPendingLeft = left; sunkyPendingW = baseW; sunkyPendingGameW = gameW;
             return;
         }
     }
