@@ -1,0 +1,126 @@
+[app] Sunky 1.0 (build 31), iOS 26.2
+[app] audio: 48000 Hz, start status 0
+[app] controller connected: Gamepad
+[app] starting /Users/runner/Library/Developer/CoreSimulator/Devices/B8CBB336-95B2-4793-BDA1-A2B401E584C9/data/Containers/Bundle/Application/7DFF137F-7C31-4EE0-9E27-4EBE405FE49E/Sunky.app/Games/g2/data.win
+[app] gl: screen 2622x1206, storage 1, status 0x8cd5, OpenGL ES 3.0 APPLE-23.0.2
+[bs] VM: Initialized with 2149 functions mapped
+[bs] VM: Reset complete
+[bs] VM: Reset complete
+[bs] GL: Compiling default vertex shader
+[bs] GL: Compiling default fragment shader
+[bs] GL: Shader default succesfully linked!
+[bs] GL: 4 Shaders Found
+[bs] GL: Compiling sha_hq2x
+[bs] GL: Compiling sha_hq2x vertex shader
+[bs] GL: Compiling sha_hq2x fragment shader
+[bs] GL: Shader sha_hq2x succesfully linked!
+[bs] GL: Compiling sha_hq4x
+[bs] GL: Compiling sha_hq4x vertex shader
+[bs] GL: Compiling sha_hq4x fragment shader
+[bs] GL: Shader sha_hq4x succesfully linked!
+[bs] GL: Compiling sha_invert
+[bs] GL: Compiling sha_invert vertex shader
+[bs] GL: Compiling sha_invert fragment shader
+[bs] GL: Shader sha_invert succesfully linked!
+[bs] GL: Compiling sha_outline
+[bs] GL: Compiling sha_outline vertex shader
+[bs] GL: Compiling sha_outline fragment shader
+[bs] GL: Shader sha_outline succesfully linked!
+[bs] GL: Renderer initialized (3 texture pages)
+[bs] Audio: miniaudio engine initialized
+[bs] warning: Runner: built without physics support, games using phy_* functions will not simulate
+[bs] Runner: Room loaded: rm_logo (room 0) with 1 instances
+[bs] warning: VM: [gml_Object_obj_persistent_Other_2] Stubbed function "display_get_width"!
+[bs] Runner started OK
+[app] butterscotch: started, screen 2622x1206
+[bs] warning: VM: [gml_Object_obj_persistent_Other_11] Unknown function "display_reset"!
+wide: room 0 448x256 views 1 appsurf 1/1 game 557x256 extra 109 aspect 2.174 cam 448x256 port 448x256 win 2622x1206
+[bs] GL: Created surface 0 with size (557x256)
+[bs] GL: TXTR page 2 replaced from /Users/runner/Library/Developer/CoreSimulator/Devices/B8CBB336-95B2-4793-BDA1-A2B401E584C9/data/Containers/Bundle/Application/7DFF137F-7C31-4EE0-9E27-4EBE405FE49E/Sunky.app/Art/txtr/2.png
+[bs] GL: Loaded TXTR page 2 (2048x2048)
+side art sunky_side_rm_logo.png: 128x256 ready
+[bs] warning: VM: [gml_Object_obj_persistent_Alarm_2] Stubbed function "window_center"!
+[app] test tap at 437,289
+[app] test tap at 437,289
+[app] test tap at 437,289
+[app] test tap at 437,289
+[bs] GL: Created dynamic sprite 881 (557x256) from surface 0 at (0,0)
+[bs] Room changed: rm_logo (room 0) -> room19 (room 1)
+[bs] Runner: Room loaded: room19 (room 1) with 3 instances
+wide: room 1 448x256 views 1 appsurf 1/1 game 557x256 extra 109 aspect 2.174 cam 448x256 port 448x256 win 2622x1206
+side art sunky_side_room19.png: 128x256 ready
+side art sunky_side_rm_title.png: 128x256 ready
+side art sunky_side_Curtain.png: 128x256 ready
+side art sunky_side_hello.png: 128x256 ready
+[app] test tap at 437,289
+[bs] GL: Deleted sprite 881
+[bs] GL: TXTR page 1 replaced from /Users/runner/Library/Developer/CoreSimulator/Devices/B8CBB336-95B2-4793-BDA1-A2B401E584C9/data/Containers/Bundle/Application/7DFF137F-7C31-4EE0-9E27-4EBE405FE49E/Sunky.app/Art/txtr/1.png
+[bs] GL: Loaded TXTR page 1 (2048x2048)
+[bs] GL: Loaded TXTR page 0 (2048x2048)
+[app] test tap at 437,289
+[bs] GL: Created dynamic sprite 881 (557x256) from surface 0 at (0,0)
+[bs] Room changed: room19 (room 1) -> room18 (room 2)
+[bs] Runner: Room loaded: room18 (room 2) with 4 instances
+wide: room 2 448x256 views 1 appsurf 1/1 game 557x256 extra 109 aspect 2.174 cam 448x256 port 448x256 win 2622x1206
+side art sunky_side_room18.png: 128x256 ready
+[bs] GL: Deleted sprite 881
+[app] test tap at 437,289
+[app] test tap at 437,289
+[app] test tap at 437,289
+[app] test key 13 down
+[app] test key 13 down
+[bs] GL: Created dynamic sprite 881 (557x256) from surface 0 at (0,0)
+[bs] Room changed: room18 (room 2) -> rm_title (room 3)
+[bs] Runner: Room loaded: rm_title (room 3) with 3 instances
+wide: room 3 448x256 views 1 appsurf 1/1 game 557x256 extra 109 aspect 2.174 cam 448x256 port 448x256 win 2622x1206
+[bs] GL: Deleted sprite 881
+[app] test key 13 down
+[app] test key 13 down
+[bs] GL: Created dynamic sprite 881 (557x256) from surface 0 at (0,0)
+[bs] Room changed: rm_title (room 3) -> Curtain (room 4)
+[bs] Runner: Room loaded: Curtain (room 4) with 6 instances
+wide: room 4 448x256 views 1 appsurf 1/1 game 557x256 extra 109 aspect 2.174 cam 448x256 port 448x256 win 2622x1206
+[bs] GL: Deleted sprite 881
+[app] test key 13 down
+[app] test key 13 down
+[app] test key 39 down
+[app] test key 16 down
+[app] test key 16 down
+[app] test key 39 down
+[app] test key 16 down
+[app] test key 16 down
+[app] test key 39 down
+[app] test key 16 down
+[bs] GL: Created dynamic sprite 881 (557x256) from surface 0 at (0,0)
+[bs] Room changed: Curtain (room 4) -> rm_worldmap (room 5)
+[bs] Runner: Room loaded: rm_worldmap (room 5) with 6 instances
+wide: room 5 448x256 views 1 appsurf 1/1 game 557x256 extra 109 aspect 2.174 cam 448x256 port 448x256 win 2622x1206
+[bs] GL: Deleted sprite 881
+[app] test key 16 down
+[app] test key 39 down
+[bs] GL: Created dynamic sprite 881 (557x256) from surface 0 at (0,0)
+[bs] Room changed: rm_worldmap (room 5) -> room39 (room 7)
+[bs] Runner: Room loaded: room39 (room 7) with 71 instances
+wide: room 7 448x928 views 1 appsurf 1/1 game 557x256 extra 109 aspect 2.174 cam 448x256 port 448x256 win 2622x1206
+[bs] GL: Deleted sprite 881
+[app] test key 16 down
+[app] test key 16 down
+[app] test key 39 down
+[app] test key 16 down
+[app] test key 16 down
+[app] test key 39 down
+[app] test key 16 down
+[app] test key 16 down
+[app] test key 39 down
+[app] test key 16 down
+[app] test key 16 down
+[app] test key 39 down
+[app] test key 16 down
+[app] test key 16 down
+[app] test key 39 down
+[app] test key 16 down
+[app] test key 16 down
+[app] test key 39 down
+[app] test key 16 down
+[app] test key 16 down
+[app] test key 39 down

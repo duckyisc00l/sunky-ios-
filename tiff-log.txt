@@ -1,0 +1,64 @@
+[app] Sunky 1.0 (build 31), iOS 26.2
+[app] audio: 48000 Hz, start status 0
+[app] controller connected: Gamepad
+[app] starting /Users/runner/Library/Developer/CoreSimulator/Devices/B8CBB336-95B2-4793-BDA1-A2B401E584C9/data/Containers/Data/Application/C4599D51-B11A-4EA4-AE0A-2EE683AD4F49/Documents/tiff/game.exe
+replacement art: 20 images from "/Users/runner/Library/Developer/CoreSimulator/Devices/B8CBB336-95B2-4793-BDA1-A2B401E584C9/data/Containers/Bundle/Application/7DFF137F-7C31-4EE0-9E27-4EBE405FE49E/Sunky.app/Art"
+launching game
+  > param_string: "/Users/runner/Library/Developer/CoreSimulator/Devices/B8CBB336-95B2-4793-BDA1-A2B401E584C9/data/Containers/Data/Application/C4599D51-B11A-4EA4-AE0A-2EE683AD4F49/Documents/tiff/game.exe"
+  > program_directory: "/Users/runner/Library/Developer/CoreSimulator/Devices/B8CBB336-95B2-4793-BDA1-A2B401E584C9/data/Containers/Data/Application/C4599D51-B11A-4EA4-AE0A-2EE683AD4F49/Documents/tiff"
+[app] gl: screen 2622x1206, storage 1, status 0x8cd5, OpenGL ES 3.0 APPLE-23.0.2
+creating graphics context
+  > GL_VERSION: "OpenGL ES 3.0 APPLE-23.0.2"
+  > GL_VENDOR: "Apple Inc."
+GPU Max Texture Size: 4096
+[app] test tap at 437,299
+[app] test tap at 437,281
+[app] test tap at 437,281
+[app] test tap at 437,281
+[app] test tap at 437,281
+[app] test tap at 437,281
+[app] test tap at 437,281
+[app] test tap at 437,281
+[app] test tap at 437,281
+[app] test key 13 down
+[app] test tap at 437,281
+[app] test key 13 down
+[app] test tap at 437,281
+[app] test key 13 down
+[app] test tap at 437,281
+[app] test tap at 437,281
+[app] test key 13 down
+[app] test tap at 437,281
+[app] test key 13 down
+[app] test key 13 down
+[app] test key 13 down
+[app] test key 13 down
+[app] test key 13 down
+[app] test key 13 down
+[app] test key 13 down
+[app] test key 39 down
+[app] test key 32 down
+[app] test key 32 down
+[app] test key 39 down
+[app] test key 32 down
+[app] test key 32 down
+[app] test key 39 down
+[app] test key 32 down
+[app] test key 32 down
+[app] test key 39 down
+[app] test key 32 down
+[app] test key 32 down
+[app] test key 39 down
+[app] test key 32 down
+[app] test key 32 down
+[app] test key 39 down
+[app] test key 32 down
+[app] test key 32 down
+[app] test key 39 down
+[app] test key 32 down
+[app] test key 32 down
+[app] test key 39 down
+[app] test key 32 down
+[app] test key 32 down
+[app] test key 39 down
+[app] test key 32 down

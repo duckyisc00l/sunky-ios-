@@ -1,0 +1,683 @@
+Command line invocation:
+    /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/xcodebuild -project Sunky.xcodeproj -scheme Sunky -configuration Release -sdk iphonesimulator -destination "generic/platform=iOS Simulator" -derivedDataPath build-sim ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO CODE_SIGNING_ALLOWED=NO build
+
+Build settings from command line:
+    ARCHS = x86_64
+    CODE_SIGNING_ALLOWED = NO
+    ONLY_ACTIVE_ARCH = NO
+    SDKROOT = iphonesimulator18.5
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'Sunky' in project 'Sunky' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch x86_64 -isysroot /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -x objective-c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+ExecuteExternalTool /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch x86_64 -isysroot /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -x c -c /dev/null
+
+Build description signature: e6d6508f16ce984b641563a67d94e152
+Build description path: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/XCBuildData/e6d6508f16ce984b641563a67d94e152.xcbuilddata
+CreateBuildDirectory /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios/Sunky.xcodeproj
+    builtin-create-build-directory /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products
+
+CreateBuildDirectory /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios/Sunky.xcodeproj
+    builtin-create-build-directory /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex
+
+ClangStatCache /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios/Sunky.xcodeproj
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache
+
+WriteAuxiliaryFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky-7be56959d92d674d19d586bae200c35a-VFS-iphonesimulator/all-product-headers.yaml
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios/Sunky.xcodeproj
+    write-file /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky-7be56959d92d674d19d586bae200c35a-VFS-iphonesimulator/all-product-headers.yaml
+
+CreateBuildDirectory /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios/Sunky.xcodeproj
+    builtin-create-build-directory /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator
+
+CreateBuildDirectory /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphonesimulator
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios/Sunky.xcodeproj
+    builtin-create-build-directory /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphonesimulator
+
+WriteAuxiliaryFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky.DependencyStaticMetadataFileList (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    write-file /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky.hmap (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    write-file /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky.hmap
+
+WriteAuxiliaryFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky.DependencyMetadataFileList (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    write-file /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-project-headers.hmap (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    write-file /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-project-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-own-target-headers.hmap (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    write-file /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-own-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-generated-files.hmap (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    write-file /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-generated-files.hmap
+
+WriteAuxiliaryFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-all-target-headers.hmap (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    write-file /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-all-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-all-non-framework-target-headers.hmap (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    write-file /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    write-file /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+-target x86_64-apple-ios14.0-simulator '-std=gnu11' -fobjc-arc -fobjc-weak -fmodules -gmodules '-fmodules-cache-path=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex' -fpascal-strings -Os -fno-common '-DGLES_SILENCE_DEPRECATION=1' '-DNS_BLOCK_ASSERTIONS=1' '-DOBJC_OLD_DISPATCH_PROTOTYPES=0' -isysroot /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -fasm-blocks -g '-fvisibility=hidden' '-fobjc-abi-version=2' -fobjc-legacy-dispatch -iquote /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-generated-files.hmap -I/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-own-target-headers.hmap -I/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-all-target-headers.hmap -iquote /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Sunky-project-headers.hmap -I/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/include -I/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/DerivedSources-normal/x86_64 -I/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/DerivedSources/x86_64 -I/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/DerivedSources -F/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator
+
+WriteAuxiliaryFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Sunky.LinkFileList (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    write-file /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Sunky.LinkFileList
+
+MkDir /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    /bin/mkdir -p /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app
+
+MkDir /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_output/thinned (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    /bin/mkdir -p /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_output/thinned
+
+MkDir /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_output/unthinned (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    /bin/mkdir -p /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_output/unthinned
+
+GenerateAssetSymbols /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Assets.xcassets (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/actool /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Assets.xcassets --compile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app --output-format human-readable-text --notices --warnings --export-dependency-info /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_dependencies --output-partial-info-plist /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_generated_info.plist --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 14.0 --platform iphonesimulator --bundle-identifier com.duckyisc00l.sunky --generate-objc-asset-symbols /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/DerivedSources/GeneratedAssetSymbols.h --generate-asset-symbol-index /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/* com.apple.actool.compilation-results */
+/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/DerivedSources/GeneratedAssetSymbols-Index.plist
+/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/DerivedSources/GeneratedAssetSymbols.h
+
+
+CpResource /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/Games /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Games (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Games /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app
+
+CpResource /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/Controls /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Controls (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Controls /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app
+
+CpResource /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/Art /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Art (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Art /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app
+
+CompileAssetCatalogVariant thinned /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Assets.xcassets (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/actool /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Assets.xcassets --compile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_output/thinned --output-format human-readable-text --notices --warnings --export-dependency-info /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_dependencies_thinned --output-partial-info-plist /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_generated_info.plist_thinned --app-icon AppIcon --compress-pngs --enable-on-demand-resources YES --development-region en --target-device iphone --target-device ipad --minimum-deployment-target 14.0 --platform iphonesimulator
+/* com.apple.actool.compilation-results */
+/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_generated_info.plist_thinned
+/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_output/thinned/AppIcon60x60@2x.png
+/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_output/thinned/AppIcon76x76@2x~ipad.png
+/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_output/thinned/Assets.car
+
+
+ScanDependencies /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/MenuViewController.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/MenuViewController.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    builtin-ScanDependencies -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/MenuViewController.o.scan -- /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/MenuViewController.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/MenuViewController.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/MenuViewController.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/MenuViewController.o
+
+ScanDependencies /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/main.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/main.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    builtin-ScanDependencies -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/main.o.scan -- /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/main.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/main.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/main.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/main.o
+
+ScanDependencies /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Games.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Games.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    builtin-ScanDependencies -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Games.o.scan -- /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Games.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Games.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Games.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Games.o
+
+ScanDependencies /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameViewController.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/GameViewController.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    builtin-ScanDependencies -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameViewController.o.scan -- /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameViewController.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameViewController.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/GameViewController.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameViewController.o
+
+ScanDependencies /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameView.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/GameView.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    builtin-ScanDependencies -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameView.o.scan -- /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameView.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameView.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/GameView.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameView.o
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/ptrauth-6CT0B1C91SEYKXULPE721ZBZD.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/ptrauth-6CT0B1C91SEYKXULPE721ZBZD.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_float-DR76S81H4J6DUBFL3WBZ0XI97.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_float-DR76S81H4J6DUBFL3WBZ0XI97.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/ptrcheck-4MNLMOA8E0MKQLJKOKNNUC6QU.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/ptrcheck-4MNLMOA8E0MKQLJKOKNNUC6QU.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_iso646-A5LPYEA8XV6ZXPQQNZ5NB821D.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_iso646-A5LPYEA8XV6ZXPQQNZ5NB821D.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_stddef-AGJVTV896M20ZD6O1AW5X94GR.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_stddef-AGJVTV896M20ZD6O1AW5X94GR.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/os_availability_internal-BRFZ17MNROXGA27135NRB4LQT.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/os_availability_internal-BRFZ17MNROXGA27135NRB4LQT.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_stdarg-4Z2Q50DAOI74RB9TMTAZJYWB8.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_stdarg-4Z2Q50DAOI74RB9TMTAZJYWB8.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_fenv-AX01BURQN42GZ6TBJI1FKEEZB.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_fenv-AX01BURQN42GZ6TBJI1FKEEZB.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_stdbool-2TFK7F50OBC97OJP0XV1D089R.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_stdbool-2TFK7F50OBC97OJP0XV1D089R.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_float-E7TC557T2R21X1ZANOM7PPQL6.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_float-E7TC557T2R21X1ZANOM7PPQL6.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/TargetConditionals-4KJCI5RMFYLIG0VTLGKL81ULK.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/TargetConditionals-4KJCI5RMFYLIG0VTLGKL81ULK.scan
+
+ScanDependencies /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Dialog.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Dialog.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    builtin-ScanDependencies -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Dialog.o.scan -- /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Dialog.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Dialog.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Dialog.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Dialog.o
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/os_availability-C16RNYF3303RD1SGW7KMBM15F.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/os_availability-C16RNYF3303RD1SGW7KMBM15F.scan
+
+ScanDependencies /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/BSRunner.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/BSRunner.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    builtin-ScanDependencies -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/BSRunner.o.scan -- /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/BSRunner.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/BSRunner.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/BSRunner.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/BSRunner.o
+
+ScanDependencies /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Audio.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Audio.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    builtin-ScanDependencies -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Audio.o.scan -- /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Audio.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Audio.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Audio.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Audio.o
+
+ScanDependencies /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/AppDelegate.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/AppDelegate.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    builtin-ScanDependencies -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/AppDelegate.o.scan -- /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/AppDelegate.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/AppDelegate.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/AppDelegate.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/AppDelegate.o
+
+LinkAssetCatalog /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Assets.xcassets (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-linkAssetCatalog --thinned /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_output/thinned --thinned-dependencies /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_dependencies_thinned --thinned-info-plist-content /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_generated_info.plist_thinned --unthinned /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_output/unthinned --unthinned-dependencies /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_dependencies_unthinned --unthinned-info-plist-content /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_generated_info.plist_unthinned --output /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app --plist-output /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_generated_info.plist
+note: Emplaced /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/AppIcon60x60@2x.png (in target 'Sunky' from project 'Sunky')
+note: Emplaced /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/AppIcon76x76@2x~ipad.png (in target 'Sunky' from project 'Sunky')
+note: Emplaced /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/Assets.car (in target 'Sunky' from project 'Sunky')
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/AvailabilityMacros-7PG9AIHJWYVF0VPGTJSY18C8F.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/AvailabilityMacros-7PG9AIHJWYVF0VPGTJSY18C8F.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/DarwinFoundation-A6LKI52ST3L0X14WWUF3QDRL8.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/DarwinFoundation-A6LKI52ST3L0X14WWUF3QDRL8.scan
+
+ProcessInfoPlistFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/Info.plist /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Info.plist (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-infoPlistUtility /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Info.plist -producttype com.apple.product-type.application -genpkginfo /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/PkgInfo -expandbuildsettings -format xml -platform iphonesimulator -additionalcontentfile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/assetcatalog_generated_info.plist -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/Info.plist
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/netinet_in-2RO07WICL1QZXLUC29EZIB86I.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/netinet_in-2RO07WICL1QZXLUC29EZIB86I.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_stdint-1QPWH4B70AMGZ9669Y59AFA91.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_stdint-1QPWH4B70AMGZ9669Y59AFA91.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_complex-CT4RMH4ZKA6YG6NE3NR5E7YBX.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_complex-CT4RMH4ZKA6YG6NE3NR5E7YBX.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_setjmp-A57VTDMABCN7MP3M3FDGLZX79.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_setjmp-A57VTDMABCN7MP3M3FDGLZX79.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/sys_time-4KX47O7DUQW6L4VSU6B5VTFY5.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/sys_time-4KX47O7DUQW6L4VSU6B5VTFY5.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_math-D82626DWI1K3DCTSCBX322A90.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_math-D82626DWI1K3DCTSCBX322A90.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_locale-54EII8SV8XF2E5ZID9USK7J04.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_locale-54EII8SV8XF2E5ZID9USK7J04.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/runetype-CNSP864JP0XGR8H1O9BI3DM3.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/runetype-CNSP864JP0XGR8H1O9BI3DM3.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_limits-HDUT3QMFSIIV3UJGOS9PKPX6.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_limits-HDUT3QMFSIIV3UJGOS9PKPX6.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_tgmath-1ZNMN5TUO9D21KYYWXDXKP4U6.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_tgmath-1ZNMN5TUO9D21KYYWXDXKP4U6.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/xlocale-DWH20D4F9RA432Y8O2M71KBJY.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/xlocale-DWH20D4F9RA432Y8O2M71KBJY.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_sys_select-5UUZAMT3VU7K3UZXFL0937D3K.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_sys_select-5UUZAMT3VU7K3UZXFL0937D3K.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/alloca-36KF5XM66Y4CU9LC5YUE5U6PL.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/alloca-36KF5XM66Y4CU9LC5YUE5U6PL.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_ctype-3LDM8R0F7L06OFTZ3FM13WE3N.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_ctype-3LDM8R0F7L06OFTZ3FM13WE3N.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_useconds_t-5WOMT556CB0AYK61OPGL0DED0.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_useconds_t-5WOMT556CB0AYK61OPGL0DED0.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_tgmath-9UR644SIOJIGW698A0Z2FBSNI.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_tgmath-9UR644SIOJIGW698A0Z2FBSNI.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_errno-B34BTA6JGVPYZCI39A7GFFK2J.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_errno-B34BTA6JGVPYZCI39A7GFFK2J.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/__wctype-COFVPDRM9AP3FGZV50I466ILU.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/__wctype-COFVPDRM9AP3FGZV50I466ILU.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_assert-BVF45Y14TX7DUYUS0GPHEVA3.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_assert-BVF45Y14TX7DUYUS0GPHEVA3.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_limits-EGAJ8T7Q48B62DUJ50ZB9XJJS.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_limits-EGAJ8T7Q48B62DUJ50ZB9XJJS.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/sys_types-2SLQQFZR7Z2Y5I9J6VSTK8JKG.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/sys_types-2SLQQFZR7Z2Y5I9J6VSTK8JKG.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_strings-C6ETCRU7XQODRLTY2VDZ1FROM.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_strings-C6ETCRU7XQODRLTY2VDZ1FROM.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_wctype-6MK4TG41TAIBSCDKPZ0K7VMZ3.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_wctype-6MK4TG41TAIBSCDKPZ0K7VMZ3.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/uuid-96M053J6JHAXI502BMV4E3ZNF.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/uuid-96M053J6JHAXI502BMV4E3ZNF.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/mach-8D9EJVLWNMTLY89GL1L9ND1XB.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/mach-8D9EJVLWNMTLY89GL1L9ND1XB.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/nl_types-1SLIP11H4HCQ72ROZFZVJM10O.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/nl_types-1SLIP11H4HCQ72ROZFZVJM10O.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_stdio-CNJC6DQUQ6A6MM09KN1AZP8X9.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_stdio-CNJC6DQUQ6A6MM09KN1AZP8X9.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_string-A2VUY44M8RH5CCEZE2FOKZK67.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_string-A2VUY44M8RH5CCEZE2FOKZK67.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_signal-EEZPHPXPO2HLPA800C02X5WE.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_signal-EEZPHPXPO2HLPA800C02X5WE.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_time-94FKGPDW4EVVSG51I2909RPWO.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_time-94FKGPDW4EVVSG51I2909RPWO.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_stdint-E4UGIFN273YCTURV1JG88ZZ4F.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_stdint-E4UGIFN273YCTURV1JG88ZZ4F.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_stdatomic-5XPWG7RNE1WMQXBLF7TAQJPPB.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_stdatomic-5XPWG7RNE1WMQXBLF7TAQJPPB.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_inttypes-3370AAC3ICZZPC9X1SXF5STBZ.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_inttypes-3370AAC3ICZZPC9X1SXF5STBZ.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_wchar-9GITTMLCXZGK1CVL9TBXFZO59.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_wchar-9GITTMLCXZGK1CVL9TBXFZO59.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/pthread-15UOR3VZE078DFS6U4QY10M66.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/pthread-15UOR3VZE078DFS6U4QY10M66.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/gethostuuid-2I7OCGAVUV96Z37XO1J6G8ORD.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/gethostuuid-2I7OCGAVUV96Z37XO1J6G8ORD.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/sys_select-3BCECB02AVAMK83U1CBI19ZD3.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/sys_select-3BCECB02AVAMK83U1CBI19ZD3.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_inttypes-CHCXGX855UDQV79R788MF60Z3.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_inttypes-CHCXGX855UDQV79R788MF60Z3.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/sys_resource-8VGH0FPAESHY1E0AZGSDGO02V.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/sys_resource-8VGH0FPAESHY1E0AZGSDGO02V.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/unistd-5NKXYC3GKNC2RQVWS8IBB1D0J.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/unistd-5NKXYC3GKNC2RQVWS8IBB1D0J.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/sys_wait-D8E7K05G8AHJPKI98D6DMJ9BI.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/sys_wait-D8E7K05G8AHJPKI98D6DMJ9BI.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_stdlib-3NTBG9TXR5NKDNJ511MDRMUO0.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_stdlib-3NTBG9TXR5NKDNJ511MDRMUO0.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/Darwin-BEFVXEGB90N487VNO3SUARQVO.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/Darwin-BEFVXEGB90N487VNO3SUARQVO.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_intrinsics-3OAFQ6RO7TWL9AK1M3ALI18Q.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/_Builtin_intrinsics-3OAFQ6RO7TWL9AK1M3ALI18Q.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/ObjectiveC-CAA0GJ134W3LWE9GKVII94J67.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/ObjectiveC-CAA0GJ134W3LWE9GKVII94J67.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/os_object-5AG74OIU1NAB29TA3P63DZ9U3.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/os_object-5AG74OIU1NAB29TA3P63DZ9U3.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/os_workgroup-2T6P2VCAOI01FDVM9H7INQQJE.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/os_workgroup-2T6P2VCAOI01FDVM9H7INQQJE.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/simd-EDOKCUNNQEEZNY9WC3Y4HO0DX.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/simd-EDOKCUNNQEEZNY9WC3Y4HO0DX.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/Dispatch-9D0A7LIKOE11OVZACS13DF1PK.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/Dispatch-9D0A7LIKOE11OVZACS13DF1PK.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreFoundation-9WQ4V2MRQ8FJUBDG26K16YOMC.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreFoundation-9WQ4V2MRQ8FJUBDG26K16YOMC.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/XPC-5BFKZ6EQDTP26WX8UYDXRPOVH.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/XPC-5BFKZ6EQDTP26WX8UYDXRPOVH.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/Security-F218Q23J40GMA9TAOUBTC9VV7.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/Security-F218Q23J40GMA9TAOUBTC9VV7.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CFNetwork-4183XBTS02SCKLD34ZC8L3AQN.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CFNetwork-4183XBTS02SCKLD34ZC8L3AQN.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreAudioTypes-1M5IIRLPMEZ7E325CW482YH72.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreAudioTypes-1M5IIRLPMEZ7E325CW482YH72.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreGraphics-94RLBQ2WMSYZ3KJN360C6B4FC.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreGraphics-94RLBQ2WMSYZ3KJN360C6B4FC.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreAudio-2ARJR18ULBQ8QC0RT0GECN8KS.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreAudio-2ARJR18ULBQ8QC0RT0GECN8KS.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/Foundation-9HRCRYSGWMG4N43ITI00D1IGE.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/Foundation-9HRCRYSGWMG4N43ITI00D1IGE.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreText-7BMAQUUAAAQYEEXH5PKHGG5AD.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreText-7BMAQUUAAAQYEEXH5PKHGG5AD.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/ImageIO-EJ13EYWR9E2D1G61PXLZ8HA56.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/ImageIO-EJ13EYWR9E2D1G61PXLZ8HA56.scan
+
+CompileC /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Games.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Games.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Games.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Games.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Games.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Games.o
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/IOSurface-6JROQCVC9U98PLGBX295WRSBL.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/IOSurface-6JROQCVC9U98PLGBX295WRSBL.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/OpenGLES-D0Z1MC0X1TTZT9IY8W9JI4FTZ.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/OpenGLES-D0Z1MC0X1TTZT9IY8W9JI4FTZ.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreMIDI-CV3GZ7DOY3GW98YJ6GY9ACNZ0.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreMIDI-CV3GZ7DOY3GW98YJ6GY9ACNZ0.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/FileProvider-50REMMZHPSR1A792PKWQL47X9.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/FileProvider-50REMMZHPSR1A792PKWQL47X9.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/Symbols-C282BBXHNIO4HCCG7BTTFXCRA.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/Symbols-C282BBXHNIO4HCCG7BTTFXCRA.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/Metal-9NKZ3FWQNWQN614VFGEB9EVM2.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/Metal-9NKZ3FWQNWQN614VFGEB9EVM2.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/UserNotifications-V4EAQ6V1722P7X24EI9V5S71.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/UserNotifications-V4EAQ6V1722P7X24EI9V5S71.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/AudioToolbox-59A13PVLCI4LUO7G1FMV7LDHS.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/AudioToolbox-59A13PVLCI4LUO7G1FMV7LDHS.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/UniformTypeIdentifiers-7ZOYA219LB7WCOZS0T5HNONS6.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/UniformTypeIdentifiers-7ZOYA219LB7WCOZS0T5HNONS6.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreVideo-6SJ76SNMAQ6T82QPLZWEV4ZNA.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreVideo-6SJ76SNMAQ6T82QPLZWEV4ZNA.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreMedia-8E5SMVAD4NSWBXGONA5ZFRY8M.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreMedia-8E5SMVAD4NSWBXGONA5ZFRY8M.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/QuartzCore-7Y88QFJS5PGEDOV55CBGM5Z96.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/QuartzCore-7Y88QFJS5PGEDOV55CBGM5Z96.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreImage-6QD7XZMRXGTLX325D5IV3DP0D.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/CoreImage-6QD7XZMRXGTLX325D5IV3DP0D.scan
+
+CompileC /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/BSRunner.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/BSRunner.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/BSRunner.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/BSRunner.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/BSRunner.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/BSRunner.o
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/UIKit-7DQW2FFW6URHZPJJILAY7TXE0.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/UIKit-7DQW2FFW6URHZPJJILAY7TXE0.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/AVFAudio-7JX0Y55OO66ZYRN2E0MAMYT60.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/AVFAudio-7JX0Y55OO66ZYRN2E0MAMYT60.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/MediaToolbox-BWB7P9NZMZPYJCF5LX8LC7BS0.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/MediaToolbox-BWB7P9NZMZPYJCF5LX8LC7BS0.scan
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/AVFoundation-4NQA5U54JXK24PJPIHX6BGG8J.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/AVFoundation-4NQA5U54JXK24PJPIHX6BGG8J.scan
+
+CompileC /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Audio.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Audio.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Audio.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Audio.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Audio.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Audio.o
+
+CompileC /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/main.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/main.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/main.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/main.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/main.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/main.o
+
+CompileC /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameView.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/GameView.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameView.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameView.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/GameView.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameView.o
+
+CompileC /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Dialog.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Dialog.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Dialog.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Dialog.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/Dialog.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Dialog.o
+
+CompileC /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/AppDelegate.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/AppDelegate.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/AppDelegate.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/AppDelegate.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/AppDelegate.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/AppDelegate.o
+
+PrecompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/GameController-88MO057LCYZCE96JISMRH6V3Z.scan
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-precompileModule /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/ExplicitPrecompiledModules/GameController-88MO057LCYZCE96JISMRH6V3Z.scan
+
+CompileC /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/MenuViewController.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/MenuViewController.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/MenuViewController.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/MenuViewController.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/MenuViewController.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/MenuViewController.o
+/Users/runner/work/sunky-ios-/sunky-ios-/ios/App/MenuViewController.m:38:21: warning: unused function 'pixelView' [-Wunused-function]
+   38 | static UIImageView *pixelView(UIImage *img, CGFloat scale) {
+      |                     ^~~~~~~~~
+/Users/runner/work/sunky-ios-/sunky-ios-/ios/App/MenuViewController.m:46:13: warning: unused function 'setPixelText' [-Wunused-function]
+   46 | static void setPixelText(UIImageView *v, NSString *text, BOOL gold, CGFloat scale) {
+      |             ^~~~~~~~~~~~
+/Users/runner/work/sunky-ios-/sunky-ios-/ios/App/MenuViewController.m:62:17: warning: unused function 'panelImage' [-Wunused-function]
+   62 | static UIImage *panelImage(NSString *name, CGFloat scale) {
+      |                 ^~~~~~~~~~
+3 warnings generated.
+
+CompileC /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameViewController.o /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/GameViewController.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    
+    Using response file: /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
+    
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/SDKStatCaches.noindex/iphonesimulator18.5-22F76-96ae0914227b19deccb34b33ba7b5dea.sdkstatcache -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wquoted-include-in-framework-header -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -MMD -MT dependencies -MF /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameViewController.d --serialize-diagnostics /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameViewController.dia -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/App/GameViewController.m -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/GameViewController.o
+
+Ld /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/Sunky normal (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target x86_64-apple-ios14.0-simulator -isysroot /Applications/Xcode_16.4.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -Os -L/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphonesimulator -L/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator -L/Users/runner/work/sunky-ios-/sunky-ios-/ios/lib/iphonesimulator -F/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/EagerLinkingTBDs/Release-iphonesimulator -F/Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator -filelist /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Sunky.LinkFileList -Xlinker -rpath -Xlinker @executable_path/Frameworks -dead_strip -Xlinker -object_path_lto -Xlinker /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Sunky_lto.o -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Intermediates.noindex/Sunky.build/Release-iphonesimulator/Sunky.build/Objects-normal/x86_64/Sunky_dependency_info.dat -fobjc-arc -fobjc-link-runtime -lgm8emulator -lbutterscotch -lc++ -lresolv -framework OpenGLES -framework QuartzCore -framework AudioToolbox -framework AVFoundation -framework GameController -framework Security -framework CoreFoundation -framework CoreAudio -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/Sunky
+
+GenerateDSYMFile /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app.dSYM /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/Sunky (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app/Sunky -o /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app.dSYM
+
+RegisterExecutionPolicyException /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-RegisterExecutionPolicyException /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app
+
+Validate /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    builtin-validationUtility /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app -infoplist-subpath Info.plist
+
+Touch /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app (in target 'Sunky' from project 'Sunky')
+    cd /Users/runner/work/sunky-ios-/sunky-ios-/ios
+    /usr/bin/touch -c /Users/runner/work/sunky-ios-/sunky-ios-/ios/build-sim/Build/Products/Release-iphonesimulator/Sunky.app
+
+note: Disabling previews because SWIFT_VERSION is set and SWIFT_OPTIMIZATION_LEVEL=-O, expected -Onone (in target 'Sunky' from project 'Sunky')
+** BUILD SUCCEEDED **
+
