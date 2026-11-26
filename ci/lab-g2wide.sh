@@ -9,11 +9,12 @@ shot() {
   local g; g=$(xwininfo -root -tree 2>/dev/null | grep -oE "1113x512\+[0-9]+\+[0-9]+" | head -1)
   import -window root ${g:+-crop $g} "$out/$1.png" 2>/dev/null
 }
-for r in "$@"; do
+for r in "$@"; do for nb in "" 1; do
+  BS_NO_BANDS=$nb; [ -z "$nb" ] && unset BS_NO_BANDS; export ${nb:+BS_NO_BANDS}
   BS_START_ROOM=$r timeout 30 "$bs" "$data" --disable-log-colours --widescreen-hack 2.174 --window-size 1113x512 > "$out/room$r.log" 2>&1 &
   pid=$!
-  sleep 6; shot "r$r-a"
-  xdotool keydown Right; sleep 3; shot "r$r-b"; xdotool keyup Right
-  xdotool keydown Left; sleep 3; shot "r$r-c"; xdotool keyup Left
+  sleep 6; shot "r$r${nb:+n}-a"
+  xdotool keydown Right; sleep 3; shot "r$r${nb:+n}-b"; xdotool keyup Right
+  xdotool keydown Left; sleep 3; shot "r$r${nb:+n}-c"; xdotool keyup Left
   kill $pid 2>/dev/null; wait $pid 2>/dev/null; sleep 1
-done
+done; done

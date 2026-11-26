@@ -623,6 +623,11 @@ static bool sunkyWideBackground(Runner* runner, RuntimeBackground* bg, int32_t t
     if (bg->tileY && h < (float) cam->viewHeight - 2.0f) return false;
     float viewL = (float) cam->viewX - runner->sunkyWideLeft;
     float viewR = viewL + (float) cam->viewWidth + (float) runner->widescreenExtraWidth;
+    if (getenv("BS_START_ROOM") != nullptr) {
+        static int logged = 0;
+        if (logged++ < 3) fprintf(stderr, "bands: bg %d w %.0f h %.0f at %.0f,%.0f view %.0f..%.0f scale %.2f target %d,%d src %dx%d\n",
+            bg->backgroundIndex, w, h, bg->x, bg->y, viewL, viewR, sx, tpag->targetX, tpag->targetY, tpag->sourceWidth, tpag->sourceHeight);
+    }
     float x0 = bg->x, y0 = bg->y;
     sunkyBgColumns(runner, tpagIndex, 0.0f, (float) tpag->boundingWidth, x0, sx, y0, sy, bg->alpha);
     float bandSrc = fmaxf(8.0f, (float) tpag->boundingWidth * 0.05f); // in picture pixels
@@ -659,7 +664,7 @@ static void drawGMS1Backgrounds(Runner* runner, bool foreground) {
         if (0 > bg->backgroundIndex) continue;
 
         int32_t tpagIndex = Renderer_resolveBackgroundTPAGIndex(dataWin, bg->backgroundIndex);
-        if (sunkyWideBackground(runner, bg, tpagIndex)) continue; // SUNKY-IOS
+        if (getenv("BS_NO_BANDS") == nullptr && sunkyWideBackground(runner, bg, tpagIndex)) continue; // SUNKY-IOS
 
         drawBackground(
             runner,
