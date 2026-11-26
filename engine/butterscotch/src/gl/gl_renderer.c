@@ -2836,9 +2836,9 @@ static SunkySideArt* sunkyLoadArt(FileSystem* fs, const char* name) {
         for (int y = 0; y < h; y++) for (int c = 0; c < 3; c++) sum[c] += pixels[((size_t) y * w + col) * 4 + c];
         for (int c = 0; c < 3; c++) (side == 0 ? a->edgeL : a->edgeR)[c] = (uint8_t) (sum[c] / (uint32_t) h);
     }
-    // GL keeps rows bottom-up, the same way the surfaces are kept, so flip the picture
+    // the game's surfaces keep their rows top-down, as the file does, so no flip
     uint8_t* flipped = malloc((size_t) w * (size_t) h * 4);
-    for (int y = 0; y < h; y++) memcpy(flipped + (size_t) y * w * 4, pixels + (size_t) (h - 1 - y) * w * 4, (size_t) w * 4);
+    memcpy(flipped, pixels, (size_t) w * (size_t) h * 4);
     stbi_image_free(pixels);
     GLint prevTex = 0, prevFb = 0;
     glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTex);
@@ -2908,8 +2908,9 @@ bool GLRenderer_sunkyDrawSideArtOnScreen(Renderer* renderer, FileSystem* fs, con
     glDisable(GL_SCISSOR_TEST);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, a->fbo);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
-    if (lw > 0) glBlitFramebuffer(half - lw, 0, half, a->h, xl - (int32_t) ((float) lw * sc + 0.5f), y0, xl, y0 + vh, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-    if (rw > 0) glBlitFramebuffer(half, 0, half + rw, a->h, xr, y0, xr + (int32_t) ((float) rw * sc + 0.5f), y0 + vh, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    // the screen keeps its rows bottom-up, so the art goes on upside-down-flipped (top row at the top)
+    if (lw > 0) glBlitFramebuffer(half - lw, 0, half, a->h, xl - (int32_t) ((float) lw * sc + 0.5f), y0 + vh, xl, y0, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    if (rw > 0) glBlitFramebuffer(half, 0, half + rw, a->h, xr, y0 + vh, xr + (int32_t) ((float) rw * sc + 0.5f), y0, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     glBindFramebuffer(GL_FRAMEBUFFER, (GLuint) prevFb);
     if (scissor) glEnable(GL_SCISSOR_TEST);
     return true;
