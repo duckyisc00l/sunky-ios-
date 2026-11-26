@@ -129,7 +129,7 @@ jobs:
         env: { LIBGL_ALWAYS_SOFTWARE: "1", SDL_AUDIODRIVER: dummy }
         run: |
           # the phone's shape (2.174), the way the app widens it
-          xvfb-run -a -s "-screen 0 1280x960x24" ci/lab-g2wide.sh bs/build/butterscotch games/g2x/data.win out/g2/wide 3 4 5 7 8 9 10 11 12 15 16 17 18 19
+          xvfb-run -a -s "-screen 0 1280x960x24" ci/lab-g2wide.sh bs/build/butterscotch games/g2x/data.win out/g2/wide 3 7 8
       - name: Publish to branch r-g2
         if: always()
         run: |

@@ -4,7 +4,7 @@
 set -uo pipefail
 bs=$(realpath "$1"); data=$(realpath "$2"); out=$(realpath -m "$3"); shift 3; mkdir -p "$out"
 cd "$(dirname "$data")"
-shot() { import -window root -crop 1113x512+0+0 "$out/$1.png" 2>/dev/null; }
+shot() { import -window root "$out/$1.png" 2>/dev/null; }
 for r in "$@"; do
   BS_START_ROOM=$r timeout 30 "$bs" "$data" --disable-log-colours --widescreen-hack 2.174 --window-size 1113x512 > "$out/room$r.log" 2>&1 &
   pid=$!

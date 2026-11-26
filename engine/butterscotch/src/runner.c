@@ -1333,12 +1333,21 @@ static void endGuiPass(Runner* runner) {
     runner->inGuiPass = false;
 }
 
+// SUNKY-IOS: how much wider widescreen makes the picture (1 when it's off). A game that sets its own
+// GUI size and draws the application surface itself (Sunky the Game 2 does, for its screen filters)
+// gets a GUI this much wider too, so the widened picture isn't squeezed back into the old shape.
+float Runner_sunkyWideFactor(Runner* runner) {
+    int32_t base = runner->renderGameW - runner->widescreenExtraWidth;
+    if (runner->widescreenExtraWidth <= 0 || base <= 0) return 1.0f;
+    return (float) runner->renderGameW / (float) base;
+}
+
 void Runner_drawGUI(Runner* runner, int32_t windowW, int32_t windowH, int32_t targetW, int32_t targetH) {
     rebuildDrawableCacheIfDirty(runner);
     Drawable* drawables = runner->cachedDrawables;
     int32_t drawableCount = (int32_t) arrlen(drawables);
 
-    int32_t guiW = runner->guiWidth > 0 ? runner->guiWidth : targetW;
+    int32_t guiW = runner->guiWidth > 0 ? (int32_t) ((float) runner->guiWidth * Runner_sunkyWideFactor(runner) + 0.5f) : targetW;
     int32_t guiH = runner->guiHeight > 0 ? runner->guiHeight : targetH;
     beginGuiPass(runner, guiW, guiH, windowW, windowH, RENDER_TARGET_HOST_FRAMEBUFFER);
     fireDrawSubtype(runner, drawables, drawableCount, DRAW_GUI_BEGIN);
@@ -5019,7 +5028,7 @@ static int32_t findStackTop(Runner* runner) {
 
 void Runner_guiSizeChanged(Runner* runner) {
     if (!runner->inGuiPass || runner->renderer == nullptr) return;
-    int32_t guiW = runner->guiWidth > 0 ? runner->guiWidth : runner->guiPassPortW;
+    int32_t guiW = runner->guiWidth > 0 ? (int32_t) ((float) runner->guiWidth * Runner_sunkyWideFactor(runner) + 0.5f) : runner->guiPassPortW;
     int32_t guiH = runner->guiHeight > 0 ? runner->guiHeight : runner->guiPassPortH;
     runner->guiPassW = guiW;
     runner->guiPassH = guiH;

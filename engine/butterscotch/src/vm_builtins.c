@@ -13422,6 +13422,7 @@ static RValue builtin_draw_surface_stretched(VMContext* ctx, RValue* args, MAYBE
     if (runner->renderer != nullptr) {
         float surfW = Renderer_getSurfaceWidth(runner->renderer, surfaceId);
         float surfH = Renderer_getSurfaceHeight(runner->renderer, surfaceId);
+        if (surfaceId == runner->applicationSurfaceId) width *= Runner_sunkyWideFactor(runner); // SUNKY-IOS: the widened picture keeps its shape
         float xscale = surfW > 0.0f ? width  / surfW : 1.0f;
         float yscale = surfH > 0.0f ? height / surfH : 1.0f;
         runner->renderer->vtable->drawSurface(runner->renderer, surfaceId, 0, 0, -1, -1, x, y, xscale, yscale, 0.0, 0xFFFFFFFF, 1.0);
@@ -13441,6 +13442,7 @@ static RValue builtin_draw_surface_stretched_ext(VMContext* ctx, RValue* args, M
     if (runner->renderer != nullptr) {
         float surfW = Renderer_getSurfaceWidth(runner->renderer, surfaceId);
         float surfH = Renderer_getSurfaceHeight(runner->renderer, surfaceId);
+        if (surfaceId == runner->applicationSurfaceId) width *= Runner_sunkyWideFactor(runner); // SUNKY-IOS: the widened picture keeps its shape
         float xscale = surfW > 0.0f ? width  / surfW : 1.0f;
         float yscale = surfH > 0.0f ? height / surfH : 1.0f;
         runner->renderer->vtable->drawSurface(runner->renderer, surfaceId, 0, 0, -1, -1, x, y, xscale, yscale, 0.0, color, alpha);

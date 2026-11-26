@@ -1014,6 +1014,7 @@ bool Runner_surfaceSetTarget(Runner* runner, int32_t surfaceID);
 // When we are NOT in a GUI pass, we do nothing.
 // When we ARE in a GUI pass, we recalculate the GUI width and height and re-start with beginGUI to match the new dimensions.
 void Runner_guiSizeChanged(Runner* runner);
+float Runner_sunkyWideFactor(Runner* runner); // SUNKY-IOS
 // Pops the top of the surface stack and bind whatever is below (or the main framebuffer when the stack is empty).
 // Returns false when there was nothing to pop.
 bool Runner_surfaceResetTarget(Runner* runner);
