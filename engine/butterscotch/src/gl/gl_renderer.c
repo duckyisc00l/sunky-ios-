@@ -2887,7 +2887,14 @@ bool GLRenderer_sunkyDrawSideArtOnScreen(Renderer* renderer, FileSystem* fs, con
     for (int32_t i = 0; i < n; i++) for (int c = 0; c < 3; c++) { sl[c] += colL[i * 4 + c]; sr[c] += colR[i * 4 + c]; }
     int32_t dl = 0, dr = 0;
     for (int c = 0; c < 3; c++) { dl += abs((int32_t) (sl[c] / (uint32_t) n) - a->edgeL[c]); dr += abs((int32_t) (sr[c] / (uint32_t) n) - a->edgeR[c]); }
-    if (getenv("BS_START_ROOM") != nullptr) fprintf(stderr, "side art %s on screen: edge differences %d %d\n", name, dl, dr);
+    if (getenv("BS_START_ROOM") != nullptr) {
+        static int dbg = 0;
+        if (dbg++ % 60 == 0) {
+            uint8_t mid[4] = {0}; glReadPixels(vx + vw / 2, y0 + vh / 2, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, mid);
+            fprintf(stderr, "side art %s on screen: edge differences %d %d; left avg %u,%u,%u right avg %u,%u,%u at x %d/%d y0 %d vh %d fbH %d view %d,%d %dx%d mid %u,%u,%u\n",
+                name, dl, dr, sl[0] / n, sl[1] / n, sl[2] / n, sr[0] / n, sr[1] / n, sr[2] / n, xl, xr, y0, vh, fbH, vx, vy, vw, vh, mid[0], mid[1], mid[2]);
+        }
+    }
     if (dl > 90 && dr > 90) { glBindFramebuffer(GL_FRAMEBUFFER, (GLuint) prevFb); return false; }
     int32_t half = a->w / 2;
     int32_t lw = left < half ? left : half, rw = (gameW - left - contentW) < half ? (gameW - left - contentW) : half;
