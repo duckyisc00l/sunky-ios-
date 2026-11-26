@@ -2903,7 +2903,8 @@ bool GLRenderer_sunkyDrawSideArt(Renderer* renderer, FileSystem* fs, const char*
         for (int32_t y = 0; y < n; y++) for (int c = 0; c < 3; c++) { sl[c] += colL[y * 4 + c]; sr[c] += colR[y * 4 + c]; }
         int32_t dl = 0, dr = 0;
         for (int c = 0; c < 3; c++) { dl += abs((int32_t) (sl[c] / (uint32_t) n) - a->edgeL[c]); dr += abs((int32_t) (sr[c] / (uint32_t) n) - a->edgeR[c]); }
-        if (dl > 90 || dr > 90) return false;
+        if (getenv("BS_START_ROOM") != nullptr) fprintf(stderr, "side art %s: edge differences %d %d\n", name, dl, dr);
+        if (dl > 90 && dr > 90) return false;
     }
     GLint prevRead = 0, prevDraw = 0;
     glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &prevRead);

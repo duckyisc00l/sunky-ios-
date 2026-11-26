@@ -614,6 +614,17 @@ static void sunkyBgColumns(Runner* runner, int32_t tpagIndex, float left, float 
 // instead of repeating (which showed cut-off copies of the picture). Returns false if it doesn't apply.
 static bool sunkyWideBackground(Runner* runner, RuntimeBackground* bg, int32_t tpagIndex) {
     if (runner->widescreenExtraWidth <= 0 || !bg->tileX || bg->stretch || bg->speedX != 0.0f || 0 > tpagIndex) return false;
+    // only screens that have their own side art (or a splash placed at the edge) are drawn once;
+    // patterned backgrounds elsewhere (the world map's wallpaper) carry on tiling as the game made them
+    {
+        static int32_t cachedRoom = -999; static bool hasArt = false;
+        if (cachedRoom != runner->currentRoomIndex && runner->currentRoom != nullptr && runner->currentRoom->name != nullptr) {
+            char file[160]; snprintf(file, sizeof file, "sunky_side_%s.png", runner->currentRoom->name);
+            hasArt = runner->fileSystem->vtable->fileExists(runner->fileSystem, file);
+            cachedRoom = runner->currentRoomIndex;
+        }
+        if (!hasArt) return false;
+    }
     GMLCamera* cam = Runner_getCameraForView(runner, runner->viewCurrent);
     if (cam == nullptr || runner->currentRoom == nullptr) return false;
     TexturePageItem* tpag = &runner->dataWin->tpag.items[tpagIndex];
