@@ -1380,35 +1380,30 @@ void Runner_sunkyFillMenuSides(Runner* runner, int32_t gameW) {
 #if defined(ENABLE_MODERN_GL)
     bool anchored = runner->sunkyAnchored;
     runner->sunkyAnchored = false;
-    if (runner->widescreenExtraWidth <= 0 || runner->currentRoom == nullptr || !runner->viewsEnabled || !runner->usingAppSurface) return;
-    GMLCamera* cam = Runner_getCameraForView(runner, 0);
-    if (cam == nullptr || cam->viewWidth <= 0) return;
-    if ((float) runner->currentRoom->width > (float) cam->viewWidth + 1.0f || (float) runner->currentRoom->height > (float) cam->viewHeight + 1.0f) return;
+    sunkyPendingArt[0] = 0;
+    if (runner->widescreenExtraWidth <= 0 || runner->currentRoom == nullptr || runner->currentRoom->name == nullptr) return;
+    // screens with their own side art (drawn for them, see ci/sunky2_sides): sunky_side_<room>.png
+    char file[160];
+    snprintf(file, sizeof file, "sunky_side_%s.png", runner->currentRoom->name);
+    static int32_t cachedRoom = -999; static bool hasArt = false;
+    if (cachedRoom != runner->currentRoomIndex) {
+        hasArt = runner->fileSystem->vtable->fileExists(runner->fileSystem, file);
+        cachedRoom = runner->currentRoomIndex;
+    }
+    if (!hasArt) return;
     int32_t baseW = gameW - runner->widescreenExtraWidth;
     int32_t left = runner->widescreenExtraWidth / 2;
-    // screens with their own side art (drawn for them, see ci/sunky2_sides): sunky_side_<room>.png
-    const char* rn = runner->currentRoom->name;
-    if (rn != nullptr) {
-        char file[160];
-        snprintf(file, sizeof file, "sunky_side_%s.png", rn);
-        if (GLRenderer_sunkyDrawSideArt(runner->renderer, runner->fileSystem, file, runner->applicationSurfaceId, left, baseW)) return;
-        // a screen with side art showing something else (a black card first): plain black sides,
-        // unless its picture was placed against the screen edge (the HELLO splash)
-        if (!anchored && runner->fileSystem->vtable->fileExists(runner->fileSystem, file)) {
-            GLRenderer_sunkyBlackSides(runner->renderer, runner->applicationSurfaceId, left, baseW);
-            // it may still be drawn straight to the screen later in the frame: check again then
-            snprintf(sunkyPendingArt, sizeof sunkyPendingArt, "%s", file);
-            sunkyPendingLeft = left; sunkyPendingW = baseW; sunkyPendingGameW = gameW;
-            return;
-        }
-        // a splash placed at the screen edge: something else may be drawn over it later (the
-        // WARNING card over the HELLO splash), so check the screen itself at the end of the frame
-        if (anchored && runner->fileSystem->vtable->fileExists(runner->fileSystem, file)) {
-            snprintf(sunkyPendingArt, sizeof sunkyPendingArt, "%s", file);
-            sunkyPendingLeft = left; sunkyPendingW = baseW; sunkyPendingGameW = gameW;
-        }
+    // whatever happens below, look at the finished screen too: some cards are drawn straight to it
+    snprintf(sunkyPendingArt, sizeof sunkyPendingArt, "%s", file);
+    sunkyPendingLeft = left; sunkyPendingW = baseW; sunkyPendingGameW = gameW;
+    if (!runner->viewsEnabled || !runner->usingAppSurface) return;
+    if (GLRenderer_sunkyDrawSideArt(runner->renderer, runner->fileSystem, file, runner->applicationSurfaceId, left, baseW)) {
+        sunkyPendingArt[0] = 0;
+        return;
     }
-    // any other screen this narrow is left with black sides (nothing copied or stretched)
+    // showing something else for now (a black card first): plain black sides, unless the picture
+    // was placed against the screen edge (the HELLO splash)
+    if (!anchored) GLRenderer_sunkyBlackSides(runner->renderer, runner->applicationSurfaceId, left, baseW);
     (void) GLRenderer_sunkyFillSides;
 #else
     (void) runner; (void) gameW;
