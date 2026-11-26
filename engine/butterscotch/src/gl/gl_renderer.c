@@ -2759,7 +2759,8 @@ void GLRenderer_sunkyFillSides(Renderer* renderer, int32_t surfaceId, int32_t le
     int32_t w = gl->surfaceWidth[surfaceId], h = gl->surfaceHeight[surfaceId];
     if (left <= 0 || contentW <= 0 || left + contentW > w) return;
     flushBatch(gl);
-    int32_t band = contentW / 20; if (band < 4) band = 4;
+    // a thin band (8 pixels of 448), so writing that comes close to the edge isn't picked up
+    int32_t band = contentW / 56; if (band < 4) band = 4;
     // OpenGL ES can't copy within one framebuffer, so each edge band goes through a scratch one
     static GLuint scratchFbo = 0, scratchTex = 0;
     static int32_t scratchW = 0, scratchH = 0;
