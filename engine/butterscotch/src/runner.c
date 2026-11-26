@@ -1401,6 +1401,12 @@ void Runner_sunkyFillMenuSides(Runner* runner, int32_t gameW) {
             sunkyPendingLeft = left; sunkyPendingW = baseW; sunkyPendingGameW = gameW;
             return;
         }
+        // a splash placed at the screen edge: something else may be drawn over it later (the
+        // WARNING card over the HELLO splash), so check the screen itself at the end of the frame
+        if (anchored && runner->fileSystem->vtable->fileExists(runner->fileSystem, file)) {
+            snprintf(sunkyPendingArt, sizeof sunkyPendingArt, "%s", file);
+            sunkyPendingLeft = left; sunkyPendingW = baseW; sunkyPendingGameW = gameW;
+        }
     }
     // any other screen this narrow is left with black sides (nothing copied or stretched)
     (void) GLRenderer_sunkyFillSides;
