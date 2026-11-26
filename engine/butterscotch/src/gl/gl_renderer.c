@@ -2759,27 +2759,50 @@ void GLRenderer_sunkyFillSides(Renderer* renderer, int32_t surfaceId, int32_t le
     int32_t w = gl->surfaceWidth[surfaceId], h = gl->surfaceHeight[surfaceId];
     if (left <= 0 || contentW <= 0 || left + contentW > w) return;
     flushBatch(gl);
-    GLint prevRead = 0, prevDraw = 0;
+    int32_t band = contentW / 20; if (band < 4) band = 4;
+    // OpenGL ES can't copy within one framebuffer, so each edge band goes through a scratch one
+    static GLuint scratchFbo = 0, scratchTex = 0;
+    static int32_t scratchW = 0, scratchH = 0;
+    if (scratchFbo == 0) { glGenFramebuffers(1, &scratchFbo); glGenTextures(1, &scratchTex); }
+    GLint prevRead = 0, prevDraw = 0, prevTex = 0;
     glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &prevRead);
     glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &prevDraw);
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTex);
+    if (scratchW != band || scratchH != h) {
+        glBindTexture(GL_TEXTURE_2D, scratchTex);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, band, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glBindFramebuffer(GL_FRAMEBUFFER, scratchFbo);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, scratchTex, 0);
+        glBindTexture(GL_TEXTURE_2D, (GLuint) prevTex);
+        scratchW = band; scratchH = h;
+    }
     GLboolean scissor = glIsEnabled(GL_SCISSOR_TEST);
     glDisable(GL_SCISSOR_TEST);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, gl->surfaces[surfaceId]);
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gl->surfaces[surfaceId]);
-    int32_t band = contentW / 20; if (band < 4) band = 4;
     int32_t right = left + contentW;
-    // left side, outwards from the picture's edge
-    bool flip = true;
-    for (int32_t inner = left; inner > 0; inner -= band, flip = !flip) {
-        int32_t seg = inner < band ? inner : band;
-        if (flip) glBlitFramebuffer(left, 0, left + seg, h, inner, 0, inner - seg, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-        else glBlitFramebuffer(left + band - seg, 0, left + band, h, inner - seg, 0, inner, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-    }
-    flip = true;
-    for (int32_t inner = right; inner < w; inner += band, flip = !flip) {
-        int32_t seg = w - inner < band ? w - inner : band;
-        if (flip) glBlitFramebuffer(right - seg, 0, right, h, inner + seg, 0, inner, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-        else glBlitFramebuffer(right - band, 0, right - band + seg, h, inner, 0, inner + seg, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    for (int side = 0; side < 2; side++) {
+        int32_t edge0 = side == 0 ? left : right - band; // the band at this edge of the picture
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, gl->surfaces[surfaceId]);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, scratchFbo);
+        glBlitFramebuffer(edge0, 0, edge0 + band, h, 0, 0, band, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, scratchFbo);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gl->surfaces[surfaceId]);
+        bool flip = true;
+        if (side == 0) {
+            for (int32_t inner = left; inner > 0; inner -= band, flip = !flip) {
+                int32_t seg = inner < band ? inner : band;
+                // mirrored: scratch column 0 lands next to the picture's edge
+                if (flip) glBlitFramebuffer(0, 0, seg, h, inner, 0, inner - seg, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+                else glBlitFramebuffer(band - seg, 0, band, h, inner - seg, 0, inner, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            }
+        } else {
+            for (int32_t inner = right; inner < w; inner += band, flip = !flip) {
+                int32_t seg = w - inner < band ? w - inner : band;
+                if (flip) glBlitFramebuffer(band - seg, 0, band, h, inner + seg, 0, inner, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+                else glBlitFramebuffer(0, 0, seg, h, inner, 0, inner + seg, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            }
+        }
     }
     glBindFramebuffer(GL_READ_FRAMEBUFFER, (GLuint) prevRead);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, (GLuint) prevDraw);

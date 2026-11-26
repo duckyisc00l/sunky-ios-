@@ -629,6 +629,15 @@ static bool sunkyWideBackground(Runner* runner, RuntimeBackground* bg, int32_t t
             bg->backgroundIndex, w, h, bg->x, bg->y, viewL, viewR, sx, tpag->targetX, tpag->targetY, tpag->sourceWidth, tpag->sourceHeight);
     }
     float x0 = bg->x, y0 = bg->y;
+    // a picture that reaches only one side (the HELLO splash: Mario at the left, plain colour on the
+    // right) keeps that side against the screen's edge, so nothing is cut or repeated; the room's
+    // colour fills the rest
+    bool reachesL = tpag->targetX == 0, reachesR = tpag->targetX + tpag->sourceWidth >= tpag->boundingWidth;
+    if (reachesL != reachesR) {
+        float shift = reachesL ? viewL - (float) cam->viewX : viewR - ((float) cam->viewX + (float) cam->viewWidth);
+        sunkyBgColumns(runner, tpagIndex, 0.0f, (float) tpag->boundingWidth, x0 + shift, sx, y0, sy, bg->alpha);
+        return true;
+    }
     sunkyBgColumns(runner, tpagIndex, 0.0f, (float) tpag->boundingWidth, x0, sx, y0, sy, bg->alpha);
     float bandSrc = fmaxf(8.0f, (float) tpag->boundingWidth * 0.05f); // in picture pixels
     float band = bandSrc * sx;
