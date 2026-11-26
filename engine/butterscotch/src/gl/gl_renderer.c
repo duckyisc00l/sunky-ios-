@@ -2810,6 +2810,74 @@ void GLRenderer_sunkyFillSides(Renderer* renderer, int32_t surfaceId, int32_t le
     if (scissor) glEnable(GL_SCISSOR_TEST);
 }
 
+// SUNKY-IOS: side art for a screen that's only as wide as the old picture. The art file is 128
+// pixels wide (game pixels) and as tall as the screen: the left 64 columns go to the left of the
+// picture (their right edge against it), the right 64 to the right. Loaded once per file.
+typedef struct { char* name; GLuint fbo, tex; int32_t w, h; bool ok; } SunkySideArt;
+static SunkySideArt* sunkyArts = nullptr;
+static int32_t sunkyArtCount = 0;
+
+static SunkySideArt* sunkyLoadArt(FileSystem* fs, const char* name) {
+    for (int32_t i = 0; i < sunkyArtCount; i++) if (strcmp(sunkyArts[i].name, name) == 0) return &sunkyArts[i];
+    sunkyArts = realloc(sunkyArts, sizeof(SunkySideArt) * (size_t) (sunkyArtCount + 1));
+    SunkySideArt* a = &sunkyArts[sunkyArtCount++];
+    memset(a, 0, sizeof(*a));
+    a->name = safeStrdup(name);
+    uint8_t* data = nullptr; int32_t size = 0;
+    if (fs == nullptr || !fs->vtable->readFileBinary(fs, name, &data, &size) || data == nullptr) return a;
+    int w = 0, h = 0, ch = 0;
+    uint8_t* pixels = stbi_load_from_memory(data, size, &w, &h, &ch, 4);
+    free(data);
+    if (pixels == nullptr) return a;
+    // GL keeps rows bottom-up, the same way the surfaces are kept, so flip the picture
+    uint8_t* flipped = malloc((size_t) w * (size_t) h * 4);
+    for (int y = 0; y < h; y++) memcpy(flipped + (size_t) y * w * 4, pixels + (size_t) (h - 1 - y) * w * 4, (size_t) w * 4);
+    stbi_image_free(pixels);
+    GLint prevTex = 0, prevFb = 0;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTex);
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFb);
+    glGenTextures(1, &a->tex);
+    glBindTexture(GL_TEXTURE_2D, a->tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, flipped);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    free(flipped);
+    glGenFramebuffers(1, &a->fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, a->fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, a->tex, 0);
+    a->ok = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+    glBindFramebuffer(GL_FRAMEBUFFER, (GLuint) prevFb);
+    glBindTexture(GL_TEXTURE_2D, (GLuint) prevTex);
+    a->w = w; a->h = h;
+    fprintf(stderr, "side art %s: %dx%d %s\n", name, w, h, a->ok ? "ready" : "failed");
+    return a;
+}
+
+bool GLRenderer_sunkyDrawSideArt(Renderer* renderer, FileSystem* fs, const char* name, int32_t surfaceId, int32_t left, int32_t contentW) {
+    GLRenderer* gl = (GLRenderer*) renderer;
+    if (0 > surfaceId || (uint32_t) surfaceId >= gl->surfaceCount || gl->surfaces[surfaceId] == 0) return false;
+    SunkySideArt* a = sunkyLoadArt(fs, name);
+    if (!a->ok) return false;
+    int32_t w = gl->surfaceWidth[surfaceId], h = gl->surfaceHeight[surfaceId];
+    int32_t half = a->w / 2;
+    int32_t right = left + contentW;
+    int32_t lw = left < half ? left : half, rw = (w - right) < half ? (w - right) : half;
+    flushBatch(gl);
+    GLint prevRead = 0, prevDraw = 0;
+    glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &prevRead);
+    glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &prevDraw);
+    GLboolean scissor = glIsEnabled(GL_SCISSOR_TEST);
+    glDisable(GL_SCISSOR_TEST);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, a->fbo);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gl->surfaces[surfaceId]);
+    if (lw > 0) glBlitFramebuffer(half - lw, 0, half, a->h, left - lw, 0, left, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    if (rw > 0) glBlitFramebuffer(half, 0, half + rw, a->h, right, 0, right + rw, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, (GLuint) prevRead);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, (GLuint) prevDraw);
+    if (scissor) glEnable(GL_SCISSOR_TEST);
+    return true;
+}
+
 static bool glSurfaceExists(Renderer* renderer, int32_t surfaceId) {
     GLRenderer* gl = (GLRenderer*) renderer;
     if (0 > surfaceId || (uint32_t) surfaceId >= gl->surfaceCount) return false;

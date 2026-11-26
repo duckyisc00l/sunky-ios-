@@ -88,6 +88,7 @@ jobs:
           brew install sevenzip >/dev/null 2>&1 || true
           mkdir -p /tmp/g2x && 7zz x -y -o/tmp/g2x games/g2.exe >/dev/null
           mkdir -p ios/App/Games/g2 && cp /tmp/g2x/data.win ios/App/Games/g2/
+          ci/sunky2_sides/install.sh ios/App/Games/g2
           python3 -m venv /tmp/venv && /tmp/venv/bin/pip -q install pillow
           /tmp/venv/bin/python ci/make_icons.py ios/App/Games "$PWD/ios/iconsets"
           rm -rf ios/App/Assets.xcassets/AppIcon.appiconset && cp -R ios/iconsets/all/AppIcon.appiconset ios/App/Assets.xcassets/

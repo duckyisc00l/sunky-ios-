@@ -639,25 +639,8 @@ static bool sunkyWideBackground(Runner* runner, RuntimeBackground* bg, int32_t t
         runner->sunkyAnchored = true;
         return true;
     }
+    // drawn once, in the middle; its sides get their own art (or stay black), never copies of it
     sunkyBgColumns(runner, tpagIndex, 0.0f, (float) tpag->boundingWidth, x0, sx, y0, sy, bg->alpha);
-    float bandSrc = fmaxf(8.0f, (float) tpag->boundingWidth * 0.05f); // in picture pixels
-    float band = bandSrc * sx;
-    // left side, from the picture's edge outwards
-    float inner = x0; bool flip = true;
-    while (inner > viewL + 0.01f) {
-        float seg = fminf(band, inner - viewL), segSrc = seg / sx;
-        if (flip) sunkyBgColumns(runner, tpagIndex, 0.0f, segSrc, inner, -sx, y0, sy, bg->alpha);
-        else sunkyBgColumns(runner, tpagIndex, bandSrc - segSrc, segSrc, inner - seg, sx, y0, sy, bg->alpha);
-        inner -= seg; flip = !flip;
-    }
-    float pw = (float) tpag->boundingWidth;
-    inner = x0 + w; flip = true;
-    while (inner < viewR - 0.01f) {
-        float seg = fminf(band, viewR - inner), segSrc = seg / sx;
-        if (flip) sunkyBgColumns(runner, tpagIndex, pw - segSrc, segSrc, inner + seg, -sx, y0, sy, bg->alpha);
-        else sunkyBgColumns(runner, tpagIndex, pw - bandSrc, segSrc, inner, sx, y0, sy, bg->alpha);
-        inner += seg; flip = !flip;
-    }
     return true;
 }
 
@@ -1362,6 +1345,8 @@ void GLRenderer_sunkyFillSides(Renderer* renderer, int32_t surfaceId, int32_t le
 
 // SUNKY-IOS: a screen that doesn't scroll and is only as wide as the old picture (title, menus,
 // map) gets its widescreen sides filled from the thin band at its edges, mirrored back and forth.
+bool GLRenderer_sunkyDrawSideArt(Renderer* renderer, FileSystem* fs, const char* name, int32_t surfaceId, int32_t left, int32_t contentW);
+
 void Runner_sunkyFillMenuSides(Runner* runner, int32_t gameW) {
 #if defined(ENABLE_MODERN_GL)
     bool anchored = runner->sunkyAnchored;
@@ -1373,7 +1358,15 @@ void Runner_sunkyFillMenuSides(Runner* runner, int32_t gameW) {
     if ((float) runner->currentRoom->width > (float) cam->viewWidth + 1.0f || (float) runner->currentRoom->height > (float) cam->viewHeight + 1.0f) return;
     int32_t baseW = gameW - runner->widescreenExtraWidth;
     int32_t left = runner->widescreenExtraWidth / 2;
-    GLRenderer_sunkyFillSides(runner->renderer, runner->applicationSurfaceId, left, baseW);
+    // screens with their own side art (drawn for them, see ci/sunky2_sides): sunky_side_<room>.png
+    const char* rn = runner->currentRoom->name;
+    if (rn != nullptr) {
+        char file[160];
+        snprintf(file, sizeof file, "sunky_side_%s.png", rn);
+        if (GLRenderer_sunkyDrawSideArt(runner->renderer, runner->fileSystem, file, runner->applicationSurfaceId, left, baseW)) return;
+    }
+    // any other screen this narrow is left with black sides (nothing copied or stretched)
+    (void) GLRenderer_sunkyFillSides;
 #else
     (void) runner; (void) gameW;
 #endif
@@ -1622,8 +1615,8 @@ void Runner_drawViews(Runner* runner, int32_t gameW, int32_t gameH, bool debugSh
                 static int32_t loggedRoom = -999;
                 if (loggedRoom != runner->currentRoomIndex) {
                     loggedRoom = runner->currentRoomIndex;
-                    fprintf(stderr, "views: room %d view %d,%d %dx%d (cam %d,%d %dx%d) port %d,%d %dx%d game %dx%d base %dx%d extra %d appsurf %d\n",
-                        runner->currentRoomIndex, viewX, viewY, viewW, viewH, camera->viewX, camera->viewY, camera->viewWidth, camera->viewHeight,
+                    fprintf(stderr, "views: room %d (%s) view %d,%d %dx%d (cam %d,%d %dx%d) port %d,%d %dx%d game %dx%d base %dx%d extra %d appsurf %d\n",
+                        runner->currentRoomIndex, runner->currentRoom ? runner->currentRoom->name : "?", viewX, viewY, viewW, viewH, camera->viewX, camera->viewY, camera->viewWidth, camera->viewHeight,
                         portX, portY, portW, portH, gameW, gameH, widescreenBaseW, widescreenBaseH, runner->widescreenExtraWidth, runner->usingAppSurface);
                 }
             }
