@@ -1,0 +1,42 @@
+GEN8 208
+  bytecode 13 debug 1 version_field (1, 0, 0, 1354) window 448x256
+OPTN 296
+EXTN 4
+SOND 4364
+SPRT 372368
+BGND 316
+PATH 208
+SCPT 400
+SHDR 388
+FONT 516
+TMLN 4
+OBJT 266564
+ROOM 346256
+DAFL 0
+TPAG 65968
+CODE 367312
+VARI 3960
+FUNC 2088
+STRG 207660
+TXTR 1356100
+AUDO 6247681
+room 0 rm_logo 448x256 views 448x256 colour 00ff8080 bg12 at 0,0 tileX tileY
+room 1 room19 448x256 views 448x256 colour 00c0c0c0 bg11 at 0,0 tileX tileY
+room 2 room18 448x256 views 448x256 colour 00c0c0c0 bg2 at 0,0 tileX tileY
+room 3 rm_title 448x256 views 448x256 colour 00c0c0c0 bg3 at 0,0 tileX tileY
+room 4 Curtain 448x256 views 448x256 colour 00c0c0c0 bg-1 at 0,0 tileX tileY; bg-1 at 0,0 tileX tileY
+room 5 rm_worldmap 448x256 views 448x256 colour 00c0c0c0 bg5 at 0,0 tileX tileY
+room 6 rm_template 640x432 views 384x216 colour 00c0c0c0 bg0 at 0,0 tileX tileY
+room 7 room39 448x928 views 448x256 colour 00c0c0c0 bg7 at 0,0 tileX tileY; bg-1 at 0,-176 tileX tileY
+room 8 rm_cedarhills 2624x256 views 448x256 colour 00c0c0c0 bg1 at 0,-288 tileX tileY; bg0 at 0,-176 tileX tileY
+room 9 room40 448x672 views 448x256 colour 00c0c0c0 bg7 at 0,0 tileX tileY; bg-1 at 0,-176 tileX tileY
+room 10 rm_cedarhills_bonus 448x256 views 448x256 colour 00c0c0c0 bg8 at 0,0 tileX tileY
+room 11 rm_cedarhills_sky 768x256 views 448x256 colour 00c0c0c0 bg8 at 0,0 tileX tileY
+room 12 room44 768x256 views 448x256 colour 00c0c0c0 bg8 at 0,0 tileX tileY
+room 13 room41 2624x256 views 448x256 colour 00c0c0c0 bg1 at 0,-288 tileX tileY; bg0 at 0,-176 tileX tileY
+room 14 room42 2624x256 views 448x256 colour 00c0c0c0 bg1 at 0,-288 tileX tileY; bg0 at 0,-176 tileX tileY
+room 15 room43 448x928 views 448x256 colour 00c0c0c0 bg7 at 0,0 tileX tileY; bg-1 at 0,-176 tileX tileY
+room 16 room45 880x256 views 448x256 colour 00c0c0c0 bg7 at 0,0 tileX tileY
+room 17 room16 448x256 views 448x256 colour 00c0c0c0 
+room 18 room20 448x256 views 448x256 colour 0000fefe bg-1 at 0,0 tileX tileY
+room 19 rm_gameover 448x256 views 448x256 colour 00000000 

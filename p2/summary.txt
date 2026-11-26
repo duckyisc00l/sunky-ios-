@@ -1,0 +1,364 @@
+version GameMaker8_1 fullscreen false scaling -1 interpolate false cursor true esc_close true f4 true f5f6 true freeze_on_lose_focus false
+counts sprites 111 sounds 36 backgrounds 35 scripts 0 fonts 0 timelines 0 objects 138 rooms 10 included 0 extensions 0
+SOUND 1 Ring ext .wav kind 0 bytes 120024 vol 1
+SOUND 2 Swipe ext .wav kind 0 bytes 28250 vol 1
+SOUND 3 Dash ext .wav kind 0 bytes 139228 vol 1
+SOUND 4 Turn ext .wav kind 0 bytes 203538 vol 1
+SOUND 5 Jump ext .wav kind 0 bytes 79210 vol 1
+SOUND 6 BOOM ext .wav kind 0 bytes 286764 vol 1
+SOUND 7 Strike ext .wav kind 0 bytes 99100 vol 1
+SOUND 8 Fall ext .wav kind 0 bytes 167184 vol 1
+SOUND 9 SpikeRise ext .wav kind 0 bytes 134032 vol 1
+SOUND 10 SpikeLower ext .wav kind 0 bytes 98496 vol 1
+SOUND 11 Explode ext .wav kind 0 bytes 175032 vol 1
+SOUND 12 End ext .wav kind 0 bytes 808614 vol 1
+SOUND 13 Sega ext .wav kind 0 bytes 287286 vol 0.8
+SOUND 15 Super... ext .wav kind 1 bytes 1865772 vol 1
+SOUND 16 SUPER SUNKY ext .wav kind 1 bytes 901676 vol 1
+SOUND 18 Skid ext .wav kind 0 bytes 49774 vol 1
+SOUND 19 Blast ext .wav kind 0 bytes 125866 vol 1
+SOUND 20 Sunky Fall ext .wav kind 0 bytes 244892 vol 1
+SOUND 21 SUPER SUNKY 2 ext .wav kind 1 bytes 1723948 vol 1
+SOUND 22 Spring ext .wav kind 0 bytes 77768 vol 1
+SOUND 23 Faceplamp ext .wav kind 0 bytes 75714 vol 1
+SOUND 26 Break ext .wav kind 0 bytes 25090 vol 1
+SOUND 27 FallIntoWater ext .wav kind 0 bytes 200528 vol 1
+SOUND 28 Splash ext .wav kind 0 bytes 155876 vol 1
+SOUND 29 Level Pacguy's Fav ext .wav kind 1 bytes 26025200 vol 1
+SOUND 30 SunkyFallIntoCliff ext .wav kind 0 bytes 255476 vol 1
+SOUND 31 Tube ext .wav kind 0 bytes 19960 vol 1
+SOUND 32 Fuse ext .WAV kind 0 bytes 36922 vol 1
+SOUND 33 Splode ext .wav kind 0 bytes 434220 vol 1
+SOUND 34 Fake Signpost Fly Away ext .wav kind 0 bytes 342060 vol 1
+SOUND 35 Act 2 ext .wav kind 1 bytes 10590600 vol 1
+SOUND 36 Falling ext .wav kind 0 bytes 370604 vol 1
+SOUND 37 Splat ext .wav kind 0 bytes 61484 vol 1
+SOUND 38 Stretch ext .wav kind 0 bytes 413740 vol 1
+SOUND 39 Pop ext .wav kind 0 bytes 71724 vol 1
+SOUND 40 Zap ext .wav kind 0 bytes 63532 vol 1
+ROOM ORDER 12 14 11 13 16 17 18 19 2 10
+ROOM 2 End 640x480 speed 30 views false [] inst 4
+  INST room 2 obj 28 End at 0,0
+  INST room 2 obj 69 Restart at 400,408
+  INST room 2 obj 69 Restart at 464,408
+  INST room 2 obj 69 Restart at 496,408
+ROOM 10 Level Secelt 640x480 speed 30 views false [] inst 0
+ROOM 11 Level Pacguy's Fav 4000x512 speed 18 views true [640x480@640x480] inst 37
+  INST room 11 obj 0 Sunky at 128,256
+  INST room 11 obj 115 BGScroll 2 at 0,0
+  INST room 11 obj 124 Fan at 896,352
+  INST room 11 obj 1 Solid at 832,80
+  INST room 11 obj 127 FallAgeen at 1792,64
+  INST room 11 obj 1 Solid at 1632,320
+  INST room 11 obj 1 Solid at 1632,384
+  INST room 11 obj 1 Solid at 1632,448
+  INST room 11 obj 128 Block at 1472,143
+  INST room 11 obj 128 Block at 1408,143
+  INST room 11 obj 128 Block at 1280,143
+  INST room 11 obj 128 Block at 1344,143
+  INST room 11 obj 1 Solid at -32,324
+  INST room 11 obj 1 Solid at 2104,452
+  INST room 11 obj 136 Bomb Generator at 1976,387
+  INST room 11 obj 1 Solid at 2048,452
+  INST room 11 obj 1 Solid at 2560,320
+  INST room 11 obj 1 Solid at 2560,256
+  INST room 11 obj 146 Fake Signpost 1 at 3584,232
+  INST room 11 obj 1 Solid at 3200,320
+  INST room 11 obj 1 Solid at 3200,256
+  INST room 11 obj 78 RightSolid at 3968,256
+  INST room 11 obj 78 RightSolid at 3968,320
+  INST room 11 obj 142 Spinny at 2432,384
+  INST room 11 obj 148 Trap Floor at 3264,384
+  INST room 11 obj 148 Trap Floor at 3392,384
+  INST room 11 obj 148 Trap Floor at 3328,384
+  INST room 11 obj 148 Trap Floor at 3456,384
+  INST room 11 obj 148 Trap Floor at 3520,384
+  INST room 11 obj 148 Trap Floor at 3648,384
+  INST room 11 obj 148 Trap Floor at 3584,384
+  INST room 11 obj 148 Trap Floor at 3712,384
+  INST room 11 obj 148 Trap Floor at 3776,384
+  INST room 11 obj 148 Trap Floor at 3840,384
+  INST room 11 obj 143 Spinny Circle at 2496,504
+  INST room 11 obj 116 Level Pacguy's Fav at -128,64
+  INST room 11 obj 119 Pipe at 576,432
+ROOM 12 Warning 640x480 speed 30 views false [] inst 2
+  INST room 12 obj 141 Quit at 11,363
+  INST room 12 obj 140 Play at 447,363
+ROOM 13 Act 2 4000x512 speed 18 views true [640x480@640x480] inst 145
+  INST room 13 obj 173 Concoction at 2176,224
+  INST room 13 obj 1 Solid at 0,320
+  INST room 13 obj 1 Solid at 704,388
+  INST room 13 obj 1 Solid at 768,388
+  INST room 13 obj 1 Solid at 832,392
+  INST room 13 obj 78 RightSolid at 704,-60
+  INST room 13 obj 78 RightSolid at 768,-60
+  INST room 13 obj 78 RightSolid at 832,-60
+  INST room 13 obj 171 Slope at 1751,384
+  INST room 13 obj 171 Slope at 1752,383
+  INST room 13 obj 171 Slope at 1753,382
+  INST room 13 obj 171 Slope at 1754,381
+  INST room 13 obj 171 Slope at 1755,380
+  INST room 13 obj 171 Slope at 1756,379
+  INST room 13 obj 171 Slope at 1757,378
+  INST room 13 obj 171 Slope at 1758,377
+  INST room 13 obj 171 Slope at 1759,376
+  INST room 13 obj 171 Slope at 1760,375
+  INST room 13 obj 171 Slope at 1761,374
+  INST room 13 obj 171 Slope at 1762,373
+  INST room 13 obj 171 Slope at 1763,372
+  INST room 13 obj 171 Slope at 1764,371
+  INST room 13 obj 171 Slope at 1765,370
+  INST room 13 obj 171 Slope at 1766,369
+  INST room 13 obj 171 Slope at 1767,368
+  INST room 13 obj 171 Slope at 1768,367
+  INST room 13 obj 171 Slope at 1769,366
+  INST room 13 obj 171 Slope at 1770,365
+  INST room 13 obj 171 Slope at 1771,364
+  INST room 13 obj 171 Slope at 1772,363
+  INST room 13 obj 171 Slope at 1773,362
+  INST room 13 obj 171 Slope at 1774,361
+  INST room 13 obj 171 Slope at 1775,360
+  INST room 13 obj 171 Slope at 1776,359
+  INST room 13 obj 171 Slope at 1777,358
+  INST room 13 obj 171 Slope at 1778,357
+  INST room 13 obj 171 Slope at 1779,356
+  INST room 13 obj 171 Slope at 1780,355
+  INST room 13 obj 171 Slope at 1781,354
+  INST room 13 obj 171 Slope at 1782,353
+  INST room 13 obj 171 Slope at 1783,352
+  INST room 13 obj 171 Slope at 1784,351
+  INST room 13 obj 171 Slope at 1785,350
+  INST room 13 obj 171 Slope at 1786,349
+  INST room 13 obj 171 Slope at 1787,348
+  INST room 13 obj 171 Slope at 1788,347
+  INST room 13 obj 171 Slope at 1789,346
+  INST room 13 obj 171 Slope at 1790,345
+  INST room 13 obj 171 Slope at 1791,344
+  INST room 13 obj 171 Slope at 1792,343
+  INST room 13 obj 171 Slope at 1793,342
+  INST room 13 obj 171 Slope at 1794,341
+  INST room 13 obj 171 Slope at 1795,340
+  INST room 13 obj 171 Slope at 1796,339
+  INST room 13 obj 171 Slope at 1797,338
+  INST room 13 obj 171 Slope at 1798,337
+  INST room 13 obj 171 Slope at 1799,336
+  INST room 13 obj 171 Slope at 1800,335
+  INST room 13 obj 171 Slope at 1801,334
+  INST room 13 obj 171 Slope at 1802,333
+  INST room 13 obj 171 Slope at 1803,332
+  INST room 13 obj 171 Slope at 1804,331
+  INST room 13 obj 171 Slope at 1805,330
+  INST room 13 obj 171 Slope at 1806,329
+  INST room 13 obj 171 Slope at 1807,328
+  INST room 13 obj 171 Slope at 1808,327
+  INST room 13 obj 171 Slope at 1809,326
+  INST room 13 obj 171 Slope at 1810,325
+  INST room 13 obj 171 Slope at 1811,324
+  INST room 13 obj 171 Slope at 1812,323
+  INST room 13 obj 172 Slope 2 at 1768,150
+  INST room 13 obj 172 Slope 2 at 1767,151
+  INST room 13 obj 172 Slope 2 at 1766,152
+  INST room 13 obj 172 Slope 2 at 1765,153
+  INST room 13 obj 172 Slope 2 at 1764,154
+  INST room 13 obj 172 Slope 2 at 1763,155
+  INST room 13 obj 172 Slope 2 at 1762,156
+  INST room 13 obj 172 Slope 2 at 1761,157
+  INST room 13 obj 172 Slope 2 at 1760,158
+  INST room 13 obj 172 Slope 2 at 1759,159
+  INST room 13 obj 172 Slope 2 at 1758,160
+  INST room 13 obj 172 Slope 2 at 1757,161
+  INST room 13 obj 172 Slope 2 at 1756,162
+  INST room 13 obj 172 Slope 2 at 1755,163
+  INST room 13 obj 172 Slope 2 at 1754,164
+  INST room 13 obj 172 Slope 2 at 1753,165
+  INST room 13 obj 172 Slope 2 at 1752,166
+  INST room 13 obj 172 Slope 2 at 1751,167
+  INST room 13 obj 172 Slope 2 at 1750,168
+  INST room 13 obj 172 Slope 2 at 1749,169
+  INST room 13 obj 172 Slope 2 at 1748,170
+  INST room 13 obj 172 Slope 2 at 1747,171
+  INST room 13 obj 172 Slope 2 at 1746,172
+  INST room 13 obj 172 Slope 2 at 1745,173
+  INST room 13 obj 172 Slope 2 at 1744,174
+  INST room 13 obj 172 Slope 2 at 1743,175
+  INST room 13 obj 172 Slope 2 at 1742,176
+  INST room 13 obj 172 Slope 2 at 1741,177
+  INST room 13 obj 172 Slope 2 at 1740,178
+  INST room 13 obj 172 Slope 2 at 1739,179
+  INST room 13 obj 172 Slope 2 at 1738,180
+  INST room 13 obj 172 Slope 2 at 1737,181
+  INST room 13 obj 172 Slope 2 at 1736,182
+  INST room 13 obj 172 Slope 2 at 1735,183
+  INST room 13 obj 172 Slope 2 at 1734,184
+  INST room 13 obj 172 Slope 2 at 1733,185
+  INST room 13 obj 172 Slope 2 at 1732,186
+  INST room 13 obj 172 Slope 2 at 1731,187
+  INST room 13 obj 172 Slope 2 at 1730,188
+  INST room 13 obj 172 Slope 2 at 1729,189
+  INST room 13 obj 172 Slope 2 at 1728,190
+  INST room 13 obj 172 Slope 2 at 1727,191
+  INST room 13 obj 172 Slope 2 at 1726,192
+  INST room 13 obj 172 Slope 2 at 1725,193
+  INST room 13 obj 172 Slope 2 at 1724,194
+  INST room 13 obj 172 Slope 2 at 1723,195
+  INST room 13 obj 172 Slope 2 at 1722,196
+  INST room 13 obj 172 Slope 2 at 1721,197
+  INST room 13 obj 172 Slope 2 at 1720,198
+  INST room 13 obj 172 Slope 2 at 1719,199
+  INST room 13 obj 172 Slope 2 at 1718,200
+  INST room 13 obj 172 Slope 2 at 1717,201
+  INST room 13 obj 172 Slope 2 at 1716,202
+  INST room 13 obj 172 Slope 2 at 1715,203
+  INST room 13 obj 172 Slope 2 at 1714,204
+  INST room 13 obj 172 Slope 2 at 1713,205
+  INST room 13 obj 172 Slope 2 at 1712,206
+  INST room 13 obj 172 Slope 2 at 1711,207
+  INST room 13 obj 172 Slope 2 at 1710,208
+  INST room 13 obj 172 Slope 2 at 1709,209
+  INST room 13 obj 172 Slope 2 at 1708,210
+  INST room 13 obj 172 Slope 2 at 1707,211
+  INST room 13 obj 176 Lightning Maker at 1824,256
+  INST room 13 obj 1 Solid at 2592,256
+  INST room 13 obj 178 STAHPs the Lightnin at 2784,256
+  INST room 13 obj 25 SpikeGenerator at 3040,256
+  INST room 13 obj 25 SpikeGenerator at 3104,256
+  INST room 13 obj 164 Squishy at 704,0
+  INST room 13 obj 169 Block2 at 1088,383
+  INST room 13 obj 168 Block1 at 1152,383
+  INST room 13 obj 169 Block2 at 1216,382
+  INST room 13 obj 168 Block1 at 1280,383
+  INST room 13 obj 156 Falling 1 at 0,0
+  INST room 13 obj 152 Act 2 at 0,0
+  INST room 13 obj 179 Conveniently Placed Emerdoods at 3808,192
+ROOM 14 Password 640x480 speed 30 views false [] inst 1
+  INST room 14 obj 162 Password at 138,192
+ROOM 16 Rise 640x480 speed 16 views false [] inst 8
+  INST room 16 obj 180 Eyes at 360,240
+  INST room 16 obj 184 Green at 64,352
+  INST room 16 obj 186 Pink at 448,352
+  INST room 16 obj 187 Yellow at 0,288
+  INST room 16 obj 188 Grey at 512,288
+  INST room 16 obj 183 Red at 160,384
+  INST room 16 obj 181 Blue at 352,384
+  INST room 16 obj 185 Cyan at 256,416
+ROOM 17 SUPER SUNKY 640x480 speed 35 views false [] inst 3
+  INST room 17 obj 191 Create at 0,0
+  INST room 17 obj 190 Dance at 32,320
+  INST room 17 obj 190 Dance at 480,320
+ROOM 18 Dance yo pants 640x480 speed 35 views false [] inst 2
+  INST room 18 obj 193 SunkyDance at 64,224
+  INST room 18 obj 192 White In 2 at 0,0
+ROOM 19 Ready for LAUWNCH 640x480 speed 35 views false [] inst 2
+  INST room 19 obj 197 Ready for LAWNCH at 32,224
+  INST room 19 obj 200 EndOfCutscene at 0,0
+SPRITE 0 SunkyStand frames 1 128x128
+SPRITE 1 SunkyWalk frames 4 128x128
+SPRITE 2 SunkyJump frames 14 128x128
+SPRITE 3 64x64 frames 1 64x64
+SPRITE 4 64x64 2 frames 1 64x64
+SPRITE 5 SunkyLeft frames 1 128x128
+SPRITE 6 SunkyWalkLeft frames 4 128x128
+SPRITE 7 SunkyJumpLeft frames 14 128x128
+SPRITE 8 SunkyTurnLeft frames 23 128x128
+SPRITE 9 SunkyTurnRight frames 23 128x128
+SPRITE 10 Coin frames 12 60x60
+SPRITE 11 ByeBye frames 5 60x60
+SPRITE 15 Platform frames 4 128x400
+SPRITE 16 Platform 2 frames 1 128x400
+SPRITE 19 Reach frames 23 300x300
+SPRITE 20 Spikes frames 1 60x64
+SPRITE 21 Spikes Rise frames 2 55x64
+SPRITE 22 Spikes Lower frames 2 55x64
+SPRITE 23 Sunkysplode frames 10 640x480
+SPRITE 24 Signpost frames 20 170x158
+SPRITE 26 Fade Out frames 20 640x480
+SPRITE 27 Fade In frames 20 640x480
+SPRITE 29 LDFadeOut frames 8 640x480
+SPRITE 30 LDFadeIn frames 6 640x480
+SPRITE 33 Fade In 2 frames 10 667x500
+SPRITE 35 Fade Out 2 frames 19 800x1000
+SPRITE 36 Sunky Did a Thing frames 11 640x185
+SPRITE 51 Fall frames 28 128x192
+SPRITE 56 SunkySpring frames 5 128x128
+SPRITE 57 SunkySpring2 frames 17 128x128
+SPRITE 66 SunkyFallIntoWater frames 22 128x192
+SPRITE 67 SunkyFallIntoWater2 frames 1 128x192
+SPRITE 69 SunkySwim frames 14 128x130
+SPRITE 70 SunkySwimLeft frames 14 128x130
+SPRITE 73 SunkySwimTurnLeft frames 5 128x130
+SPRITE 74 SunkySwimTurnRight frames 5 128x130
+SPRITE 75 SunkySinky frames 7 128x300
+SPRITE 76 SunkySwimMask frames 1 128x130
+SPRITE 100 Level Pacguy's Fav frames 48 154x181
+SPRITE 101 Up frames 6 154x181
+SPRITE 102 Pipe frames 1 64x64
+SPRITE 103 PipePrepare frames 27 64x64
+SPRITE 104 Fire frames 3 64x200
+SPRITE 105 Fire 2 frames 14 64x200
+SPRITE 106 Fire 3 frames 3 64x200
+SPRITE 107 Burmt frames 21 128x128
+SPRITE 108 Fire Mask frames 1 64x200
+SPRITE 109 Fan frames 3 64x32
+SPRITE 110 SunkyFan frames 15 128x128
+SPRITE 111 Block frames 1 64x64
+SPRITE 112 BlockDisappear frames 12 64x64
+SPRITE 113 SunkyFallAgeen frames 13 300x432
+SPRITE 114 BlockReappear frames 12 64x64
+SPRITE 115 Empty frames 1 64x64
+SPRITE 116 Bomb frames 1 46x100
+SPRITE 117 Bomb Land frames 4 46x74
+SPRITE 118 Bomb Light frames 10 46x74
+SPRITE 119 Button frames 1 164x60
+SPRITE 120 Play frames 1 163x60
+SPRITE 121 Button 2 frames 1 163x60
+SPRITE 122 Quit frames 1 163x60
+SPRITE 123 Bombsplode frames 6 200x150
+SPRITE 124 Spinny frames 6 356x131
+SPRITE 125 Spinny Circle frames 1 48x48
+SPRITE 126 SunkyRotate frames 9 448x258
+SPRITE 127 Signpost Fake frames 25 170x185
+SPRITE 128 Trap Floor frames 6 64x130
+SPRITE 129 Trap Floor 2 frames 1 64x130
+SPRITE 130 Act 2 frames 4 640x480
+SPRITE 131 Act 2 Phase 2 frames 1 640x480
+SPRITE 132 Act 2 Phase 3 frames 4 640x480
+SPRITE 133 Act 2 Phase 4 frames 1 640x480
+SPRITE 134 Falling frames 3 640x480
+SPRITE 135 Falling 2 frames 6 640x480
+SPRITE 136 SunkySquash frames 1 128x128
+SPRITE 137 SunkySquash 2 frames 2 128x128
+SPRITE 138 SunkySquash 3 frames 11 128x128
+SPRITE 139 SunkySquash4 frames 6 128x128
+SPRITE 140 Enter Password frames 1 365x64
+SPRITE 141 Enter Password 2 frames 1 365x64
+SPRITE 142 Gear frames 25 64x64
+SPRITE 143 Squishy frames 1 188x256
+SPRITE 144 Squishy 2 frames 4 188x256
+SPRITE 145 SunkySquish frames 2 128x150
+SPRITE 146 SunkySquish2 frames 1 128x150
+SPRITE 147 TangibleBlock frames 1 64x64
+SPRITE 148 IntangibleBlock frames 1 64x64
+SPRITE 149 Slope frames 2 1x64
+SPRITE 150 Concoction frames 3 64x32
+SPRITE 151 Lightning frames 4 256x32
+SPRITE 152 Conveniently Placed Emerdoods frames 1 160x128
+SPRITE 153 Blue frames 1 128x104
+SPRITE 154 Red frames 1 128x104
+SPRITE 155 Green frames 1 128x104
+SPRITE 156 Pink frames 1 128x104
+SPRITE 157 Yellow frames 1 128x104
+SPRITE 158 Grey frames 1 128x104
+SPRITE 159 Cyan frames 1 128x104
+SPRITE 160 Eyes frames 1 121x26
+SPRITE 161 White Out frames 7 640x480
+SPRITE 162 SuperSunky frames 6 640x480
+SPRITE 163 Make frames 2 640x480
+SPRITE 164 Dance frames 10 150x150
+SPRITE 165 SNAPBACKTOREALITY frames 8 150x150
+SPRITE 166 SuperDance frames 10 150x150
+SPRITE 167 Ohp, there goes gravity frames 1 150x150
+SPRITE 168 Goin' Up! frames 5 640x480
+SPRITE 169 COLDBREWSKI frames 19 640x480
+SPRITE 170 Ready for LAWNCH frames 2 150x150
+SPRITE 171 LAWNCH frames 9 105x372
+SPRITE 172 WhiteIn frames 3 640x480
