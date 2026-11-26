@@ -327,6 +327,19 @@ int32_t bs_ios_step(int32_t winW, int32_t winH, float deltaTime) {
         }
     }
 
+    {
+        // SUNKY-IOS test log: what widescreen decided, once per room
+        static int32_t lastRoom = -999;
+        int32_t rid = runner->currentRoomIndex;
+        if (rid != lastRoom && runner->currentRoom != nullptr) {
+            lastRoom = rid;
+            GMLCamera* cam = Runner_getCameraForView(runner, 0);
+            fprintf(stderr, "wide: room %d %ux%u views %d appsurf %d/%d game %dx%d extra %d aspect %.3f cam %dx%d port %dx%d win %dx%d\n",
+                rid, runner->currentRoom->width, runner->currentRoom->height, runner->viewsEnabled,
+                runner->appSurfaceEnabled, runner->usingAppSurface, gameW, gameH, runner->widescreenExtraWidth, gWidescreenAspect,
+                cam ? cam->viewWidth : -1, cam ? cam->viewHeight : -1, runner->views[0].portWidth, runner->views[0].portHeight, winW, winH);
+        }
+    }
     glBindFramebuffer(GL_FRAMEBUFFER, gHostFramebuffer);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
