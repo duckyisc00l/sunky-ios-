@@ -131,7 +131,7 @@ jobs:
           # the phone's shape (2.174), the way the app widens it
           ci/sunky2_sides/install.sh games/g2x
           xvfb-run -a -s "-screen 0 1280x960x24" ci/lab-g2wide.sh bs/build/butterscotch games/g2x/data.win out/g2/wide 2
-          TIMELINE=1 TL_N=40 TL_STEP=0.25 xvfb-run -a -s "-screen 0 1280x960x24" ci/lab-g2wide.sh bs/build/butterscotch games/g2x/data.win out/g2/time 2
+          TIMELINE=1 TL_N=40 TL_STEP=0.2 TL_KEY_AT=15 xvfb-run -a -s "-screen 0 1280x960x24" ci/lab-g2wide.sh bs/build/butterscotch games/g2x/data.win out/g2/time 3
       - name: Publish to branch r-g2
         if: always()
         run: |
