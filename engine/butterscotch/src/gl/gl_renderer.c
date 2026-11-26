@@ -1575,6 +1575,13 @@ static void drawTiled(
             if (i == 0 || wy < visMinY) visMinY = wy;
             if (i == 0 || wy > visMaxY) visMaxY = wy;
         }
+        // SUNKY-IOS: the widescreen widening is applied after this projection, so what's really seen is
+        // wider than it says: keep tiles out to half as wide again on each side
+        {
+            float spanX = visMaxX - visMinX, spanY = visMaxY - visMinY;
+            visMinX -= spanX * 0.5f; visMaxX += spanX * 0.5f;
+            visMinY -= spanY * 0.5f; visMaxY += spanY * 0.5f;
+        }
         if (tileX) {
             // Snap start forward by whole tiles so the tile containing visMinX is kept
             if (visMinX > startX) startX += floorf((visMinX - startX) / tileW) * tileW;
@@ -2741,6 +2748,42 @@ static void glSurfaceResize(Renderer* renderer, int32_t surfaceID, int32_t width
 
     logInfo("GL: Resized Surface %u Size (%dx%d)\n", surfaceID, width, height);
     glBindFramebuffer(GL_FRAMEBUFFER, (GLuint) prevBinding);
+}
+
+// SUNKY-IOS: fills the widescreen sides of a surface whose picture only covers the middle
+// [left, left + contentW): each side continues as the thin band at the picture's edge, mirrored back
+// and forth (no repeats of the picture, no backwards writing from further in).
+void GLRenderer_sunkyFillSides(Renderer* renderer, int32_t surfaceId, int32_t left, int32_t contentW) {
+    GLRenderer* gl = (GLRenderer*) renderer;
+    if (0 > surfaceId || (uint32_t) surfaceId >= gl->surfaceCount || gl->surfaces[surfaceId] == 0) return;
+    int32_t w = gl->surfaceWidth[surfaceId], h = gl->surfaceHeight[surfaceId];
+    if (left <= 0 || contentW <= 0 || left + contentW > w) return;
+    flushBatch(gl);
+    GLint prevRead = 0, prevDraw = 0;
+    glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &prevRead);
+    glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &prevDraw);
+    GLboolean scissor = glIsEnabled(GL_SCISSOR_TEST);
+    glDisable(GL_SCISSOR_TEST);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, gl->surfaces[surfaceId]);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, gl->surfaces[surfaceId]);
+    int32_t band = contentW / 20; if (band < 4) band = 4;
+    int32_t right = left + contentW;
+    // left side, outwards from the picture's edge
+    bool flip = true;
+    for (int32_t inner = left; inner > 0; inner -= band, flip = !flip) {
+        int32_t seg = inner < band ? inner : band;
+        if (flip) glBlitFramebuffer(left, 0, left + seg, h, inner, 0, inner - seg, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        else glBlitFramebuffer(left + band - seg, 0, left + band, h, inner - seg, 0, inner, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    }
+    flip = true;
+    for (int32_t inner = right; inner < w; inner += band, flip = !flip) {
+        int32_t seg = w - inner < band ? w - inner : band;
+        if (flip) glBlitFramebuffer(right - seg, 0, right, h, inner + seg, 0, inner, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        else glBlitFramebuffer(right - band, 0, right - band + seg, h, inner, 0, inner + seg, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    }
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, (GLuint) prevRead);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, (GLuint) prevDraw);
+    if (scissor) glEnable(GL_SCISSOR_TEST);
 }
 
 static bool glSurfaceExists(Renderer* renderer, int32_t surfaceId) {

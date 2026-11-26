@@ -1130,6 +1130,16 @@ void Runner_draw(Runner* runner) {
 #endif
 
                 Renderer_drawTile(runner->renderer, tile, offsetX, offsetY);
+                // SUNKY-IOS: a narrow, tall level (Sunky the Game 2's shafts) wraps around side to side,
+                // so the widescreen sides show its other edge
+                if (runner->widescreenExtraWidth > 0 && runner->currentRoom != nullptr) {
+                    GMLCamera* wc = Runner_getCameraForView(runner, runner->viewCurrent);
+                    float rw = (float) runner->currentRoom->width;
+                    if (wc != nullptr && rw <= (float) wc->viewWidth + 1.0f && (float) runner->currentRoom->height > (float) wc->viewHeight + 1.0f) {
+                        Renderer_drawTile(runner->renderer, tile, offsetX - rw, offsetY);
+                        Renderer_drawTile(runner->renderer, tile, offsetX + rw, offsetY);
+                    }
+                }
             }
         } else if (d->type == DRAWABLE_INSTANCE) {
             Instance* inst = d->instance;
@@ -1336,6 +1346,24 @@ static void beginGuiPass(Runner* runner, int32_t guiW, int32_t guiH, int32_t por
 static void endGuiPass(Runner* runner) {
     runner->renderer->vtable->endGUI(runner->renderer);
     runner->inGuiPass = false;
+}
+
+void GLRenderer_sunkyFillSides(Renderer* renderer, int32_t surfaceId, int32_t left, int32_t contentW);
+
+// SUNKY-IOS: a screen that doesn't scroll and is only as wide as the old picture (title, menus,
+// map) gets its widescreen sides filled from the thin band at its edges, mirrored back and forth.
+void Runner_sunkyFillMenuSides(Runner* runner, int32_t gameW) {
+#if defined(ENABLE_MODERN_GL)
+    if (runner->widescreenExtraWidth <= 0 || runner->currentRoom == nullptr || !runner->viewsEnabled || !runner->usingAppSurface) return;
+    GMLCamera* cam = Runner_getCameraForView(runner, 0);
+    if (cam == nullptr || cam->viewWidth <= 0) return;
+    if ((float) runner->currentRoom->width > (float) cam->viewWidth + 1.0f || (float) runner->currentRoom->height > (float) cam->viewHeight + 1.0f) return;
+    int32_t baseW = gameW - runner->widescreenExtraWidth;
+    int32_t left = runner->widescreenExtraWidth / 2;
+    GLRenderer_sunkyFillSides(runner->renderer, runner->applicationSurfaceId, left, baseW);
+#else
+    (void) runner; (void) gameW;
+#endif
 }
 
 // SUNKY-IOS: how much wider widescreen makes the picture (1 when it's off). A game that sets its own

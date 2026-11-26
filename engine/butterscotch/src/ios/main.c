@@ -348,6 +348,7 @@ int32_t bs_ios_step(int32_t winW, int32_t winH, float deltaTime) {
     Runner_beginFrame(runner, gameW, gameH, winW, winH, winW, winH);
     Runner_updateMousePosition(runner, winW, winH, gCursorX * winW, gCursorY * winH);
     Runner_drawViews(runner, gameW, gameH, false);
+    Runner_sunkyFillMenuSides(runner, gameW); // SUNKY-IOS
     runner->renderer->vtable->endFrameInit(runner->renderer);
     Runner_drawPost(runner, winW, winH);
     runner->renderer->vtable->endFrameEnd(runner->renderer);

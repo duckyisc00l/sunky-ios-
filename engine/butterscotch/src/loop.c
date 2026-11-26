@@ -1374,6 +1374,7 @@ int loop(CommandLineArgs args, const char *argv0) {
                 Runner_updateMousePosition(runner, winW, winH, mx, my);
 
                 Runner_drawViews(runner, gameW, gameH, debugShowCollisionMasks);
+                Runner_sunkyFillMenuSides(runner, gameW); // SUNKY-IOS
                 renderer->vtable->endFrameInit(renderer);
                 Runner_drawPost(runner, fbWidth, fbHeight);
                 renderer->vtable->endFrameEnd(renderer);
