@@ -12,3 +12,6 @@ cp "$here/warning.need" "$to/sunky_side_rm_logo.png.need"
 cp "$here/black.png"   "$to/sunky_side_room18.png"
 cp "$here/title.png"   "$to/sunky_side_rm_title.png"     # the SUNKY THE GAME 2 title
 cp "$here/curtain.png" "$to/sunky_side_Curtain.png"      # the curtain screen
+cp "$here/hello.png"   "$to/sunky_side_hello.png"         # the HELLO splash's purple, for its last frame as the game moves on
+# every screen's art, tried in turn while the game swaps screens (it briefly shows the last one)
+printf '%s\n' sunky_side_rm_title.png sunky_side_Curtain.png sunky_side_hello.png > "$to/sunky_side_all.txt"

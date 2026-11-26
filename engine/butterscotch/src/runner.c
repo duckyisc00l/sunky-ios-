@@ -1368,8 +1368,29 @@ static int32_t sunkyPendingLeft = 0, sunkyPendingW = 0, sunkyPendingGameW = 0;
 void Runner_sunkySideArtOnScreen(Runner* runner, unsigned int fbo, int32_t fbH) {
 #if defined(ENABLE_MODERN_GL)
     if (sunkyPendingArt[0] == 0) return;
-    GLRenderer_sunkyDrawSideArtOnScreen(runner->renderer, runner->fileSystem, sunkyPendingArt, fbo, fbH,
-        runner->viewportX, runner->viewportY, runner->viewportW, runner->viewportH, sunkyPendingGameW, sunkyPendingLeft, sunkyPendingW);
+    if (!GLRenderer_sunkyDrawSideArtOnScreen(runner->renderer, runner->fileSystem, sunkyPendingArt, fbo, fbH,
+            runner->viewportX, runner->viewportY, runner->viewportW, runner->viewportH, sunkyPendingGameW, sunkyPendingLeft, sunkyPendingW)) {
+        // while the game swaps screens it briefly still shows the last one: try the other screens'
+        // art (listed in sunky_side_all.txt) so the sides don't flash black
+        static char** names = nullptr; static int32_t count = -1;
+        if (count < 0) {
+            count = 0;
+            char* txt = runner->fileSystem->vtable->readFileText(runner->fileSystem, "sunky_side_all.txt");
+            if (txt != nullptr) {
+                for (char* line = strtok(txt, "\r\n"); line != nullptr; line = strtok(nullptr, "\r\n")) {
+                    if (line[0] == 0) continue;
+                    names = realloc(names, sizeof(char*) * (size_t) (count + 1));
+                    names[count++] = safeStrdup(line);
+                }
+                free(txt);
+            }
+        }
+        for (int32_t i = 0; i < count; i++) {
+            if (strcmp(names[i], sunkyPendingArt) == 0) continue;
+            if (GLRenderer_sunkyDrawSideArtOnScreen(runner->renderer, runner->fileSystem, names[i], fbo, fbH,
+                    runner->viewportX, runner->viewportY, runner->viewportW, runner->viewportH, sunkyPendingGameW, sunkyPendingLeft, sunkyPendingW)) break;
+        }
+    }
     sunkyPendingArt[0] = 0;
 #else
     (void) runner; (void) fbo; (void) fbH;
