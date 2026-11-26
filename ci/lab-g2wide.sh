@@ -13,6 +13,7 @@ for r in "$@"; do for nb in ""; do
   BS_NO_BANDS=$nb; [ -z "$nb" ] && unset BS_NO_BANDS; export ${nb:+BS_NO_BANDS}
   BS_START_ROOM=$r timeout 30 "$bs" "$data" --disable-log-colours --widescreen-hack=2.174 --window-size 1113x512 > "$out/room$r.log" 2>&1 &
   pid=$!
+  if [ -n "${TIMELINE:-}" ]; then for t in 1 2 3 4 5 6 7 8 9 10 11 12; do sleep 1; shot "r$r-t$(printf %02d $t)"; done; kill $pid 2>/dev/null; wait $pid 2>/dev/null; sleep 1; continue; fi
   sleep 4; shot "r$r${nb:+n}-a"
   xdotool keydown Right; sleep 3; shot "r$r${nb:+n}-b"; xdotool keyup Right
   xdotool keydown Left; sleep 3; shot "r$r${nb:+n}-c"; xdotool keyup Left
