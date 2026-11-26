@@ -1605,6 +1605,15 @@ void Runner_drawViews(Runner* runner, int32_t gameW, int32_t gameH, bool debugSh
             int32_t portH = (int32_t) ((float) view->portHeight * runner->displayScaleY + 0.5f);
             float viewAngle = camera->viewAngle;
 
+            if (getenv("BS_START_ROOM") != nullptr) {
+                static int32_t loggedRoom = -999;
+                if (loggedRoom != runner->currentRoomIndex) {
+                    loggedRoom = runner->currentRoomIndex;
+                    fprintf(stderr, "views: room %d view %d,%d %dx%d (cam %d,%d %dx%d) port %d,%d %dx%d game %dx%d base %dx%d extra %d appsurf %d\n",
+                        runner->currentRoomIndex, viewX, viewY, viewW, viewH, camera->viewX, camera->viewY, camera->viewWidth, camera->viewHeight,
+                        portX, portY, portW, portH, gameW, gameH, widescreenBaseW, widescreenBaseH, runner->widescreenExtraWidth, runner->usingAppSurface);
+                }
+            }
             runner->viewCurrent = (int32_t) vi;
             runner->renderer->cameraCurrent = runner->views[runner->viewCurrent].cameraId;
             beginDrawViewClipAdjustment(runner, camera, gameW, gameH, widescreenBaseW, widescreenBaseH, portW, portH, edgeShiftX);
